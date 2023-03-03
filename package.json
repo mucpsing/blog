@@ -15,6 +15,7 @@
     "typecheck": "tsc"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.0.1",
     "@docusaurus/core": "^2.3.1",
     "@docusaurus/preset-classic": "^2.3.1",
     "@mdx-js/react": "^1.6.22",
@@ -42,6 +43,8 @@
     "postcss-nested": "^6.0.1",
     "postcss-preset-env": "^8.0.1",
     "rc-queue-anim": "^2.0.0",
+    "stylus": "^0.59.0",
+    "stylus-loader": "^7.1.0",
     "typescript": "^4.7.4"
   },
   "browserslist": {

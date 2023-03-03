@@ -2,19 +2,18 @@
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-02-07 19:55:02
  * @LastEditors: cpasion-office-win10 373704015@qq.com
- * @LastEditTime: 2023-03-01 17:24:20
+ * @LastEditTime: 2023-03-03 17:34:31
  * @FilePath: \cps-blog\src\pages\index.tsx
  * @Description: 首页
  */
 import React, { useEffect, useRef } from "react";
-
 
 import Link from "@docusaurus/Link";
 import Layout from "@theme/Layout";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 
 import HomepageFeatures from "@site/src/components/HomepageFeatures";
-import HomepageSwiper from '@site/src/components/HomepageSwiper'
+import HomepageSwiper from "@site/src/components/HomepageSwiper";
 
 import _ from "lodash";
 import clsx from "clsx";
@@ -51,7 +50,8 @@ function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
   return (
     <header className={clsx("hero hero--primary", styles.heroBanner)}>
-      <div className={clsx(styles.containerLeft)}>
+
+      {/* <div className={clsx(styles.containerLeft)}>
         <h1 className="hero__title">{siteConfig.title}</h1>
         <p>在这疯狂的时代，我们听到的名人言论</p>
         <TypedTitle />
@@ -60,11 +60,13 @@ function HomepageHeader() {
             Docusaurus Tutorial - 5min ⏱️
           </Link>
         </div>
-      </div>
+      </div> */}
 
-    <div className={clsx(styles.containerRight)}>
-      <HomepageSwiper />
-    </div>
+      {/* <div className={clsx(styles.containerRight)}>
+        <HomepageSwiper className={"details-switch-demo"} />
+      </div> */}
+
+      <HomepageSwiper className={"details-switch-demo"} />
     </header>
   );
 }
