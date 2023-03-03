@@ -8,6 +8,7 @@ export default class Demo extends React.Component {
     return (
       <div>
         <Test className={"details-switch-demo"} />
+        <p className="p-3 bg-red-2 rounded-sm h-4"> 112233 </p>
       </div>
     );
   }
