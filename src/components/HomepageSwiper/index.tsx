@@ -104,9 +104,9 @@ export default class Test extends React.Component<any, TestState> {
       { translateX: [0, -300], opacity: [1, 0] },
       { translateX: [0, 300], opacity: [1, 0] },
     ];
-    if (showInt <= 0) {
-      showInt = 0;
-    }
+
+    if (showInt <= 0) showInt = 0;
+
     this.setState({ showInt, imgAnim });
     this.bannerImg.prev();
     this.bannerText.prev();
@@ -128,9 +128,7 @@ export default class Test extends React.Component<any, TestState> {
   };
 
   getDuration = (e) => {
-    if (e.key === "map") {
-      return 800;
-    }
+    if (e.key === "map") return 800;
     return 1000;
   };
 
@@ -145,6 +143,7 @@ export default class Test extends React.Component<any, TestState> {
         leaveChildHide
       >
         <QueueAnim
+          className="flex justify-center"
           animConfig={this.state.imgAnim}
           duration={this.getDuration}
           delay={[!i ? this.state.delay : 300, 0]}
@@ -176,7 +175,7 @@ export default class Test extends React.Component<any, TestState> {
 
     return (
       <div
-        className={clsx(`${this.props.className}-wrapper`, "flex justify-between items-center py-72 px-10")}
+        className={clsx(`${this.props.className}-wrapper`, "flex justify-around items-center py-72 px-10")}
         style={{ background: dataArray[this.state.showInt].background }}
       >
         <div className={"home-title w-[600px]"}>
