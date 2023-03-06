@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { RightOutlined, LeftOutlined } from "@ant-design/icons";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 
@@ -19,17 +19,31 @@ import "rc-banner-anim/assets/index.css";
 import "@site/src/components/HomepageSwiper/index.css";
 
 const Element = BannerAnim.Element;
-
-type imgAnim = {
-  translateX: number[];
-  opacity: number[];
+const COMPONENT_HEIGHT = 400;
+const animConfigs = {
+  left: [
+    { translateX: [0, 300], opacity: [1, 0] },
+    { translateX: [0, -300], opacity: [1, 0] },
+  ],
+  right: [
+    { translateX: [0, 300], opacity: [1, 0] },
+    { translateX: [0, -300], opacity: [1, 0] },
+  ],
 };
+
+type ns = number | string;
+
+type ImgAnim = { [key: string]: ns[] };
 interface TestState {
   showInt: number;
   delay: number;
-  imgAnim: imgAnim[];
+  imgAnim: ImgAnim[];
   oneEnter: boolean;
+  id: { [ky: string]: string };
 }
+
+const InT: { [key: string]: ns[] } = { translateX: [0, 300], opacity: [1, 0] };
+const OutT: { [key: string]: ns[] } = { translateX: [0, -300], opacity: [1, 0] };
 
 function TypedTitle() {
   const { siteConfig } = useDocusaurusContext();
@@ -45,12 +59,10 @@ function TypedTitle() {
     });
 
     // Destroying
-    return () => {
-      typed.destroy();
-    };
+    return () => typed.destroy();
   }, []);
   return (
-    <p className="hero__subtitle my-2">
+    <p className="my-2 hero__subtitle">
       <span className="transform" ref={el}></span>
     </p>
   );
@@ -59,16 +71,43 @@ function TypedTitle() {
 function HomeTitle() {
   const { siteConfig } = useDocusaurusContext();
   return (
-    <div className={clsx(styles.containerLeft)}>
+    <div className={styles.containerLeft + " text-white"}>
       <h1 className="hero__title">{siteConfig.title}</h1>
       <p className="my-2">在这疯狂的时代，我们听到的名人言论</p>
       <TypedTitle />
-      <div className={styles.buttons + "mx-2"}>
+      <div className={styles.buttons + " mx-2 mt-4 flex justify-center"}>
         <Link className="button button--secondary button--lg" to="/">
-          Docusaurus Tutorial - 5min ⏱️
+          About Me ⏱️
+        </Link>
+
+        <Link className="button button--secondary button--lg" to="/">
+          About Me ⏱️
         </Link>
       </div>
     </div>
+  );
+}
+
+function ImgChildren(props: { color: string; i: number; map: string; pic: string; imgAnim: any; delay: number }) {
+  return (
+    <Element key={props.i} leaveChildHide>
+      <QueueAnim
+        style={{ background: props.color, height: "50%" }}
+        className="relative flex justify-center w-full h-full"
+        animConfig={props.imgAnim}
+        duration={(e) => (e.key === "map" ? 800 : 1000)}
+        delay={[!props.i ? props.delay : 300, 0]}
+        ease={["easeOutCubic", "easeInQuad"]}
+        key="img-wrapper"
+      >
+        <div className="details-switch-demo-map" key="map">
+          <img src={props.map} width="100%" alt="" />
+        </div>
+        <div className="details-switch-demo-pic" key="pic">
+          <img src={props.pic} width="100%" alt="" />
+        </div>
+      </QueueAnim>
+    </Element>
   );
 }
 
@@ -80,11 +119,12 @@ export default class Test extends React.Component<any, TestState> {
   constructor(props) {
     super(props);
     this.state = {
+      id: {},
       showInt: 0,
       delay: 0,
       imgAnim: [
-        { translateX: [0, 300], opacity: [1, 0] },
-        { translateX: [0, -300], opacity: [1, 0] },
+        { translateX: [0, 300], opacity: [1, 0] }, // 进入
+        { translateX: [0, -300], opacity: [1, 0] }, // 离开
       ],
       oneEnter: false,
     };
@@ -99,13 +139,17 @@ export default class Test extends React.Component<any, TestState> {
 
   onLeft = () => {
     let showInt = this.state.showInt;
-    showInt -= 1;
+
     const imgAnim = [
       { translateX: [0, -300], opacity: [1, 0] },
       { translateX: [0, 300], opacity: [1, 0] },
     ];
 
-    if (showInt <= 0) showInt = 0;
+    if (showInt <= 0) {
+      showInt = dataArray.length - 1;
+    } else {
+      showInt -= 1;
+    }
 
     this.setState({ showInt, imgAnim });
     this.bannerImg.prev();
@@ -118,56 +162,72 @@ export default class Test extends React.Component<any, TestState> {
       { translateX: [0, 300], opacity: [1, 0] },
       { translateX: [0, -300], opacity: [1, 0] },
     ];
-    showInt += 1;
-    if (showInt > dataArray.length - 1) {
-      showInt = dataArray.length - 1;
+
+    if (showInt >= dataArray.length - 1) {
+      showInt = 0;
+    } else {
+      showInt += 1;
     }
+
     this.setState({ showInt, imgAnim });
     this.bannerImg.next();
     this.bannerText.next();
   };
 
-  getDuration = (e) => {
-    if (e.key === "map") return 800;
-    return 1000;
-  };
+  getDuration = (e) => (e.key === "map" ? 800 : 1000);
 
   render() {
-    const imgChildren = dataArray.map((item, i) => (
-      <Element
-        key={i}
-        style={{
-          background: item.color,
-          height: "50%",
-        }}
-        leaveChildHide
-      >
-        <QueueAnim
-          className="flex justify-center"
-          animConfig={this.state.imgAnim}
-          duration={this.getDuration}
-          delay={[!i ? this.state.delay : 300, 0]}
-          ease={["easeOutCubic", "easeInQuad"]}
-          key="img-wrapper"
-        >
-          <div className={`${this.props.className}-map map${i}`} key="map">
-            <img src={item.map} width="100%" alt="" />
-          </div>
-          <div className={`${this.props.className}-pic pic${i}`} key="pic">
-            <img src={item.pic} width="100%" alt="" />
-          </div>
-        </QueueAnim>
-      </Element>
-    ));
+    // const imgChildren = dataArray.map((item, i) => (
+    //   <ImgChildren
+    //     imgAnim={this.state.imgAnim}
+    //     delay={this.state.delay}
+    //     color={item.color}
+    //     pic={item.pic}
+    //     map={item.map}
+    //     i={i}
+    //   ></ImgChildren>
+    // ));
+
+    const imgChildren = dataArray.map((item, i) => {
+      return (
+        <Element key={i} leaveChildHide>
+          <QueueAnim
+            className="relative flex items-center justify-center w-full h-full"
+            animConfig={this.state.imgAnim}
+            duration={this.getDuration}
+            delay={[!i ? this.state.delay : 300, 0]}
+            ease={["easeOutCubic", "easeInQuad"]}
+            key="img-wrapper"
+          >
+            <div key="bg" className="absolute top-0 w-full h-1/2" style={{ background: item.color }}></div>
+            <div className={`${this.props.className}-map absolute w-4/5`} key="map">
+              <img src={item.map} width="100%" alt="" />
+            </div>
+            <div className={`${this.props.className}-pic absolute w-4/5`} key="pic">
+              <img src={item.pic} width="100%" alt="" />
+            </div>
+          </QueueAnim>
+        </Element>
+      );
+    });
 
     const textChildren = dataArray.map((item, i) => {
       const { title, content, background } = item;
       return (
-        <Element key={i}>
-          <QueueAnim type="bottom" duration={1000} delay={[!i ? this.state.delay + 500 : 800, 0]}>
-            <h1 key="h1">{title}</h1>
-            <em key="em" style={{ background }} />
-            <p key="p">{content}</p>
+        <Element key={i} prefixCls="p-6">
+          <QueueAnim
+            className="flex flex-col items-start"
+            type="bottom"
+            duration={800}
+            delay={[!i ? this.state.delay + 500 : 800, 0]}
+          >
+            <h2 key="title" className="py-2 text-xl">
+              {title}
+            </h2>
+            <em key="line" style={{ background }} className="inline-block rounded-sm w-16 h-[2px]" />
+            <p key="content" className="mt-3 text-sm">
+              {content}
+            </p>
           </QueueAnim>
         </Element>
       );
@@ -175,10 +235,13 @@ export default class Test extends React.Component<any, TestState> {
 
     return (
       <div
-        className={clsx(`${this.props.className}-wrapper`, "flex justify-around items-center py-72 px-10")}
+        className={clsx(
+          `${this.props.className}-wrapper`,
+          "flex justify-around items-center py-60 px-10 text-gray-700"
+        )}
         style={{ background: dataArray[this.state.showInt].background }}
       >
-        <div className={"home-title w-[600px]"}>
+        <div className="home-title w-[600px]">
           <HomeTitle />
         </div>
 
@@ -191,9 +254,7 @@ export default class Test extends React.Component<any, TestState> {
             ease="easeInOutExpo"
             arrow={false}
             thumb={false}
-            ref={(c) => {
-              this.bannerImg = c;
-            }}
+            ref={(c) => (this.bannerImg = c)}
             onChange={this.onChange}
             dragPlay={false}
           >
@@ -216,8 +277,8 @@ export default class Test extends React.Component<any, TestState> {
           </BannerAnim>
 
           <TweenOneGroup enter={{ opacity: 0, type: "from" }} leave={{ opacity: 0 }}>
-            {this.state.showInt && <LeftOutlined onClick={this.onLeft} />}
-            {this.state.showInt < dataArray.length - 1 && <RightOutlined onClick={this.onRight} />}
+            <LeftOutlined onClick={this.onLeft} />
+            <RightOutlined onClick={this.onRight} />
           </TweenOneGroup>
         </div>
       </div>

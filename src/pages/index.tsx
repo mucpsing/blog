@@ -1,8 +1,8 @@
 /*
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-02-07 19:55:02
- * @LastEditors: cpasion-office-win10 373704015@qq.com
- * @LastEditTime: 2023-03-03 17:34:31
+ * @LastEditors: CPS-surfacePro7 holy.dandelion@139.com
+ * @LastEditTime: 2023-03-05 09:55:34
  * @FilePath: \cps-blog\src\pages\index.tsx
  * @Description: 首页
  */
@@ -14,6 +14,7 @@ import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 
 import HomepageFeatures from "@site/src/components/HomepageFeatures";
 import HomepageSwiper from "@site/src/components/HomepageSwiper";
+import Swiper from "@site/src/components/HomepageSwiper/swiper";
 
 import _ from "lodash";
 import clsx from "clsx";
@@ -49,8 +50,7 @@ function TypedTitle() {
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
   return (
-    <header className={clsx("hero hero--primary", styles.heroBanner)}>
-
+    <header className={clsx("hero hero--primary flex flex-col", styles.heroBanner)}>
       {/* <div className={clsx(styles.containerLeft)}>
         <h1 className="hero__title">{siteConfig.title}</h1>
         <p>在这疯狂的时代，我们听到的名人言论</p>
@@ -67,6 +67,7 @@ function HomepageHeader() {
       </div> */}
 
       <HomepageSwiper className={"details-switch-demo"} />
+      <Swiper></Swiper>
     </header>
   );
 }

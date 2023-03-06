@@ -8,7 +8,6 @@
 }
 
 .details-switch-demo {
-  /* margin: 40px auto; */
   width: 700px;
   height: 400px;
   background: #fff;
@@ -24,46 +23,6 @@
   height: 100%;
   position: relative;
   overflow: hidden;
-}
-
-.details-switch-demo-pic,
-.details-switch-demo-map {
-  position: absolute;
-}
-
-.details-switch-demo-pic {
-  width: 220px;
-  top: 100px;
-  left: 40px;
-}
-
-.details-switch-demo-map {
-  width: 80%;
-}
-.details-switch-demo-map.map2 {
-  width: 200px;
-  left: 50px;
-}
-
-.details-switch-demo-text-wrapper .banner-anim-elem {
-  padding: 40px;
-}
-
-.details-switch-demo-text-wrapper h1 {
-  font-size: 18px;
-  margin: 5px auto;
-}
-
-.details-switch-demo-text-wrapper em {
-  height: 2px;
-  width: 60px;
-  border-radius: 2px;
-  display: block;
-}
-
-.details-switch-demo-text-wrapper p {
-  font-size: 12px;
-  margin-top: 10px;
 }
 
 .details-switch-demo-wrapper .anticon {
