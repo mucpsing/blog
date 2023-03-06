@@ -1,8 +1,8 @@
 /*
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-02-07 19:55:02
- * @LastEditors: CPS-surfacePro7 holy.dandelion@139.com
- * @LastEditTime: 2023-03-05 09:55:34
+ * @LastEditors: CPS holy.dandelion@139.com
+ * @LastEditTime: 2023-03-07 00:06:43
  * @FilePath: \cps-blog\src\pages\index.tsx
  * @Description: 首页
  */
@@ -51,23 +51,7 @@ function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
   return (
     <header className={clsx("hero hero--primary flex flex-col", styles.heroBanner)}>
-      {/* <div className={clsx(styles.containerLeft)}>
-        <h1 className="hero__title">{siteConfig.title}</h1>
-        <p>在这疯狂的时代，我们听到的名人言论</p>
-        <TypedTitle />
-        <div className={styles.buttons}>
-          <Link className="button button--secondary button--lg" to="/">
-            Docusaurus Tutorial - 5min ⏱️
-          </Link>
-        </div>
-      </div> */}
-
-      {/* <div className={clsx(styles.containerRight)}>
-        <HomepageSwiper className={"details-switch-demo"} />
-      </div> */}
-
       <HomepageSwiper className={"details-switch-demo"} />
-      <Swiper></Swiper>
     </header>
   );
 }
