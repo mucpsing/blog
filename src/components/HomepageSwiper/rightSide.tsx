@@ -1,13 +1,15 @@
 /*
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-06 23:17:09
- * @LastEditors: CPS holy.dandelion@139.com
- * @LastEditTime: 2023-03-07 00:11:55
+ * @LastEditors: cpasion-office-win10 373704015@qq.com
+ * @LastEditTime: 2023-03-07 15:05:33
  * @FilePath: \cps-blog\src\components\HomepageSwiper\rightSide.tsx
  * @Description: 首页标题区域
  */
+
 import React, { useEffect, useRef } from "react";
 import Typed from "typed.js";
+import _ from "lodash";
 
 import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
@@ -30,7 +32,7 @@ function TypedTitle() {
     return () => typed.destroy();
   }, []);
   return (
-    <p className="my-2 hero__subtitle">
+    <p className="h-28 my-2 hero__subtitle">
       <span className="transform" ref={el}></span>
     </p>
   );
