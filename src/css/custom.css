@@ -32,3 +32,5 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import "rc-banner-anim/assets/index.css";

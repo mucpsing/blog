@@ -1,20 +1,19 @@
 /*
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-02-07 19:55:02
- * @LastEditors: CPS holy.dandelion@139.com
- * @LastEditTime: 2023-03-07 00:06:43
+ * @LastEditors: cpasion-office-win10 373704015@qq.com
+ * @LastEditTime: 2023-03-09 10:14:38
  * @FilePath: \cps-blog\src\pages\index.tsx
  * @Description: 首页
  */
 import React, { useEffect, useRef } from "react";
 
-import Link from "@docusaurus/Link";
 import Layout from "@theme/Layout";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 
 import HomepageFeatures from "@site/src/components/HomepageFeatures";
 import HomepageSwiper from "@site/src/components/HomepageSwiper";
-import Swiper from "@site/src/components/HomepageSwiper/swiper";
+import HomePageImgShow from "@site/src/components/HomepageImgShow";
 
 import _ from "lodash";
 import clsx from "clsx";
@@ -61,6 +60,7 @@ export default function Home(): JSX.Element {
   return (
     <Layout title={`Hello from ${siteConfig.title}`} description="Description will go into a meta tag in <head />">
       <HomepageHeader />
+      <HomePageImgShow></HomePageImgShow>
       <main>
         <HomepageFeatures />
       </main>
