@@ -1,8 +1,8 @@
 /*
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-06 22:25:11
- * @LastEditors: cpasion-office-win10 373704015@qq.com
- * @LastEditTime: 2023-03-08 10:32:22
+ * @LastEditors: CPS holy.dandelion@139.com
+ * @LastEditTime: 2023-03-08 22:42:35
  * @FilePath: \cps-blog\src\components\HomepageSwiper\index.tsx
  * @Description: 首页轮播组件
  */
@@ -201,11 +201,7 @@ export default class Test extends React.Component<any, TestState> {
               <div
                 onClick={(e) => this.switchPage(index)}
                 style={{ background: color }}
-                className={[
-                  this.state.showInt == index ? "w-10" : "w-5",
-                  "h-5 rounded-full cursor-pointer",
-                  "hover:w-10 transition-all duration-300",
-                ].join(" ")}
+                className={["w-5 h-5 rounded-full cursor-pointer", "hover:w-10 transition-all duration-300"].join(" ")}
               ></div>
             );
           })}
