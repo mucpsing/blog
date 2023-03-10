@@ -20,34 +20,164 @@ function onHover(index: number) {
   CURRT_HOVER_INDRX = index;
 }
 
-function ImageList(props: { clos: number }) {
+/**
+ * @description: 计算元素在二维空间的具体位置
+ * @param {number} index 一维的位置（元素下标）
+ * @param {number} COL_COUNT 元素每行的个数
+ */
+function getRowAndCol(index: number, COL_COUNT: number = 4) {
+  index += 1;
+  const res = index % COL_COUNT;
+
+  let col, row;
+  if (res == 0) {
+    row = index / COL_COUNT;
+    col = COL_COUNT;
+  } else {
+    row = (index - res) / COL_COUNT + 1;
+    col = res;
+  }
+
+  return { row, col };
+}
+
+function ImageList(props: { splicCol: number; imgWidth: number; gap: number }) {
+  const [refObj, setRefObj] = useState({});
+
   const [currtIndex, setCurrtIndex] = useState(-1);
   const [baseWidth, setBaseWidth] = useState(-1);
   const [baseHeight, setBaseHeight] = useState(-1);
 
+  const [maskY, setMaskY] = useState<string | number>("0px");
+  const [maskX, setMaskX] = useState<string | number>("0px");
+  const [maskW, setMaskW] = useState<string | number>("0px");
+  const [maskH, setMaskH] = useState<string | number>("0px");
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [gutter, setGutter] = useState(40);
+
   const onHover = (e: any, index: number) => {
     const target = e.target;
 
-    if (baseWidth === -1 && target.clientWidth) setBaseWidth(target.clientWidth);
-    if (baseHeight === -1 && target.clientHeight) setBaseHeight(target.clientHeight);
+    if (baseWidth === -1 && target.clientWidth) {
+      setBaseWidth(target.clientWidth);
+      setMaskW(`${target.clientWidth}px`);
+    }
+    if (baseHeight === -1 && target.clientHeight) {
+      setBaseHeight(target.clientHeight);
+      setMaskH(`${target.clientHeight}px`);
+    }
 
     setCurrtIndex(index);
 
-    console.log({ w: target.clientWidth, h: target.clientHeight, x: target.x, y: target.y });
+    // console.log({ w: target.clientWidth, h: target.clientHeight, x: target.x, y: target.y });
+  };
+
+  const onClickParent = (index) => {
+    index += 1;
+    const DEFAULT_COL = 4;
+    const DEFAULT_ROW = Math.round(data.length / DEFAULT_COL);
+    const flag = index % DEFAULT_COL;
+
+    let currtRow, currtCol;
+    let isLeft,
+      isTop = false;
+
+    // 获取当前点击的容器在第几行第几列
+    if (flag == 0) {
+      // 能被4整除，代表最后一个
+      currtRow = index / DEFAULT_COL;
+      currtCol = DEFAULT_COL;
+    } else {
+      currtRow = (index - flag) / 4 + 1;
+      currtCol = flag;
+    }
+
+    isLeft = Boolean(DEFAULT_COL - currtCol >= DEFAULT_COL / 2);
+    isTop = Boolean(currtRow <= Math.round(DEFAULT_ROW / 2));
+    console.log({ currtCol, currtRow, isLeft, isTop, refObj });
+
+    let oldX, oldY;
+    if (currtCol == 1) {
+      oldX = 0;
+    } else {
+      let marginX = (currtCol - 1) * gutter;
+      let newX = baseWidth * (currtCol - 1);
+      oldX = marginX + newX;
+    }
+
+    if (currtRow == 1) {
+      oldY = 0;
+    } else {
+      let marginY = (currtRow - 1) * gutter;
+      let newY = baseHeight * (currtRow - 1);
+      oldY = newY + marginY;
+    }
+
+    // console.log({ oldX, oldY, currtCol, currtRow });
+    setMaskX(`${oldX}px`);
+    setMaskY(`${oldY}px`);
+    setMaskW(`${baseWidth}px`);
+    setMaskH(`${baseHeight}px`);
+
+    // setTimeout(() => {
+    //   setIsOpen(true);
+
+    //   let newH = (baseHeight * DEFAULT_COL) / 2 + gutter;
+    //   let newW = (baseWidth * DEFAULT_COL) / 2 + gutter;
+
+    //   if (isLeft) {
+    //     setMaskX(0);
+    //   } else {
+    //     setMaskX((baseWidth * DEFAULT_COL) / 2 + gutter * 2);
+    //   }
+
+    //   if (isTop) {
+    //     setMaskY(0);
+    //   } else {
+    //     let newGutter = gutter * (parseInt(DEFAULT_ROW / 2) - 1);
+    //     let newY = baseHeight * parseInt(DEFAULT_ROW / 2);
+    //     setMaskY(`${newY + newGutter}px`);
+    //   }
+
+    //   setMaskW(`${newW}px`);
+    //   setMaskH(`${newH}px`);
+    // }, 1000);
+  };
+
+  const showMask = () => {
+    setIsOpen(!isOpen);
+
+    console.log({ isOpen });
   };
 
   return (
-    <QueueAnim component="div" type="bottom" className={[`grid-cols-${props.clos}`, "grid gap-10 relative"].join(" ")}>
+    <QueueAnim
+      component="div"
+      type="bottom"
+      style={{ gap: `${props.gap}px` }}
+      className={[`grid-cols-${props.splicCol}`, "grid relative"].join(" ")}
+    >
       {data.map((item, i) => {
-        let key = i.toString();
+        const { row: currtRow, col: currtCol } = getRowAndCol(i, props.splicCol);
+        const key = `${currtRow},${currtCol}`;
         return (
-          <div className="w-full cursor-pointer" key={key} onMouseEnter={(e) => onHover(e, i)}>
-            <img src={item.image} alt={key} />
+          <div
+            className="cursor-pointer"
+            key={key}
+            onMouseEnter={(e) => onHover(e, i)}
+            onClick={(e) => onClickParent(i)}
+          >
+            <img width="100%" height="100%" src={item.image} alt={key} />
           </div>
         );
       })}
 
-      <div className="absolute bg-white opacity-50" style={{ width: `${baseWidth}px`, height: `${baseHeight}px` }}>
+      <div
+        onClick={(e) => showMask()}
+        className={["absolute bg-white opacity-50", isOpen ? "transition-all duration-500" : ""].join(" ")}
+        style={{ width: maskW, height: maskH, top: maskY, left: maskX }}
+      >
         {currtIndex}
       </div>
     </QueueAnim>
@@ -57,7 +187,6 @@ function ImageList(props: { clos: number }) {
 export default function Test(props) {
   return (
     <section className="w-full p-10 bg-red-400">
-      {/* <TempClass></TempClass> */}
       <QueueAnim component="header" delay={300} type="bottom" className="text-center">
         <h2 className="my-4 text-4xl" key="title">
           项目展示
@@ -66,7 +195,7 @@ export default function Test(props) {
           以下项目中的所有商业项目均通过甲方同意公开后才展示
         </p>
       </QueueAnim>
-      {ImageList({ clos: 4 })}
+      {ImageList({ splicCol: 4, imgWidth: 300, gap: 40 })}
     </section>
   );
 }
