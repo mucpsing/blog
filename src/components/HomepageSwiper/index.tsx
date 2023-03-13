@@ -2,7 +2,7 @@
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-06 22:25:11
  * @LastEditors: CPS holy.dandelion@139.com
- * @LastEditTime: 2023-03-09 22:53:35
+ * @LastEditTime: 2023-03-10 21:47:42
  * @FilePath: \cps-blog\src\components\HomepageSwiper\index.tsx
  * @Description: 首页轮播组件
  */
@@ -16,7 +16,8 @@ import { TweenOneGroup } from "rc-tween-one";
 // import "rc-banner-anim/assets/index.css";
 import { RightOutlined, LeftOutlined } from "@ant-design/icons";
 
-import { dataArray } from "./testData";
+// import { dataArray } from "./testData";
+import dataArray from "./data";
 import HomeTitle from "./rightSide";
 
 interface TestState {
@@ -60,11 +61,11 @@ function CreateImgChildren(props: { color: string; map: string; pic: string; del
       key="img-wrapper"
     >
       <div key="bg" className="absolute top-0 w-full h-1/2" style={{ background: props.color }}></div>
-      <div className="absolute w-4/5" key="map">
-        <img src={props.map} width="100%" alt="" />
-      </div>
-      <div className="absolute w-4/5" key="pic">
+      <div className="absolute w-4/5 top-[20%]" key="pic">
         <img src={props.pic} width="100%" alt="" />
+      </div>
+      <div className="absolute w-4/5 bottom-[20%] cursor-pointer" key="map">
+        <img src={props.map} width="100%" alt="" />
       </div>
     </QueueAnim>
   );

@@ -8,19 +8,18 @@ import { CloseOutlined } from "@ant-design/icons";
 import "./index.css";
 
 import dataArray from "./data";
-
-interface PicDetailsProps {
-  title: string;
-}
-
 interface PicDetailsState {
   picOpen: { [key: string]: boolean }; // 是否有图片被展开
   title: string; // 组件标题
   subTitle: string; // 副标题
   currtOpenIndex: number; // 当前展开的图片容器
 }
+interface PicDetailsProps {
+  splitCol: number;
+  gap: number;
+}
 
-export default class PicDetailsDemo extends React.Component<any, PicDetailsState> {
+export default class PicDetailsDemo extends React.Component<PicDetailsProps, PicDetailsState> {
   constructor(props) {
     super(props);
     this.state = {
@@ -64,10 +63,12 @@ export default class PicDetailsDemo extends React.Component<any, PicDetailsState
   };
 
   getLiChildren = () => {
-    const imgWidth = 110;
+    const imgWidth = 110; // 110
     const imgHeight = 76;
-    const imgBoxWidth = 130;
-    const imgBoxHeight = 96;
+    const imgBoxWidth = imgWidth + this.props.gap;
+    const imgBoxHeight = imgHeight + this.props.gap;
+
+    const openHeight = imgHeight * 2 + this.props.gap;
 
     return dataArray.map((item, i) => {
       const { image, title, content } = item;
@@ -76,6 +77,7 @@ export default class PicDetailsDemo extends React.Component<any, PicDetailsState
 
       const left = isEnter ? 0 : imgBoxWidth * (i % 4);
       const imgLeft = isEnter ? imgBoxWidth * (i % 4) : 0;
+
       const isRight = Math.floor((i % 4) / 2);
       const isTop = Math.floor(i / 4);
 
@@ -84,7 +86,7 @@ export default class PicDetailsDemo extends React.Component<any, PicDetailsState
       let imgTop = isTop ? imgBoxHeight : 0;
       imgTop = isEnter ? imgTop : 0;
 
-      const liStyle = isEnter ? { width: "100%", height: 175, zIndex: 1 } : null;
+      const liStyle = isEnter ? { width: "100%", height: openHeight, zIndex: 1 } : null;
       const liAnimation = isOpen
         ? { boxShadow: "0 2px 8px rgba(140, 140, 140, .35)" }
         : { boxShadow: "0 0px 0px rgba(140, 140, 140, 0)" };
@@ -100,12 +102,13 @@ export default class PicDetailsDemo extends React.Component<any, PicDetailsState
             top: isTop ? imgBoxHeight : 0,
           }
         : null;
+
       aAnimation = isOpen
         ? {
             ease: "easeInOutCubic",
             left: isRight ? imgBoxWidth * 2 - 10 : 0,
             width: "50%",
-            height: 175,
+            height: openHeight,
             top: 0,
           }
         : aAnimation;

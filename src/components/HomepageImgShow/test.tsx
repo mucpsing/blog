@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import QueueAnim from "rc-queue-anim";
 
+import TweenOne, { TweenOneGroup } from "rc-tween-one";
+
 import data from "./data";
+import "./test.css";
 
 let CURRT_HOVER_INDRX = -1;
 
@@ -53,7 +56,7 @@ function ImageList(props: { splicCol: number; imgWidth: number; gap: number }) {
   const [maskW, setMaskW] = useState<string | number>("0px");
   const [maskH, setMaskH] = useState<string | number>("0px");
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState("0");
   const [gutter, setGutter] = useState(40);
 
   const onHover = (e: any, index: number) => {
@@ -114,40 +117,37 @@ function ImageList(props: { splicCol: number; imgWidth: number; gap: number }) {
       oldY = newY + marginY;
     }
 
-    // console.log({ oldX, oldY, currtCol, currtRow });
     setMaskX(`${oldX}px`);
     setMaskY(`${oldY}px`);
     setMaskW(`${baseWidth}px`);
     setMaskH(`${baseHeight}px`);
 
-    // setTimeout(() => {
-    //   setIsOpen(true);
+    setTimeout(() => {
+      setIsOpen("1");
 
-    //   let newH = (baseHeight * DEFAULT_COL) / 2 + gutter;
-    //   let newW = (baseWidth * DEFAULT_COL) / 2 + gutter;
+      if (isLeft) {
+        setMaskX(0);
+      } else {
+        setMaskX("50%");
+      }
 
-    //   if (isLeft) {
-    //     setMaskX(0);
-    //   } else {
-    //     setMaskX((baseWidth * DEFAULT_COL) / 2 + gutter * 2);
-    //   }
+      setMaskW(`50%`);
+      setMaskH(`${baseHeight * 2 + gutter}px`);
 
-    //   if (isTop) {
-    //     setMaskY(0);
-    //   } else {
-    //     let newGutter = gutter * (parseInt(DEFAULT_ROW / 2) - 1);
-    //     let newY = baseHeight * parseInt(DEFAULT_ROW / 2);
-    //     setMaskY(`${newY + newGutter}px`);
-    //   }
+      setTimeout(() => {
+        setIsOpen("2");
 
-    //   setMaskW(`${newW}px`);
-    //   setMaskH(`${newH}px`);
-    // }, 1000);
+        setMaskX(0);
+        setMaskW("100%");
+        setTimeout(() => {
+          setIsOpen("0");
+        }, 600);
+      }, 600);
+    }, 100);
   };
 
   const showMask = () => {
-    setIsOpen(!isOpen);
-
+    setIsOpen("0");
     console.log({ isOpen });
   };
 
@@ -163,7 +163,7 @@ function ImageList(props: { splicCol: number; imgWidth: number; gap: number }) {
         const key = `${currtRow},${currtCol}`;
         return (
           <div
-            className="cursor-pointer"
+            className="shadow-xl cursor-pointer shadow-black/25"
             key={key}
             onMouseEnter={(e) => onHover(e, i)}
             onClick={(e) => onClickParent(i)}
@@ -175,11 +175,13 @@ function ImageList(props: { splicCol: number; imgWidth: number; gap: number }) {
 
       <div
         onClick={(e) => showMask()}
-        className={["absolute bg-white opacity-50", isOpen ? "transition-all duration-500" : ""].join(" ")}
+        className={[
+          "absolute bg-white opacity-50",
+          isOpen == "1" ? "imgContainer-open1" : "",
+          isOpen == "2" ? "imgContainer-open2" : "",
+        ].join(" ")}
         style={{ width: maskW, height: maskH, top: maskY, left: maskX }}
-      >
-        {currtIndex}
-      </div>
+      ></div>
     </QueueAnim>
   );
 }

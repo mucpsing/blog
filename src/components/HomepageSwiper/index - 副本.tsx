@@ -1,20 +1,19 @@
 /*
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-06 22:25:11
- * @LastEditors: cpasion-office-win10 373704015@qq.com
- * @LastEditTime: 2023-03-07 15:28:00
+ * @LastEditors: CPS holy.dandelion@139.com
+ * @LastEditTime: 2023-03-09 22:53:35
  * @FilePath: \cps-blog\src\components\HomepageSwiper\index.tsx
  * @Description: 首页轮播组件
  */
 
 import _ from "lodash";
-import clsx from "clsx";
 import React from "react";
 
 import BannerAnim from "rc-banner-anim";
 import QueueAnim from "rc-queue-anim";
 import { TweenOneGroup } from "rc-tween-one";
-import "rc-banner-anim/assets/index.css";
+// import "rc-banner-anim/assets/index.css";
 import { RightOutlined, LeftOutlined } from "@ant-design/icons";
 
 import { dataArray } from "./testData";
@@ -145,6 +144,23 @@ export default class Test extends React.Component<any, TestState> {
     this.bannerText.next();
   };
 
+  switchPage = (index: number) => {
+    console.log({ index });
+    const currtPage = this.state.showInt;
+
+    if (currtPage == index) {
+      return;
+    } else if (currtPage < index) {
+      CURRT_ANIM = ANIM_CONFIGS.right;
+    } else {
+      CURRT_ANIM = ANIM_CONFIGS.left;
+    }
+
+    this.setState({ showInt: index });
+    this.bannerImg.slickGoTo(index);
+    this.bannerText.slickGoTo(index);
+  };
+
   /**
    * @description: 让底图与前景图的动画执行错开，更有视觉效果
    */
@@ -175,18 +191,36 @@ export default class Test extends React.Component<any, TestState> {
       );
     });
 
+    const Items = () => {
+      return (
+        <div className="absolute w-full h-10 bottom-0 z-[999] flex items-center justify-center gap-4">
+          {dataArray.map((item, index) => {
+            const { color } = item;
+            const key = index.toString();
+            return (
+              <div
+                key={key}
+                onClick={(e) => this.switchPage(index)}
+                style={{ background: color }}
+                className={["w-5 h-5 rounded-full cursor-pointer", "hover:w-10 transition-all duration-300"].join(" ")}
+              ></div>
+            );
+          })}
+        </div>
+      );
+    };
+
     return (
       <div
-        className={clsx(
+        className={[
           `overflow-hidden relative h-[450px] w-full`,
-          "flex justify-center items-center py-60 px-4 text-gray-700"
-        )}
+          "flex justify-evenly items-center pt-60 pb-64 px-4 text-gray-700",
+        ].join(" ")}
         style={{ background: dataArray[this.state.showInt].background, transition: "background 1s" }}
       >
-        <div className="home-title w-[460px]">
+        <div className="home-title w-[500px]">
           <HomeTitle />
         </div>
-
         <div className={"w-[700px] h-[400px] bg-white rounded-md overflow-hidden relative"}>
           <BannerAnim
             prefixCls={`w-1/2 h-full relative overflow-hidden inline-block`}
@@ -222,6 +256,8 @@ export default class Test extends React.Component<any, TestState> {
             <RightOutlined className="right-1 absolute text-2xl -mt-[20px] top-1/2" onClick={this.onRight} />
           </TweenOneGroup>
         </div>
+
+        <Items key="items" />
       </div>
     );
   }
