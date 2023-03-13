@@ -5,7 +5,7 @@ import TweenOne, { TweenOneGroup } from "rc-tween-one";
 import { CloseOutlined } from "@ant-design/icons";
 
 // import "rc-banner-anim/assets/index.css";
-import "./index.css";
+// import "./index.css";
 
 import dataArray from "./data";
 
@@ -64,10 +64,14 @@ export default class PicDetailsDemo extends React.Component<any, PicDetailsState
   };
 
   getLiChildren = () => {
+    const gap = 20;
+
     const imgWidth = 110;
     const imgHeight = 76;
-    const imgBoxWidth = 130;
-    const imgBoxHeight = 96;
+    const imgBoxWidth = imgWidth + gap;
+    const imgBoxHeight = imgHeight + gap;
+
+    const imgOpenHeight = gap + imgHeight * 2;
 
     return dataArray.map((item, i) => {
       const { image, title, content } = item;
@@ -84,7 +88,7 @@ export default class PicDetailsDemo extends React.Component<any, PicDetailsState
       let imgTop = isTop ? imgBoxHeight : 0;
       imgTop = isEnter ? imgTop : 0;
 
-      const liStyle = isEnter ? { width: "100%", height: 175, zIndex: 1 } : null;
+      const liStyle = isEnter ? { width: "100%", height: imgOpenHeight, zIndex: 1 } : null;
       const liAnimation = isOpen
         ? { boxShadow: "0 2px 8px rgba(140, 140, 140, .35)" }
         : { boxShadow: "0 0px 0px rgba(140, 140, 140, 0)" };
@@ -105,7 +109,7 @@ export default class PicDetailsDemo extends React.Component<any, PicDetailsState
             ease: "easeInOutCubic",
             left: isRight ? imgBoxWidth * 2 - 10 : 0,
             width: "50%",
-            height: 175,
+            height: imgOpenHeight,
             top: 0,
           }
         : aAnimation;
@@ -116,31 +120,40 @@ export default class PicDetailsDemo extends React.Component<any, PicDetailsState
           key={i}
           style={{ left, top, ...liStyle }}
           component="li"
-          className={isOpen ? "open" : ""}
+          className={[isOpen ? "open block" : "block", "w-[110px] z-[0] inline-block absolute"].join(" ")}
           animation={liAnimation}
         >
           <TweenOne
             component="a"
             onClick={(e) => this.onImgClick(e, i)}
             style={{ left: imgLeft, top: imgTop }}
+            className="block w-[110px] z-[1] absolute"
             animation={aAnimation}
           >
-            <img src={image} width="100%" height="100%" alt="" />
+            <img className="block object-cover w-full h-full" src={image} width="100%" height="100%" alt="" />
           </TweenOne>
+
           <TweenOneGroup
             enter={[
               { opacity: 0, duration: 0, type: "from", delay: 400 },
               { ease: "easeOutCubic", type: "from", left: isRight ? "50%" : "0%" },
             ]}
             leave={{ ease: "easeInOutCubic", left: isRight ? "50%" : "0%" }}
-            component=""
+            component="section"
           >
             {isOpen && (
-              <div className={`pic-details-demo-text-wrapper`} key="text" style={{ left: isRight ? "0%" : "50%" }}>
-                <h1>{title}</h1>
-                <CloseOutlined onClick={(e) => this.onClose(e, i)} />
-                <em />
-                <p>{content}</p>
+              <div
+                className={[
+                  `pic-details-demo-text-wrapper`,
+                  "text-gray-500 w-1/2 bg-white px-4 py-3 inline-block absolute align-top",
+                ].join(" ")}
+                key="text"
+                style={{ left: isRight ? "0%" : "50%", height: `${imgOpenHeight}px` }}
+              >
+                <h1 className="mx-auto my-1 text-lg">{title}</h1>
+                <CloseOutlined className="top-[20px] absolute right-[20px]" onClick={(e) => this.onClose(e, i)} />
+                <em className="h-[2px] w-16 bg-red-500 block" />
+                <p className="mt-2 text-xs">{content}</p>
               </div>
             )}
           </TweenOneGroup>
