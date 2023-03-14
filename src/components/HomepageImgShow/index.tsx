@@ -5,25 +5,46 @@ import TweenOne, { TweenOneGroup } from "rc-tween-one";
 import { CloseOutlined } from "@ant-design/icons";
 
 // import "rc-banner-anim/assets/index.css";
-// import "./index.css";
 
 import dataArray from "./data";
-interface PicDetailsState {
+
+interface IPicDetailsState {
   picOpen: { [key: string]: boolean }; // 是否有图片被展开
   title: string; // 组件标题
   subTitle: string; // 副标题
   currtOpenIndex: number; // 当前展开的图片容器
   splitCol: number;
-  gap: number; // 图片的间距 默认20
+  gap: number; // 图片的间距 默认20`````
   width: number;
   imgHeight: number; // 图片要展示的尺寸
 }
-interface PicDetailsProps {
+interface IPicDetailsProps {
   splitCol: number;
   gap: number;
 }
 
-export default class PicDetailsDemo extends React.Component<PicDetailsProps, PicDetailsState> {
+/**
+ * @description: 计算元素在二维空间的具体位置
+ * @param {number} index 一维的位置（元素下标）
+ * @param {number} COL_COUNT 元素每行的个数
+ */
+function getRowAndCol(index: number, COL_COUNT: number = 4) {
+  index += 1;
+  const res = index % COL_COUNT;
+
+  let col, row;
+  if (res == 0) {
+    row = index / COL_COUNT;
+    col = COL_COUNT;
+  } else {
+    row = (index - res) / COL_COUNT + 1;
+    col = res;
+  }
+
+  return { row, col };
+}
+
+export default class PicDetailsDemo extends React.Component<IPicDetailsProps, IPicDetailsState> {
   constructor(props) {
     super(props);
     this.state = {
@@ -31,7 +52,7 @@ export default class PicDetailsDemo extends React.Component<PicDetailsProps, Pic
       picOpen: {},
       title: "项目展示",
       subTitle: "以下项目中的所有商业项目均通过甲方同意公开后才展示",
-      splitCol: 6,
+      splitCol: 4,
       gap: 20,
       width: 800,
       imgHeight: 130,
@@ -92,7 +113,9 @@ export default class PicDetailsDemo extends React.Component<PicDetailsProps, Pic
       const left = isEnter ? 0 : imgBoxWidth * (i % splitCol);
       const imgLeft = isEnter ? imgBoxWidth * (i % splitCol) : 0;
 
-      const isRight = Math.floor((i % splitCol) / 2);
+      // const isRight = Math.floor((i % splitCol) / 2);
+      const { col: currtCol } = getRowAndCol(i, splitCol);
+      const isRight = Boolean(currtCol > splitCol / 2);
       const isTop = Math.floor(i / splitCol);
 
       let top = isTop ? (isTop - 1) * imgBoxHeight : 0;
@@ -121,7 +144,7 @@ export default class PicDetailsDemo extends React.Component<PicDetailsProps, Pic
       aAnimation = isOpen
         ? {
             ease: "easeInOutCubic",
-            left: isRight ? imgBoxWidth * 2 - this.state.gap / 2 : 0,
+            left: isRight ? imgBoxWidth * (splitCol / 2) - this.state.gap / 2 : 0,
             width: "50%",
             height: imgOpenHeight,
             top: 0,
@@ -141,7 +164,7 @@ export default class PicDetailsDemo extends React.Component<PicDetailsProps, Pic
             component="a"
             onClick={(e) => this.onImgClick(e, i)}
             style={{ left: imgLeft, top: imgTop, width: imgWidth, height: imgHeight }}
-            className="block z-[1] absolute overflow-hidden"
+            className="block z-[1] absolute overflow-hidden cursor-pointer"
             animation={aAnimation}
           >
             <img className="block object-cover w-full h-full" src={image} width="100%" height="100%" alt="" />
