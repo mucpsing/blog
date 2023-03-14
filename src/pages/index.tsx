@@ -2,7 +2,7 @@
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-02-07 19:55:02
  * @LastEditors: CPS holy.dandelion@139.com
- * @LastEditTime: 2023-03-09 21:37:15
+ * @LastEditTime: 2023-03-15 00:55:29
  * @FilePath: \cps-blog\src\pages\index.tsx
  * @Description: 首页
  */
@@ -61,8 +61,8 @@ export default function Home(): JSX.Element {
   return (
     <Layout title={`Hello from ${siteConfig.title}`} description="Description will go into a meta tag in <head />">
       <HomepageHeader />
-      <HomePageImgShow gap={20} splitCol={4} />
-      <Test></Test>
+      <HomePageImgShow />
+      {/* <Test></Test> */}
       <main>
         <HomepageFeatures />
       </main>

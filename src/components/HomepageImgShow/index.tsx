@@ -8,23 +8,8 @@ import { CloseOutlined } from "@ant-design/icons";
 
 import dataArray from "./data";
 
-interface IPicDetailsState {
-  picOpen: { [key: string]: boolean }; // 是否有图片被展开
-  title: string; // 组件标题
-  subTitle: string; // 副标题
-  currtOpenIndex: number; // 当前展开的图片容器
-  splitCol: number;
-  gap: number; // 图片的间距 默认20`````
-  width: number;
-  imgHeight: number; // 图片要展示的尺寸
-}
-interface IPicDetailsProps {
-  splitCol: number;
-  gap: number;
-}
-
 /**
- * @description: 计算元素在二维空间的具体位置
+ * @description: 提供一个索引和元素长度，返回该索引的二维位置
  * @param {number} index 一维的位置（元素下标）
  * @param {number} COL_COUNT 元素每行的个数
  */
@@ -44,23 +29,76 @@ function getRowAndCol(index: number, COL_COUNT: number = 4) {
   return { row, col };
 }
 
+const CLOSE_CLASS_LIST = ["cps-pic-click-will-close"]; // 拥有这个class名称的被电击时，如果内容被展开，会触发自动关闭
+interface IPicDetailsState {
+  picOpen: { [key: string]: boolean }; // 是否有图片被展开
+  currtOpenIndex: number; // 当前展开的图片容器
+  imgWidth: number;
+  imgHeight: number;
+  imgBoxWidth: number;
+  imgBoxHeight: number;
+  imgOpenHeight: number;
+}
+
+interface IPicDetailsProps {
+  title?: string; // 组件标题
+  subTitle?: string; // 副标题
+  splitCol?: number; // 图片分列的数量
+  gap?: number; // 间距
+  autoClose?: Boolean; // 展开状态下点击无关区域是否自动收起内容展示
+  width: number; // 图片的展示宽度，位置通过margin自动居中
+  imgHeight: number; // 图片的展示高度
+}
+
 export default class PicDetailsDemo extends React.Component<IPicDetailsProps, IPicDetailsState> {
+  static defaultProps = {
+    autoClose: true,
+    title: "图片展示",
+    subTitle: "以下项目中的所有商业项目均通过甲方同意公开后才展示",
+    splitCol: 6,
+    gap: 20,
+    width: 800,
+    imgHeight: 130,
+  };
+
   constructor(props) {
     super(props);
+
+    const imgWidth = (props.width - props.gap * (props.splitCol - 1)) / props.splitCol;
+    const imgHeight = props.imgHeight;
+
     this.state = {
-      currtOpenIndex: -1,
+      currtOpenIndex: -1, // 当前展开的图片
+      imgWidth,
+      imgHeight,
+      imgBoxWidth: imgWidth + this.props.gap,
+      imgBoxHeight: imgHeight + this.props.gap,
+      imgOpenHeight: this.props.gap + imgHeight * 2,
       picOpen: {},
-      title: "项目展示",
-      subTitle: "以下项目中的所有商业项目均通过甲方同意公开后才展示",
-      splitCol: 4,
-      gap: 20,
-      width: 800,
-      imgHeight: 130,
     };
   }
 
+  /**
+   * @description: 组件全局点击事件，主要用来控制当内容被展开时，是否点击其他地方会自动收起内容
+   */
+  onClick = (e: any, i: number) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // 展开状态下点击无关区域是否自动收起内容展示
+    if (this.props.autoClose) {
+      const classList = e.target.classList.toString().split(" ") as string[];
+
+      if (this.state.currtOpenIndex != -1 && classList.some((item) => CLOSE_CLASS_LIST.includes(item))) {
+        this.onClose(e, this.state.currtOpenIndex);
+      }
+    }
+  };
+
   onImgClick = (e, i: number) => {
     const { picOpen } = this.state;
+    e.preventDefault();
+    e.stopPropagation();
 
     Object.keys(picOpen).forEach((key) => {
       // 如果当前未被点击过，则需要创建对应的字段
@@ -73,12 +111,14 @@ export default class PicDetailsDemo extends React.Component<IPicDetailsProps, IP
     picOpen[i] = true; // 容器状态改为展开
 
     this.setState({ picOpen });
+    this.setState({ currtOpenIndex: i });
   };
 
-  onClose = (e, i) => {
+  onClose = (e, i: number) => {
     const { picOpen } = this.state;
     picOpen[i] = false;
     this.setState({ picOpen });
+    this.setState({ currtOpenIndex: -1 });
   };
 
   onTweenEnd = (i) => {
@@ -88,35 +128,23 @@ export default class PicDetailsDemo extends React.Component<IPicDetailsProps, IP
   };
 
   getDelay = (e) => {
-    const i = e.index + (dataArray.length % this.state.splitCol);
-    return (i % this.state.splitCol) * 100 + Math.floor(i / this.state.splitCol) * 100 + 200;
+    const i = e.index + (dataArray.length % this.props.splitCol);
+    return (i % this.props.splitCol) * 100 + Math.floor(i / this.props.splitCol) * 100 + 200;
   };
 
   getLiChildren = () => {
-    const gap = this.state.gap;
-    const splitCol = this.state.splitCol;
-    const containerWidth = this.state.width;
-
-    const imgWidth = (containerWidth - gap * (splitCol - 1)) / splitCol;
-    const imgHeight = this.state.imgHeight;
-
-    const imgBoxWidth = imgWidth + gap;
-    const imgBoxHeight = imgHeight + gap;
-
-    const imgOpenHeight = gap + imgHeight * 2;
-
+    const { imgWidth, imgHeight, imgBoxWidth, imgBoxHeight, imgOpenHeight } = this.state;
     return dataArray.map((item, i) => {
       const { image, title, content } = item;
+      const { col: currtCol } = getRowAndCol(i, this.props.splitCol);
+
       const isEnter = typeof this.state.picOpen[i] === "boolean";
       const isOpen = this.state.picOpen[i];
+      const isRight = Boolean(currtCol > this.props.splitCol / 2);
+      const isTop = Math.floor(i / this.props.splitCol);
 
-      const left = isEnter ? 0 : imgBoxWidth * (i % splitCol);
-      const imgLeft = isEnter ? imgBoxWidth * (i % splitCol) : 0;
-
-      // const isRight = Math.floor((i % splitCol) / 2);
-      const { col: currtCol } = getRowAndCol(i, splitCol);
-      const isRight = Boolean(currtCol > splitCol / 2);
-      const isTop = Math.floor(i / splitCol);
+      const left = isEnter ? 0 : imgBoxWidth * (i % this.props.splitCol);
+      const imgLeft = isEnter ? imgBoxWidth * (i % this.props.splitCol) : 0;
 
       let top = isTop ? (isTop - 1) * imgBoxHeight : 0;
       top = isEnter ? top : imgBoxHeight * isTop;
@@ -136,7 +164,7 @@ export default class PicDetailsDemo extends React.Component<IPicDetailsProps, IP
             width: imgWidth,
             height: imgHeight,
             onComplete: this.onTweenEnd.bind(this, i),
-            left: imgBoxWidth * (i % splitCol),
+            left: imgBoxWidth * (i % this.props.splitCol),
             top: isTop ? imgBoxHeight : 0,
           }
         : null;
@@ -144,7 +172,7 @@ export default class PicDetailsDemo extends React.Component<IPicDetailsProps, IP
       aAnimation = isOpen
         ? {
             ease: "easeInOutCubic",
-            left: isRight ? imgBoxWidth * (splitCol / 2) - this.state.gap / 2 : 0,
+            left: isRight ? imgBoxWidth * (this.props.splitCol / 2) - this.props.gap / 2 : 0,
             width: "50%",
             height: imgOpenHeight,
             top: 0,
@@ -181,7 +209,7 @@ export default class PicDetailsDemo extends React.Component<IPicDetailsProps, IP
             {isOpen && (
               <div
                 className={[
-                  `pic-details-demo-text-wrapper`,
+                  `cps-pic-details-demo-text-wrapper`,
                   "text-gray-500 w-1/2 bg-white px-4 py-3 inline-block absolute align-top",
                 ].join(" ")}
                 key="text"
@@ -211,37 +239,42 @@ export default class PicDetailsDemo extends React.Component<IPicDetailsProps, IP
 
   render() {
     return (
-      <div
-        className={[
-          `pic-details-demo`,
-          "my-[40px] mx-auto",
-          "w-4/5 min-w-[550px] h-[800px]",
-          "overflow-hidden rounded-sm",
-        ].join(" ")}
-      >
-        {/* 标题部分 */}
-        <QueueAnim type="bottom" className={["text-gray-500", "w-full my-[20px] mx-auto text-center"].join(" ")}>
-          <h1 key="h1" className="text-4xl ">
-            {this.state.title}
-          </h1>
-          <p key="p" className="mt-5 text-lg">
-            {this.state.subTitle}
-          </p>
-        </QueueAnim>
-
-        {/* 图片展示部分 */}
-        <QueueAnim
-          delay={this.getDelay}
-          id="cps-pic-details-wrapper"
-          component="ul"
-          style={{ width: `${this.state.width}px` }}
-          className={["relative list-none h-[300px] m-auto bg-yellow-600"].join(" ")}
-          interval={0}
-          type="bottom"
+      <section className={["cps-pic-click-will-close"].join(" ")} onClick={(e) => this.onClick(e, -1)}>
+        <div
+          className={[
+            "cps-pic-click-will-close",
+            "my-[40px] mx-auto",
+            "w-4/5 min-w-[550px] h-[800px]",
+            "overflow-hidden rounded-sm",
+          ].join(" ")}
         >
-          {this.getLiChildren()}
-        </QueueAnim>
-      </div>
+          {/* 标题部分 */}
+          <QueueAnim
+            type="bottom"
+            className={["text-gray-500", "cps-pic-click-will-close", "w-full my-[20px] mx-auto text-center"].join(" ")}
+          >
+            <h1 key="h1" className="text-4xl cps-pic-click-will-close">
+              {this.props.title}
+            </h1>
+            <p key="p" className="mt-5 text-lg cps-pic-click-will-close">
+              {this.props.subTitle}
+            </p>
+          </QueueAnim>
+
+          {/* 图片展示部分 */}
+          <QueueAnim
+            delay={this.getDelay}
+            id="cps-pic-details-wrapper"
+            component="ul"
+            style={{ width: `${this.props.width}px` }}
+            className={["relative list-none m-auto"].join(" ")}
+            interval={0}
+            type="bottom"
+          >
+            {this.getLiChildren()}
+          </QueueAnim>
+        </div>
+      </section>
     );
   }
 }
