@@ -1,8 +1,8 @@
 /*
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-06 22:25:11
- * @LastEditors: CPS holy.dandelion@139.com
- * @LastEditTime: 2023-03-10 21:47:42
+ * @LastEditors: cpasion-office-win10 373704015@qq.com
+ * @LastEditTime: 2023-03-15 17:45:23
  * @FilePath: \cps-blog\src\components\HomepageSwiper\index.tsx
  * @Description: 首页轮播组件
  */
@@ -19,12 +19,6 @@ import { RightOutlined, LeftOutlined } from "@ant-design/icons";
 // import { dataArray } from "./testData";
 import dataArray from "./data";
 import HomeTitle from "./rightSide";
-
-interface TestState {
-  showInt: number;
-  delay: number;
-  oneEnter: boolean;
-}
 
 const Element = BannerAnim.Element;
 
@@ -47,55 +41,31 @@ const ANIM_CONFIGS = {
  */
 let CURRT_ANIM = ANIM_CONFIGS.left;
 
-/**
- * @description: 左边图片展示
- */
-function CreateImgChildren(props: { color: string; map: string; pic: string; delay: number; index: number }) {
-  return (
-    <QueueAnim
-      className="relative flex items-center justify-center w-full h-full"
-      animConfig={CURRT_ANIM}
-      duration={(e) => (e.key === "map" ? 800 : 1000)}
-      delay={[!props.index ? props.delay : 300, 0]}
-      ease={["easeOutCubic", "easeInQuad"]}
-      key="img-wrapper"
-    >
-      <div key="bg" className="absolute top-0 w-full h-1/2" style={{ background: props.color }}></div>
-      <div className="absolute w-4/5 top-[20%]" key="pic">
-        <img src={props.pic} width="100%" alt="" />
-      </div>
-      <div className="absolute w-4/5 bottom-[20%] cursor-pointer" key="map">
-        <img src={props.map} width="100%" alt="" />
-      </div>
-    </QueueAnim>
-  );
+enum AlignmentMode {
+  Vertical = "vertical", // 横向
+  Horizontal = "horizontal", // 垂直
 }
 
-/**
- * @description: 右边文本展示
- */
-function CreateTextChildren(props: { content: string; delay: number; index: number; color: string; title: string }) {
-  return (
-    <QueueAnim
-      className="flex flex-col items-start"
-      type="bottom"
-      duration={800}
-      delay={[!props.index ? props.delay + 500 : 800, 0]}
-    >
-      <h2 key="title" className="py-2 text-xl">
-        {props.title}
-      </h2>
-      <em key="line" style={{ background: props.color }} className="inline-block rounded-sm w-16 h-[2px]" />
-      <p key="content" className="mt-3 text-sm">
-        {props.content}
-      </p>
-    </QueueAnim>
-  );
+interface ICpsImgSwiperProps {
+  alignmentMode?: AlignmentMode;
+  showText?: boolean;
+  showImg?: boolean;
 }
 
-export default class Test extends React.Component<any, TestState> {
+interface ICpsImgSwiperPropsState {
+  showInt: number;
+  delay: number;
+  oneEnter: boolean;
+}
+export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, ICpsImgSwiperPropsState> {
   bannerImg: any;
   bannerText: any;
+
+  static defaultProps = {
+    alignmentMode: AlignmentMode.Horizontal,
+    showText: false,
+    showImg: true,
+  };
 
   constructor(props) {
     super(props);
@@ -104,6 +74,8 @@ export default class Test extends React.Component<any, TestState> {
       delay: 0,
       oneEnter: false,
     };
+
+    console.log("判断: ", this.props.alignmentMode == "vertical");
   }
 
   onChange = () => {
@@ -169,29 +141,73 @@ export default class Test extends React.Component<any, TestState> {
 
   render() {
     /**
-     * @description: 根据数据渲染左边图片展示区域
+     * @description: 根据数据渲染左边【图片展示】区域
      */
     const leftChildrens = dataArray.map((item, i) => {
       const { color, map, pic } = item;
       return (
         <Element key={i} leaveChildHide>
-          <CreateImgChildren color={color} map={map} pic={pic} delay={this.state.delay} index={i} key={i} />
+          <QueueAnim
+            className="relative flex items-center justify-center w-full h-full"
+            animConfig={CURRT_ANIM}
+            duration={(e) => (e.key === "map" ? 800 : 1000)}
+            delay={[!i ? this.state.delay : 300, 0]}
+            ease={["easeOutCubic", "easeInQuad"]}
+            key="img-wrapper"
+          >
+            <div
+              key="bg"
+              className={["absolute top-0 w-full", this.props.alignmentMode == "vertical" ? "h-1/2" : "h-2/3"].join(
+                " "
+              )}
+              style={{ background: color }}
+            ></div>
+            <div className="absolute w-4/5 top-[20%]" key="pic">
+              <img src={pic} width="100%" height="100%" alt="" />
+            </div>
+            <div
+              className={[
+                this.props.alignmentMode == "vertical" ? "bottom-[20%] w-4/5" : "h-5/6 w-auto",
+                "absolute cursor-pointer",
+              ].join(" ")}
+              key="map"
+            >
+              {/* <img src={map} width="100%" height="100%" alt="" /> */}
+              <img src={map} className="object-fill w-full h-full" alt="" />
+            </div>
+          </QueueAnim>
         </Element>
       );
     });
 
     /**
-     * @description: 根据数据渲染右边文字描述区域
+     * @description: 根据数据渲染右边【文字描述】区域
      */
     const rightChildrens = dataArray.map((item, i) => {
       const { title, content, background } = item;
       return (
         <Element key={i} prefixCls="p-6">
-          <CreateTextChildren index={i} color={background} content={content} title={title} delay={this.state.delay} />
+          <QueueAnim
+            className="flex flex-col items-start"
+            type="bottom"
+            duration={800}
+            delay={[!i ? this.state.delay + 500 : 800, 0]}
+          >
+            <h2 key="title" className="py-2 text-xl">
+              {title}
+            </h2>
+            <em key="line" style={{ background }} className="inline-block rounded-sm w-16 h-[2px]" />
+            <p key="content" className="mt-3 text-sm">
+              {content}
+            </p>
+          </QueueAnim>
         </Element>
       );
     });
 
+    /**
+     * @description: 位于组件中央的彩色轮播切换按钮
+     */
     const Items = () => {
       return (
         <div className="absolute w-full h-10 bottom-0 z-[999] flex items-center justify-center gap-4">
@@ -223,8 +239,14 @@ export default class Test extends React.Component<any, TestState> {
           <HomeTitle />
         </div>
         <div className={"w-[700px] h-[400px] bg-white rounded-md overflow-hidden relative"}>
+          {/* 图片 */}
           <BannerAnim
-            prefixCls={`w-1/2 h-full relative overflow-hidden inline-block`}
+            prefixCls={[
+              "cps-swiper-img relative overflow-hidden",
+              this.props.alignmentMode == "vertical"
+                ? `w-1/2 h-full inline-block z-[1]`
+                : "w-full h-full block absolute z-[2]",
+            ].join(" ")}
             sync
             type="across"
             duration={1000}
@@ -238,8 +260,14 @@ export default class Test extends React.Component<any, TestState> {
             {leftChildrens}
           </BannerAnim>
 
+          {/* 文字 */}
           <BannerAnim
-            prefixCls={`w-1/2 h-full relative overflow-hidden inline-block`}
+            prefixCls={[
+              "cps-swiper-text overflow-hidden z-[3]",
+              this.props.alignmentMode == "vertical"
+                ? `w-1/2 h-full inline-block relative`
+                : "w-full h-1/3 block absolute bottom-0 bg-white/50",
+            ].join(" ")}
             sync
             type="across"
             duration={1000}
@@ -253,8 +281,8 @@ export default class Test extends React.Component<any, TestState> {
           </BannerAnim>
 
           <TweenOneGroup enter={{ opacity: 0, type: "from" }} leave={{ opacity: 0 }}>
-            <LeftOutlined className="absolute text-2xl left-1 -mt-[20px] top-1/2" onClick={this.onLeft} />
-            <RightOutlined className="right-1 absolute text-2xl -mt-[20px] top-1/2" onClick={this.onRight} />
+            <LeftOutlined className="z-[3] absolute text-2xl left-1 -mt-[20px] top-1/2" onClick={this.onLeft} />
+            <RightOutlined className="z-[3] right-1 absolute text-2xl -mt-[20px] top-1/2" onClick={this.onRight} />
           </TweenOneGroup>
         </div>
 

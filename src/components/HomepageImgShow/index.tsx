@@ -33,6 +33,7 @@ const CLOSE_CLASS_LIST = ["cps-pic-click-will-close"]; // 拥有这个class名�
 interface IPicDetailsState {
   picOpen: { [key: string]: boolean }; // 是否有图片被展开
   currtOpenIndex: number; // 当前展开的图片容器
+  height: number;
   imgWidth: number;
   imgHeight: number;
   imgBoxWidth: number;
@@ -45,9 +46,9 @@ interface IPicDetailsProps {
   subTitle?: string; // 副标题
   splitCol?: number; // 图片分列的数量
   gap?: number; // 间距
-  autoClose?: Boolean; // 展开状态下点击无关区域是否自动收起内容展示
-  width: number; // 图片的展示宽度，位置通过margin自动居中
-  imgHeight: number; // 图片的展示高度
+  autoClose?: Boolean; // 点击外部收起
+  width?: number; // 图片的展示宽度，位置通过margin自动居中
+  imgScale?: string; // 默认16:9 可以自定义
 }
 
 export default class PicDetailsDemo extends React.Component<IPicDetailsProps, IPicDetailsState> {
@@ -55,20 +56,24 @@ export default class PicDetailsDemo extends React.Component<IPicDetailsProps, IP
     autoClose: true,
     title: "图片展示",
     subTitle: "以下项目中的所有商业项目均通过甲方同意公开后才展示",
-    splitCol: 6,
-    gap: 20,
-    width: 800,
-    imgHeight: 130,
+    splitCol: 4,
+    gap: 100,
+    width: 1500,
+    imgScale: "4:3",
   };
 
   constructor(props) {
     super(props);
 
     const imgWidth = (props.width - props.gap * (props.splitCol - 1)) / props.splitCol;
-    const imgHeight = props.imgHeight;
+    const [wScale, hScale] = this.props.imgScale.split(":");
+    const imgHeight = (imgWidth / parseFloat(wScale)) * parseFloat(hScale);
+
+    const height = (dataArray.length / props.splitCol) * (imgHeight + this.props.gap);
 
     this.state = {
       currtOpenIndex: -1, // 当前展开的图片
+      height,
       imgWidth,
       imgHeight,
       imgBoxWidth: imgWidth + this.props.gap,
@@ -244,7 +249,7 @@ export default class PicDetailsDemo extends React.Component<IPicDetailsProps, IP
           className={[
             "cps-pic-click-will-close",
             "my-[40px] mx-auto",
-            "w-4/5 min-w-[550px] h-[800px]",
+            "w-4/5 min-w-[550px]",
             "overflow-hidden rounded-sm",
           ].join(" ")}
         >
@@ -266,8 +271,8 @@ export default class PicDetailsDemo extends React.Component<IPicDetailsProps, IP
             delay={this.getDelay}
             id="cps-pic-details-wrapper"
             component="ul"
-            style={{ width: `${this.props.width}px` }}
-            className={["relative list-none m-auto"].join(" ")}
+            style={{ width: `${this.props.width}px`, height: `${this.state.height}px` }}
+            className={["cps-pic-click-will-close","relative list-none m-auto"].join(" ")}
             interval={0}
             type="bottom"
           >
