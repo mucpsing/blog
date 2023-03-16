@@ -35,7 +35,7 @@ const navbarOpenSourceProjectItems = [
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "Capsion的博客", // 网站主题
+  title: "Capsion", // 网站主题
   // tagline: '好记性不如烂笔头',
   tagline: taglineList.join(","),
   favicon: "img/favicon.ico",

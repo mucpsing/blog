@@ -272,7 +272,7 @@ export default class PicDetailsDemo extends React.Component<IPicDetailsProps, IP
             id="cps-pic-details-wrapper"
             component="ul"
             style={{ width: `${this.props.width}px`, height: `${this.state.height}px` }}
-            className={["cps-pic-click-will-close","relative list-none m-auto"].join(" ")}
+            className={["cps-pic-click-will-close", "relative list-none m-auto"].join(" ")}
             interval={0}
             type="bottom"
           >
