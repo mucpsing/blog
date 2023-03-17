@@ -5,6 +5,12 @@
  */
 
 /* You can override the default Infima variables here. */
+
+/* @tailwind base; */
+@tailwind components;
+@tailwind utilities;
+@import "rc-banner-anim/assets/index.css";
+
 :root {
   --ifm-color-primary: #2e8555;
   --ifm-color-primary-dark: #29784c;
@@ -32,9 +38,4 @@
   @apply hover:text-sky-500 cursor-pointer;
 }
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@import "rc-banner-anim/assets/index.css";
 /* @import "//at.alicdn.com/t/c/font_3959151_wj4ujygdnwh.js"; */
