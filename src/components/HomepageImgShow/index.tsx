@@ -34,11 +34,14 @@ interface IPicDetailsState {
   picOpen: { [key: string]: boolean }; // 是否有图片被展开
   currtOpenIndex: number; // 当前展开的图片容器
   height: number;
+  width: number;
   imgWidth: number;
   imgHeight: number;
   imgBoxWidth: number;
   imgBoxHeight: number;
   imgOpenHeight: number;
+  containerWidth?: number;
+  containerHeight?: number;
 }
 
 interface IPicDetailsProps {
@@ -47,32 +50,42 @@ interface IPicDetailsProps {
   splitCol?: number; // 图片分列的数量
   gap?: number; // 间距
   autoClose?: Boolean; // 点击外部收起
-  width?: number; // 图片的展示宽度，位置通过margin自动居中
   imgScale?: string; // 默认16:9 可以自定义
+  rounded?: boolean; // 是否圆角
+  shadow?: boolean; // 是否带阴影
+  defaultWidth?:number; // 整体宽度
+  autoWidth?:boolean; // 响应式宽度
+
 }
 
 export default class PicDetailsDemo extends React.Component<IPicDetailsProps, IPicDetailsState> {
+  wrapperElement: HTMLElement;
+  wrapperImgElement: HTMLElement;
+
   static defaultProps = {
-    autoClose: true,
     title: "图片展示",
     subTitle: "以下项目中的所有商业项目均通过甲方同意公开后才展示",
     splitCol: 4,
-    gap: 100,
-    width: 1500,
+    gap: 40,
     imgScale: "4:3",
+    rounded: true,
+    shadow: true,
+    autoClose: true,
+    defaultWidth:800,
+    autoWidth:true
   };
 
   constructor(props) {
     super(props);
 
-    const imgWidth = (props.width - props.gap * (props.splitCol - 1)) / props.splitCol;
+    const imgWidth = (props.defaultWidth - props.gap * (props.splitCol - 1)) / props.splitCol;
     const [wScale, hScale] = this.props.imgScale.split(":");
     const imgHeight = (imgWidth / parseFloat(wScale)) * parseFloat(hScale);
-
     const height = (dataArray.length / props.splitCol) * (imgHeight + this.props.gap);
 
     this.state = {
       currtOpenIndex: -1, // 当前展开的图片
+      width: props.defaultWidth,
       height,
       imgWidth,
       imgHeight,
@@ -80,8 +93,46 @@ export default class PicDetailsDemo extends React.Component<IPicDetailsProps, IP
       imgBoxHeight: imgHeight + this.props.gap,
       imgOpenHeight: this.props.gap + imgHeight * 2,
       picOpen: {},
+      containerWidth: 0,
     };
   }
+
+  componentDidMount() {
+    
+    this.wrapperImgElement = document.getElementById("cps-pic-details-img-wrapper");
+
+    if (this.wrapperImgElement) {
+      window.addEventListener("resize", this.updateImgWrapperWidth);
+      this.updateImgWrapperWidth();
+    } else {
+      console.log("组件初始化失败，无法获取父级DOM，动态高度将失效");
+    }
+  }
+
+  /**
+   * @description: 动态修改图片尺寸
+   */
+  updateImgWrapperWidth = () => {
+    if(!this.props.autoWidth) return
+    
+    const props = this.props;
+    const imgWidth = (this.wrapperImgElement.clientWidth - props.gap * (props.splitCol - 1)) / props.splitCol;
+    const [wScale, hScale] = props.imgScale.split(":");
+    const imgHeight = (imgWidth / parseFloat(wScale)) * parseFloat(hScale);
+    const height = (dataArray.length / props.splitCol) * (imgHeight + props.gap);
+    const wrapperElement = document.getElementById("cps-pic-details-wrapper");
+
+    this.setState({
+      containerWidth: wrapperElement.clientWidth,
+      width: wrapperElement.clientWidth,
+      height,
+      imgWidth,
+      imgHeight,
+      imgBoxWidth: imgWidth + props.gap,
+      imgBoxHeight: imgHeight + props.gap,
+      imgOpenHeight: props.gap + imgHeight * 2,
+    });
+  };
 
   /**
    * @description: 组件全局点击事件，主要用来控制当内容被展开时，是否点击其他地方会自动收起内容
@@ -138,13 +189,13 @@ export default class PicDetailsDemo extends React.Component<IPicDetailsProps, IP
   };
 
   getLiChildren = () => {
-    const { imgWidth, imgHeight, imgBoxWidth, imgBoxHeight, imgOpenHeight } = this.state;
+    const { imgWidth, imgHeight, imgBoxWidth, imgBoxHeight, imgOpenHeight, picOpen } = this.state;
     return dataArray.map((item, i) => {
       const { image, title, content } = item;
       const { col: currtCol } = getRowAndCol(i, this.props.splitCol);
 
-      const isEnter = typeof this.state.picOpen[i] === "boolean";
-      const isOpen = this.state.picOpen[i];
+      const isEnter = typeof picOpen[i] === "boolean";
+      const isOpen = picOpen[i];
       const isRight = Boolean(currtCol > this.props.splitCol / 2);
       const isTop = Math.floor(i / this.props.splitCol);
 
@@ -232,26 +283,12 @@ export default class PicDetailsDemo extends React.Component<IPicDetailsProps, IP
     });
   };
 
-  componentDidMount() {
-    const targetElement = document.getElementById("cps-pic-details-wrapper");
-
-    if (targetElement) {
-      console.log({ targetElement });
-
-      console.log({ width: targetElement.clientWidth });
-    }
-  }
-
   render() {
     return (
       <section className={["cps-pic-click-will-close"].join(" ")} onClick={(e) => this.onClick(e, -1)}>
         <div
-          className={[
-            "cps-pic-click-will-close",
-            "my-[40px] mx-auto",
-            "w-4/5 min-w-[550px]",
-            "overflow-hidden rounded-sm",
-          ].join(" ")}
+          id="cps-pic-details-wrapper"
+          className={["cps-pic-click-will-close", "w-full h-full py-10 px-20", "overflow-hidden rounded-sm"].join(" ")}
         >
           {/* 标题部分 */}
           <QueueAnim
@@ -269,9 +306,9 @@ export default class PicDetailsDemo extends React.Component<IPicDetailsProps, IP
           {/* 图片展示部分 */}
           <QueueAnim
             delay={this.getDelay}
-            id="cps-pic-details-wrapper"
+            id="cps-pic-details-img-wrapper"
             component="ul"
-            style={{ width: `${this.props.width}px`, height: `${this.state.height}px` }}
+            style={{ height: `${this.state.height}px` }}
             className={["cps-pic-click-will-close", "relative list-none m-auto"].join(" ")}
             interval={0}
             type="bottom"
