@@ -28,9 +28,13 @@
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+.home-swiper-icon-default {
+  @apply hover:text-sky-500 cursor-pointer;
+}
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @import "rc-banner-anim/assets/index.css";
+/* @import "//at.alicdn.com/t/c/font_3959151_wj4ujygdnwh.js"; */
