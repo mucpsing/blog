@@ -35,27 +35,25 @@ interface IPicDetailsState {
   currtOpenIndex: number; // 当前展开的图片容器
   height: number;
   width: number;
+  gap: number;
   imgWidth: number;
   imgHeight: number;
   imgBoxWidth: number;
   imgBoxHeight: number;
   imgOpenHeight: number;
-  containerWidth?: number;
-  containerHeight?: number;
 }
 
 interface IPicDetailsProps {
   title?: string; // 组件标题
   subTitle?: string; // 副标题
   splitCol?: number; // 图片分列的数量
-  gap?: number; // 间距
+  gap?: number; // 间距（百分比），以宽度为基础，10 就是图片宽度的10%
   autoClose?: Boolean; // 点击外部收起
-  imgScale?: string; // 默认16:9 可以自定义
+  imgScale?: string; // 图片尺寸比例，默认4:3
   rounded?: boolean; // 是否圆角
   shadow?: boolean; // 是否带阴影
-  defaultWidth?:number; // 整体宽度
-  autoWidth?:boolean; // 响应式宽度
-
+  defaultWidth?: number; // 整体宽度
+  autoWidth?: boolean; // 响应式宽度
 }
 
 export default class PicDetailsDemo extends React.Component<IPicDetailsProps, IPicDetailsState> {
@@ -66,43 +64,39 @@ export default class PicDetailsDemo extends React.Component<IPicDetailsProps, IP
     title: "图片展示",
     subTitle: "以下项目中的所有商业项目均通过甲方同意公开后才展示",
     splitCol: 4,
-    gap: 40,
+    gap: 10,
     imgScale: "4:3",
     rounded: true,
     shadow: true,
     autoClose: true,
-    defaultWidth:800,
-    autoWidth:true
+    defaultWidth: 800,
+    autoWidth: true,
   };
 
   constructor(props) {
     super(props);
 
-    const imgWidth = (props.defaultWidth - props.gap * (props.splitCol - 1)) / props.splitCol;
-    const [wScale, hScale] = this.props.imgScale.split(":");
-    const imgHeight = (imgWidth / parseFloat(wScale)) * parseFloat(hScale);
-    const height = (dataArray.length / props.splitCol) * (imgHeight + this.props.gap);
-
     this.state = {
+      picOpen: {},
       currtOpenIndex: -1, // 当前展开的图片
       width: props.defaultWidth,
-      height,
-      imgWidth,
-      imgHeight,
-      imgBoxWidth: imgWidth + this.props.gap,
-      imgBoxHeight: imgHeight + this.props.gap,
-      imgOpenHeight: this.props.gap + imgHeight * 2,
-      picOpen: {},
-      containerWidth: 0,
+      height: props.defaultWidth,
+      imgWidth: 100,
+      imgHeight: 100,
+      gap: props.gap,
+      imgBoxWidth: 110,
+      imgBoxHeight: 110,
+      imgOpenHeight: 220,
     };
   }
 
   componentDidMount() {
-    
     this.wrapperImgElement = document.getElementById("cps-pic-details-img-wrapper");
 
     if (this.wrapperImgElement) {
-      window.addEventListener("resize", this.updateImgWrapperWidth);
+      window.addEventListener("resize", () => {
+        if (this.props.autoWidth) this.updateImgWrapperWidth();
+      });
       this.updateImgWrapperWidth();
     } else {
       console.log("组件初始化失败，无法获取父级DOM，动态高度将失效");
@@ -113,24 +107,21 @@ export default class PicDetailsDemo extends React.Component<IPicDetailsProps, IP
    * @description: 动态修改图片尺寸
    */
   updateImgWrapperWidth = () => {
-    if(!this.props.autoWidth) return
-    
-    const props = this.props;
-    const imgWidth = (this.wrapperImgElement.clientWidth - props.gap * (props.splitCol - 1)) / props.splitCol;
-    const [wScale, hScale] = props.imgScale.split(":");
+    // 间距公式：元素宽度/列数量*间距百分比(props.gap)
+    const gap = ((this.wrapperImgElement.clientWidth / this.props.splitCol) * this.props.gap) / 100;
+    const imgWidth = (this.wrapperImgElement.clientWidth - gap * (this.props.splitCol - 1)) / this.props.splitCol;
+    const [wScale, hScale] = this.props.imgScale.split(":");
     const imgHeight = (imgWidth / parseFloat(wScale)) * parseFloat(hScale);
-    const height = (dataArray.length / props.splitCol) * (imgHeight + props.gap);
-    const wrapperElement = document.getElementById("cps-pic-details-wrapper");
+    const height = (dataArray.length / this.props.splitCol) * (imgHeight + gap);
 
     this.setState({
-      containerWidth: wrapperElement.clientWidth,
-      width: wrapperElement.clientWidth,
+      gap,
       height,
       imgWidth,
       imgHeight,
-      imgBoxWidth: imgWidth + props.gap,
-      imgBoxHeight: imgHeight + props.gap,
-      imgOpenHeight: props.gap + imgHeight * 2,
+      imgBoxWidth: imgWidth + gap,
+      imgBoxHeight: imgHeight + gap,
+      imgOpenHeight: gap + imgHeight * 2,
     });
   };
 
@@ -209,9 +200,9 @@ export default class PicDetailsDemo extends React.Component<IPicDetailsProps, IP
 
       const liStyle = isEnter ? { width: "100%", height: imgOpenHeight, zIndex: 1 } : null;
 
-      const liAnimation = isOpen
-        ? { boxShadow: "0 2px 8px rgba(140, 140, 140, .35)" }
-        : { boxShadow: "0 0px 0px rgba(140, 140, 140, 0)" };
+      // const liAnimation = isOpen
+      //   ? { boxShadow: "0 2px 8px rgba(140, 140, 140, .35)" }
+      //   : { boxShadow: "0 0px 0px rgba(140, 140, 140, 0)" };
 
       let aAnimation: any = isEnter
         ? {
@@ -228,7 +219,7 @@ export default class PicDetailsDemo extends React.Component<IPicDetailsProps, IP
       aAnimation = isOpen
         ? {
             ease: "easeInOutCubic",
-            left: isRight ? imgBoxWidth * (this.props.splitCol / 2) - this.props.gap / 2 : 0,
+            left: isRight ? imgBoxWidth * (this.props.splitCol / 2) - this.state.gap / 2 : 0,
             width: "50%",
             height: imgOpenHeight,
             top: 0,
@@ -242,13 +233,17 @@ export default class PicDetailsDemo extends React.Component<IPicDetailsProps, IP
           style={{ left, top, ...liStyle }}
           component="li"
           className={[isOpen ? "open block" : "block", "z-[0] inline-block absolute"].join(" ")}
-          animation={liAnimation}
+          // animation={liAnimation}
         >
           <TweenOne
             component="a"
             onClick={(e) => this.onImgClick(e, i)}
             style={{ left: imgLeft, top: imgTop, width: imgWidth, height: imgHeight }}
-            className="block z-[1] absolute overflow-hidden cursor-pointer"
+            className={[
+              this.props.shadow ? "hover:shadow-lg hover:shadow-cyan-500/50" : "",
+              isOpen && this.props.shadow ? "shadow-lg shadow-cyan-500/50" : "",
+              "block z-[1] absolute overflow-hidden cursor-pointer",
+            ].join(" ")}
             animation={aAnimation}
           >
             <img className="block object-cover w-full h-full" src={image} width="100%" height="100%" alt="" />

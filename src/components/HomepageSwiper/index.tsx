@@ -2,7 +2,7 @@
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-06 22:25:11
  * @LastEditors: cpasion-office-win10 373704015@qq.com
- * @LastEditTime: 2023-03-16 11:01:03
+ * @LastEditTime: 2023-03-17 10:04:02
  * @FilePath: \cps-blog\src\components\HomepageSwiper\index.tsx
  * @Description: 首页轮播组件
  */
@@ -238,7 +238,11 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
                 key={key}
                 onClick={(e) => this.switchPage(index)}
                 style={{ background: mainColor }}
-                className={["w-5 h-5 rounded-full cursor-pointer", "hover:w-10 transition-all duration-300"].join(" ")}
+                className={[
+                  "border-2 border-solid border-white",
+                  "w-5 h-5 rounded-full cursor-pointer",
+                  "hover:w-10 transition-all duration-300",
+                ].join(" ")}
               ></div>
             );
           })}
