@@ -15,6 +15,8 @@ import HomepageFeatures from "@site/src/components/HomepageFeatures";
 import HomepageSwiper from "@site/src/components/HomepageSwiper";
 import HomePageImgShow from "@site/src/components/HomepageImgShow";
 
+import "./index.css";
+
 export default function Home(): JSX.Element {
   const { siteConfig } = useDocusaurusContext();
   return (

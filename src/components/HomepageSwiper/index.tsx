@@ -1,8 +1,8 @@
 /*
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-06 22:25:11
- * @LastEditors: cpasion-office-win10 373704015@qq.com
- * @LastEditTime: 2023-03-17 17:34:56
+ * @LastEditors: CPS holy.dandelion@139.com
+ * @LastEditTime: 2023-03-18 22:18:11
  * @FilePath: \cps-blog\src\components\HomepageSwiper\index.tsx
  * @Description: 首页轮播组件
  */
@@ -91,7 +91,7 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
         this.autoSwitchInterID = setInterval(() => {
           this.onRight("autoSwitch");
         }, this.props.autoSwitch);
-      }, 3000);
+      }, 1000);
     }
   }
 
@@ -102,7 +102,12 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
     }
   };
 
-  onLeft = () => {
+  onLeft = (e?) => {
+    if (typeof e != "string" && this.autoSwitchInterID) {
+      clearInterval(this.autoSwitchInterID);
+      this.autoSwitchInterID = 0;
+    }
+
     let showInt = this.state.showInt;
 
     this.currtAnim = ANIM_CONFIGS.left;
@@ -187,7 +192,7 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
             </div>
             <div
               className={[
-                this.props.alignmentMode == "vertical" ? "bottom-[15%] w-4/5" : "h-5/6 w-auto",
+                this.props.alignmentMode == "vertical" ? "bottom-[15%] w-4/5" : "w-4/5",
                 "absolute cursor-pointer",
               ].join(" ")}
               key="map"
@@ -205,14 +210,19 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
     const rightChildrens = this.DATA.map((item, i) => {
       const { title, content, subColor } = item;
       return (
-        <Element key={i} prefixCls={this.props.alignmentMode == "vertical" ? "px-6 py-12" : "py-4 px-10"}>
+        <Element
+          key={i}
+          prefixCls={
+            this.props.alignmentMode == "vertical" ? "px-6 py-12 md:px-3 md:py-6" : "px-10 py-4 md:px-5 md:py-2"
+          }
+        >
           <QueueAnim
             className="flex flex-col items-start"
             type="bottom"
             duration={800}
             delay={[!i ? this.state.delay + 500 : 800, 0]}
           >
-            <h2 key="title" className="py-2 text-xl">
+            <h2 key="title" className="py-2 my-1 text-xl">
               {title}
             </h2>
             <em key="line" style={{ background: subColor }} className="inline-block rounded-sm w-16 h-[2px]" />
@@ -229,7 +239,7 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
      */
     const Items = () => {
       return (
-        <div className="absolute w-full h-10 bottom-0 z-[999] flex items-center justify-center gap-4">
+        <div className="absolute w-full h-10 bottom-0 z-[1] flex items-center justify-center gap-4">
           {this.DATA.map((item, index) => {
             const { mainColor } = item;
             const key = index.toString();
@@ -253,22 +263,33 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
     return (
       <div
         className={[
-          `overflow-hidden relative h-[450px] w-full`,
+          `overflow-hidden relative w-full h-[600px]`,
+          "md:h-[650px]",
+          "lg:h-[750px]",
+          "xl:h-[900px]",
           "flex justify-evenly items-center pt-60 pb-64 px-4 text-gray-700",
         ].join(" ")}
         style={{ background: this.DATA[this.state.showInt].subColor, transition: "background 1s" }}
       >
-        <div className="home-title w-[500px]">
+        <div className="home-title w-[400px]">
           <HomeTitle />
         </div>
-        <div className={"w-[700px] h-[400px] bg-white rounded-md overflow-hidden relative"}>
+        <div
+          className={[
+            "md:w-[500px] md:h-[400px]",
+            "lg:w-[500px] lg:h-[350px]",
+            "xl:w-[950px] xl:h-[650px]",
+            "w-[4 50px] h-[550px] min-w-[300px]",
+            "bg-white rounded-md overflow-hidden relative",
+          ].join(" ")}
+        >
           {/* 图片 */}
           <BannerAnim
             className={[
               "cps-swiper-img relative overflow-hidden",
               this.props.alignmentMode == "vertical"
                 ? `w-1/2 h-full inline-block z-[1]`
-                : "w-full min-w-[600px] h-full block absolute z-[2]",
+                : "w-full min-w-[450px] h-full block absolute z-[2]",
             ].join(" ")}
             sync
             type="across"
@@ -285,8 +306,9 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
 
           {/* 文字 */}
           <BannerAnim
+            style={{ backdropFilter: "blur(5px)" }}
             className={[
-              "cps-swiper-text overflow-hidden z-[3] backdrop-blur-sm",
+              "cps-swiper-text overflow-hidden z-[3]",
               this.props.alignmentMode == "vertical"
                 ? `w-1/2 h-full inline-block relative`
                 : "w-full h-1/3 block absolute bottom-0 bg-white/50",

@@ -13,23 +13,75 @@ const navbarNotebookItems = getNavbarItems(path.resolve("./docs"), ["【18】副
 
 const navbarPersonalProjectItems = [
   {
-    href: "https://github.com/mucpsing/mucpsing",
-    label: "GitHub",
+    to: "/docs/【05】项目经历/02%20个人自用脚手架/",
+    label: "【electron】截图软件",
   },
   {
-    href: "https://gitee.com/capsion/resume",
-    label: "Gitee",
+    to: "/docs/【05】项目经历/02%20个人自用脚手架/",
+    label: "【nodejs】自用脚手架",
+  },
+  {
+    to: "/docs/【05】项目经历/03%20SublimeText插件/文件头部插入模板",
+    label: "【ST插件】插入文件头",
+  },
+  {
+    to: "/docs/【05】项目经历/03%20SublimeText插件/代码格式化",
+    label: "【ST插件】代码格式化",
+  },
+  {
+    to: "/docs/【05】项目经历/03%20SublimeText插件/快捷切换输入法为英文",
+    label: "【ST插件】自动切换英文输入",
+  },
+  {
+    to: "/docs/【05】项目经历/03%20SublimeText插件/自动生成jsdoc格式注释",
+    label: "【ST插件】注释生成",
+  },
+  {
+    to: "/docs/【05】项目经历/03%20SublimeText插件/快捷运行shell命令",
+    label: "【ST插件】快捷SHELL命令输入",
+  },
+  {
+    to: "/docs/【05】项目经历/03%20SublimeText插件/自动更新channel_v3文件",
+    label: "【ST插件】自动更新Channel_v3",
+  },
+  {
+    type: "html",
+    value: '<hr class="dropdown-separator">',
+  },
+  {
+    to: "/SublimeTextPlugs",
+    label: "🌟作品汇总🌟",
+  },
+  {
+    href: "https://github.com/Capsion-ST-PLugins",
+    label: "Github链接",
+  },
+  {
+    href: "https://gitee.com/Capsion-ST-PLugins",
+    label: "Gitee链接",
   },
 ];
 
 const navbarOpenSourceProjectItems = [
   {
-    href: "https://github.com/mucpsing/mucpsing",
-    label: "GitHub",
+    to: "/docs/【05】项目经历/06%20项目管理系统/项目预览",
+    label: "【闭源】项目管理系统",
   },
   {
-    href: "https://gitee.com/capsion/resume",
-    label: "Gitee",
+    to: "/docs/【05】项目经历/01%20全栈小程序/",
+    label: "【全栈】全栈小程序",
+  },
+  {
+    to: "/docs/【05】项目经历/01%20全栈小程序/",
+    label: "【接口】PSD文件图层实时修改接口",
+  },
+  {
+    type: "html",
+    value: '<hr class="dropdown-separator">',
+  },
+  {
+    to: "/SublimeTextPlugs",
+    label: "💼项目汇总💼",
   },
 ];
 
@@ -66,7 +118,7 @@ const config = {
 
   presets: [
     [
-      "classic",
+      "@docusaurus/preset-classic",
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
@@ -130,7 +182,7 @@ const config = {
           /* 【导航】小工具 */
           {
             type: "dropdown",
-            label: "开源项目",
+            label: "完整项目",
             position: "right",
             items: navbarOpenSourceProjectItems,
           },

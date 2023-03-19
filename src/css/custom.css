@@ -6,10 +6,10 @@
 
 /* You can override the default Infima variables here. */
 
-/* @tailwind base; */
+/* @tailwind base;
 @tailwind components;
-@tailwind utilities;
-@import "rc-banner-anim/assets/index.css";
+@tailwind utilities; */
+/* @import "rc-banner-anim/assets/index.css"; */
 
 :root {
   --ifm-color-primary: #2e8555;
@@ -35,7 +35,7 @@
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
 .home-swiper-icon-default {
-  @apply hover:text-sky-500 cursor-pointer;
+  @apply hover:text-sky-500 hover:translate-y-5 cursor-pointer transition-all;
 }
 
 /* @import "//at.alicdn.com/t/c/font_3959151_wj4ujygdnwh.js"; */
