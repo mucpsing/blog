@@ -1,8 +1,8 @@
 /*
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-06 22:25:11
- * @LastEditors: CPS holy.dandelion@139.com
- * @LastEditTime: 2023-03-18 22:18:11
+ * @LastEditors: cpasion-office-win10 373704015@qq.com
+ * @LastEditTime: 2023-03-24 11:23:02
  * @FilePath: \cps-blog\src\components\HomepageSwiper\index.tsx
  * @Description: 首页轮播组件
  */
@@ -188,7 +188,7 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
               ].join(" ")}
               key="pic"
             >
-              <img src={subImg} width="100%" height="100%" alt="" />
+              <img src={subImg} width="100%" height="100%" alt="" loading="lazy" />
             </div>
             <div
               className={[

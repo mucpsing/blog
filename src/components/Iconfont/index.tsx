@@ -1,5 +1,4 @@
-import React from "react";
-import BrowserOnly from "@docusaurus/BrowserOnly";
+import React, { useEffect } from "react";
 
 import classnames from "classnames";
 import "./iconfont.css";
@@ -17,24 +16,18 @@ declare global {
   }
 }
 
-export function IconfontInit(src: string = "") {
-  return (
-    <BrowserOnly>
-      {() => {
-        if (window.CPS_ICONFONT_INIT) return;
-        const ICONFIGT_SRC = src || "//at.alicdn.com/t/c/font_3959151_f86s1etjfv.js";
-        const scriptElem = document.createElement("script");
-        scriptElem.src = ICONFIGT_SRC;
-        document.body.appendChild(scriptElem);
-        window.CPS_ICONFONT_INIT = true;
-        return <div className="hidden">{window.CPS_ICONFONT_INIT}</div>;
-      }}
-    </BrowserOnly>
-  );
+export function createIconfontScriptsToDOM(src: string = "") {
+  if (window.CPS_ICONFONT_INIT) return;
+  const ICONFIGT_SRC = src || "//at.alicdn.com/t/c/font_3959151_f86s1etjfv.js";
+  const scriptElem = document.createElement("script");
+  scriptElem.src = ICONFIGT_SRC;
+  document.body.appendChild(scriptElem);
+  window.CPS_ICONFONT_INIT = true;
 }
 
 export default function Iconfont({ iconName, className = "", iconPrefix = "", ...restProps }: IconfontProps) {
-  IconfontInit();
+  useEffect(() => createIconfontScriptsToDOM(), []);
+
   return (
     <svg className={classnames("iconfontDefault", className)} aria-hidden="true" {...restProps}>
       <use xlinkHref={`#${iconPrefix}${iconName}`} />
