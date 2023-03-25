@@ -1,0 +1,10 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "tstest", // 该任务的名字，只需要增加这一条即可
+      "type": "npm",
+      "script": "ts:test" //任务等价于 npm run ts:test
+    }
+  ]
+}

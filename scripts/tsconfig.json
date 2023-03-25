@@ -1,7 +1,10 @@
 {
   "ts-node": {
     "compilerOptions": {
-      "sourceMap": true
+      "sourceMap": true,
+      "module": "CommonJS",
+      "lib": ["dom", "es7"],
+      "target": "es6"
     }
   },
   "compilerOptions": {
@@ -13,9 +16,9 @@
     // import * as React from "react"
     "esModuleInterop": true,
     // 目标js的版本
-    "target": "es6",
+    "target": "ESNext",
     // 目标代码的模块结构版本
-    "module": "ESNext",
+    "module": "CommonJS",
     // 在表达式和声明上有隐含的 any类型时报错。
     "noImplicitAny": true,
     // 删除注释
@@ -23,7 +26,7 @@
     // 保留 const和 enum声明
     "preserveConstEnums": false,
     // 生成sourceMap
-    "sourceMap": true,
+    "sourceMap": false,
     // 目标文件所在路径
     "outDir": "./lib",
     // 编译过程中需要引入的库文件的列表
@@ -36,7 +39,5 @@
     "declarationDir": "./lib",
     // 此处设置为node,才能解析import xx from 'xx'
     "moduleResolution": "node"
-  },
-  // 入口文件
-  "include": ["src/main.ts"]
+  }
 }

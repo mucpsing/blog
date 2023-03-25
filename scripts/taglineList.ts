@@ -1,7 +1,4 @@
-const fs = require("fs");
-const path = require("path");
-
-const taglineMdPath = path.resolve("../docs/【07】常识科普/社会真实/名人名言.md");
+import * as fs from "fs";
 
 /**
  * @Description - 提取名人名言生成成字符串列表
@@ -11,13 +8,13 @@ const taglineMdPath = path.resolve("../docs/【07】常识科普/社会真实/�
  * @returns {string[]} - {description}
  *
  */
-function extractTagline(filePath) {
+export function extractTagline(filePath: string) {
   const data = fs.readFileSync(filePath, { encoding: "utf8" });
   const dataList = data.split(/\r\n|\n|\r/gm);
 
   let talker = "";
   let context = "";
-  const taglineList = [];
+  const taglineList: string[] = [];
   dataList.forEach((eachLine) => {
     if (eachLine.trim().startsWith("### ")) {
       talker = eachLine.replace("### ", "");
@@ -36,8 +33,7 @@ function extractTagline(filePath) {
 }
 
 // (async () => {
+//   const taglineMdPath = path.resolve("../docs/【07】常识科普/社会真实/名人名言.md");
 //   const l = await extractTagline(taglineMdPath);
 //   console.log('l: ', l);
 // })();
-
-module.exports = { extractTagline };

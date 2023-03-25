@@ -1,8 +1,8 @@
 /*
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-06 23:17:09
- * @LastEditors: cpasion-office-win10 373704015@qq.com
- * @LastEditTime: 2023-03-24 15:46:01
+ * @LastEditors: CPS holy.dandelion@139.com
+ * @LastEditTime: 2023-03-25 10:19:34
  * @FilePath: \cps-blog\src\components\HomepageSwiper\rightSide.tsx
  * @Description: 首页标题区域
  */
@@ -43,7 +43,7 @@ function TypedTitle() {
 export default function HomeTitle() {
   const { siteConfig } = useDocusaurusContext();
   return (
-    <QueueAnim type="left" duration={1200} className={"text-white text-center px-4 relative"}>
+    <QueueAnim type="left" duration={800} className={"text-white text-center px-4 relative"}>
       <h1 className="hero__title" key="title">
         <strong className="text-green-700">{siteConfig.title}</strong> 的博客
       </h1>
@@ -55,17 +55,17 @@ export default function HomeTitle() {
 
       <div className={`${styles.buttons} mx-2 mt-4 flex justify-center gap-2`} key="btns">
         <Link key="b1" className="button button--secondary button--lg" to="/">
-          作品集 ⏱️
+          作品集 💼
         </Link>
 
         <Link key="b2" className="button button--secondary button--lg" to="/">
-          个人简介<Iconfont className="ml-2 home-swiper-icon-default" iconName={"logoicon-jianli"}></Iconfont>
+          个人简介 📄
         </Link>
       </div>
 
       <QueueAnim
-        delay={1200}
-        duration={1600}
+        delay={1000}
+        duration={1400}
         type={["bottom", "top"]}
         ease={["easeOutQuart", "easeInOutQuart"]}
         className="flex justify-center gap-3 my-3 text-2xl"

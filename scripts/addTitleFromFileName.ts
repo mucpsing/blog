@@ -12,8 +12,6 @@
 
 import fsp from "node:fs/promises";
 import path from "path";
-// import { glob, IOptions } from 'glob';
-// import { cursorTo } from 'readline';
 
 export let SAFE_DEEP = 100; // 防止内存溢出，这里设置一个全局的最大递归深度
 
@@ -21,14 +19,14 @@ async function addTitle(mdPath: string, dataList: string[]) {
   const basename = path.basename(path.dirname(mdPath));
 
   // 创建标题，同时过滤一些图书符号
-  const title = `# ${basename}`.replace(/【.*】/g, '');
+  const title = `# ${basename}`.replace(/【.*】/g, "");
 
   // 获取第一行
   if (dataList.length > 0) {
     const firstLine = dataList[0].trim();
 
     // 合法，不作任何改动
-    if (firstLine.startsWith('# ') && firstLine.includes(title)) return;
+    if (firstLine.startsWith("# ") && firstLine.includes(title)) return;
 
     // 插入
     dataList.unshift(title);
@@ -45,7 +43,7 @@ async function addTitle(mdPath: string, dataList: string[]) {
  *
  */
 async function addIndex(mdPath: string, mdDataList: string[]) {
-  const indexTitle = '## 文章列表: ';
+  const indexTitle = "## 文章列表: ";
 
   let indexStart = mdDataList.length;
   let indexCount = 0;
@@ -53,7 +51,7 @@ async function addIndex(mdPath: string, mdDataList: string[]) {
   let findFlag = false;
   let hasTitle = false;
   let currtIndexItems = [];
-  const newIndexItems = [];
+  const newIndexItems: string[] = [];
 
   for (let i = 0; i < mdDataList.length; ++i) {
     let eachLine = mdDataList[i].trim();
@@ -66,7 +64,7 @@ async function addIndex(mdPath: string, mdDataList: string[]) {
     }
 
     if (findFlag) {
-      if (eachLine.startsWith('- ')) {
+      if (eachLine.startsWith("- ")) {
         currtIndexItems.push(mdDataList[i]);
         indexCount += 1;
         continue;
@@ -83,10 +81,10 @@ async function addIndex(mdPath: string, mdDataList: string[]) {
   // 插入 title 目录标题
   if (!hasTitle) newIndexItems.splice(0, 0, indexTitle);
 
-  (await fsp.readdir(dirname)).forEach(eachFile => {
-    if (eachFile != 'index.md') {
+  (await fsp.readdir(dirname)).forEach((eachFile) => {
+    if (eachFile != "index.md") {
       // 去掉后缀名
-      let indexItem = `- ${path.basename(eachFile, '.md')}`;
+      let indexItem = `- ${path.basename(eachFile, ".md")}`;
       newIndexItems.push(indexItem);
     }
   });
@@ -124,8 +122,7 @@ async function walk({
   const dirList = await fsp.readdir(dirPath);
 
   // 当前目录不存在index.md 创建空文件
-  if (!dirList.includes('index.md'))
-    await fsp.writeFile(path.join(dirPath, 'index.md'), '', { encoding: 'utf8' });
+  if (!dirList.includes("index.md")) await fsp.writeFile(path.join(dirPath, "index.md"), "", { encoding: "utf8" });
 
   dirList.forEach(async (eachFile) => {
     const fullPath = path.join(dirPath, eachFile);
@@ -144,10 +141,10 @@ async function walk({
       // 注入目录
       await addIndex(fullPath, mdDataList);
 
-      const newMdData = mdDataList.join('\n');
+      const newMdData = mdDataList.join("\n");
 
       // index.md 写入新内容
-      await fsp.writeFile(fullPath, newMdData, { encoding: 'utf8' });
+      await fsp.writeFile(fullPath, newMdData, { encoding: "utf8" });
       // console.log(newMdData);
     } else if (fileInfo.isDirectory()) {
       // 递归调用
