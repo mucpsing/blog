@@ -5,37 +5,78 @@ const path = require("path");
 const lightCodeTheme = require("prism-react-renderer/themes/github");
 const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 
+/* 【首页】首页名人名言 */
 const { extractTagline } = require("./scripts/lib/taglineList");
 const taglineList = extractTagline(path.resolve("./docs/【07】常识科普/社会真实/名人名言.md"));
 
-const { createDocsNavItems } = require("./scripts/lib/createDocsNavItems");
-const navbarDocs = createDocsNavItems(path.resolve("./docs"), ["【18】副业开发"]);
+/* 【导航】学习笔记 */
+const excludeDirList = ["【18】副业开发"];
+const navBarDocsItems = {
+  label: "📔 学习笔记",
+  type: "dropdown",
+  position: "right",
+  items: require("./scripts/lib/utils").createNavItemByDir({ targetPath: path.resolve("./docs"), excludeDirList }),
+};
 
-const { createPersonProjectItems } = reuqire("./scripts/lib/createPersonProjectItems");
-const navbarPersonalProjectItems = createPersonProjectItems();
+/* 【导航】个人作品 */
+const navbarPersonalProjectItems = {
+  label: "🌟 原创作品",
+  type: "dropdown",
+  position: "right",
+  items: [
+    ...require("./scripts/lib/utils").createNavItemByDir({
+      targetPath: path.resolve("./docs/【05】项目经历/原创作品"),
+      prefixUrl: "docs/【05】项目经历/原创作品",
+      inDeep: true,
+      excludeDirList: ["index.md"],
+    }),
+    {
+      type: "html",
+      value: '<hr class="dropdown-separator">',
+    },
+    {
+      to: "/SublimeTextPlugs",
+      label: "🌟 作品汇总 🌟",
+    },
+  ],
+};
 
-const navbarOpenSourceProjectItems = [
-  {
-    to: "/docs/【05】项目经历/06%20项目管理系统/项目预览",
-    label: "【闭源】项目管理系统",
-  },
-  {
-    to: "/docs/【05】项目经历/01%20全栈小程序/",
-    label: "【全栈】全栈小程序",
-  },
-  {
-    to: "/docs/【05】项目经历/01%20全栈小程序/",
-    label: "【接口】PSD文件图层实时修改接口",
-  },
-  {
-    type: "html",
-    value: '<hr class="dropdown-separator">',
-  },
-  {
-    to: "/SublimeTextPlugs",
-    label: "💼项目汇总💼",
-  },
-];
+/* 【导航】开源项目 */
+const navbarOpenSourceItems = {
+  type: "dropdown",
+  label: "💼 完整项目",
+  position: "right",
+  items: [
+    ...require("./scripts/lib/utils").createNavItemByDir({
+      targetPath: path.resolve("./docs/【05】项目经历/完整项目"),
+      prefixUrl: "docs/【05】项目经历/原创作品",
+      inDeep: true,
+      excludeDirList: ["index.md"],
+    }),
+    {
+      type: "html",
+      value: '<hr class="dropdown-separator">',
+    },
+    {
+      to: "/SublimeTextPlugs",
+      label: "💼 项目汇总 💼",
+    },
+  ],
+};
+
+/* 【导航】实验项目 */
+/** @type {import("@docusaurus/theme-common/src/utils/useThemeConfig").NavbarItem} */
+const navbarMyLab = {
+  type: "dropdown",
+  label: "🧪我的实验",
+  position: "left",
+  items: [
+    {
+      to: "/",
+      label: "🛵 真智能自电",
+    },
+  ],
+};
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -101,7 +142,7 @@ const config = {
       // Replace with your project's social card
       image: "img/docusaurus-social-card.jpg",
       navbar: {
-        title: "🍌Capsion Blog🍌",
+        title: "🍌 Capsion Lab 🍌",
         logo: {
           alt: "My Site Logo",
           src: "img/mimi.png",
@@ -109,39 +150,20 @@ const config = {
 
         // 导航栏
         items: [
-          { to: "/", label: "首页", position: "left" },
+          { to: "/", label: "🏠 首页", position: "left" },
           {
             type: "search",
             position: "left",
           },
+          navbarMyLab,
 
-          /* 【导航】学习笔记 */
-          {
-            label: "学习笔记",
-            type: "dropdown",
-            position: "right",
-            items: navbarDocs,
-          },
-
-          /* 【导航】个人项目 */
-          {
-            label: "原创作品",
-            type: "dropdown",
-            position: "right",
-            items: navbarPersonalProjectItems,
-          },
-
-          /* 【导航】小工具 */
-          {
-            type: "dropdown",
-            label: "完整项目",
-            position: "right",
-            items: navbarOpenSourceProjectItems,
-          },
+          navBarDocsItems,
+          navbarPersonalProjectItems,
+          navbarOpenSourceItems,
 
           {
             type: "dropdown",
-            label: "关于我",
+            label: "🤸 关于我",
             position: "right",
             items: [
               {
@@ -169,7 +191,7 @@ const config = {
               },
               {
                 href: "https://gitee.com/capsion/resume",
-                label: "个人简历",
+                label: "📃 个人简历",
               },
             ],
           },

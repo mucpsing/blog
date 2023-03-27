@@ -1,8 +1,8 @@
 /*
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-06 22:25:11
- * @LastEditors: cpasion-office-win10 373704015@qq.com
- * @LastEditTime: 2023-03-24 11:23:02
+ * @LastEditors: CPS holy.dandelion@139.com
+ * @LastEditTime: 2023-03-25 22:38:16
  * @FilePath: \cps-blog\src\components\HomepageSwiper\index.tsx
  * @Description: 首页轮播组件
  */
@@ -66,7 +66,7 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
     showText: false,
     showImg: true,
     showArrow: true,
-    autoSwitch: 8000,
+    autoSwitch: 30000,
   };
 
   constructor(props) {

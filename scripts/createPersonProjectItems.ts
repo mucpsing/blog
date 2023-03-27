@@ -1,3 +1,7 @@
+/**
+ * @description: 个人作品 【子菜单】
+ * @return {*}
+ */
 export function createPersonProjectItems() {
   return [
     {

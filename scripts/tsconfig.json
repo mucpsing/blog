@@ -21,8 +21,7 @@
     "module": "CommonJS",
     // 在表达式和声明上有隐含的 any类型时报错。
     "noImplicitAny": true,
-    // 删除注释
-    "removeComments": true,
+    "removeComments": false, // 保留注释
     // 保留 const和 enum声明
     "preserveConstEnums": false,
     // 生成sourceMap
