@@ -1,0 +1,32 @@
+.bubble {
+  /* 径向渐变 */
+  background: radial-gradient(circle at 75% 30%, #fff 5px, #ff21c0 8%, #5b5b5b 60%, #ff21c0 100%);
+  /* 阴影 */
+  box-shadow: inset 0 0 20px #fff, inset 10px 0 46px #eaf5fc, inset 80px 0 60px #efcde6, inset -20px -60px 100px #f9f6de,
+    inset 0 50px 140px #f9f6de, 0 0 90px #fff;
+}
+
+.logo-gather-demo-wrapper {
+  position: relative;
+  background: #019bf0;
+  overflow: hidden;
+  height: 500px;
+}
+
+.logo-gather-demo-wrapper .point-wrapper {
+  position: absolute;
+}
+
+.logo-gather-demo-wrapper .point {
+  border-radius: 100%;
+}
+
+.logo-gather-demo-wrapper .right-side {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+}
+
+.logo-gather-demo-wrapper .right-side * {
+  pointer-events: none;
+}

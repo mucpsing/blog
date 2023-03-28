@@ -1,8 +1,8 @@
 /*
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-25 16:10:31
- * @LastEditors: CPS holy.dandelion@139.com
- * @LastEditTime: 2023-03-25 21:47:32
+ * @LastEditors: cpasion-office-win10 373704015@qq.com
+ * @LastEditTime: 2023-03-27 10:12:34
  * @FilePath: \cps-blog\scripts\utils.ts
  * @Description: 一些会被重复调用的工具函数
  */
@@ -60,7 +60,8 @@ export function createNavItemByDir({
         // 该目录存在index.md的话，仅将index.md暴露出来
         if (fileSubList.includes("index.md")) {
           navbarItemList.push({
-            to: prefixUrl ? `${prefixUrl}/${rootDirFile}/index.md` : `${rootDirFile}/index.md`,
+            // 
+            to: prefixUrl ? `${prefixUrl}/${rootDirFile}` : `${rootDirFile}`,
             label: `${rootDirFile}`,
           });
         } else {
@@ -74,7 +75,7 @@ export function createNavItemByDir({
               const basename = eachSubFile.split(".")[0];
 
               navbarItemList.push({
-                to: prefixUrl ? `${prefixUrl}/${rootDirFile}/${eachSubFile}` : `${rootDirFile}/${eachSubFile}`,
+                to: prefixUrl ? `${prefixUrl}/${rootDirFile}/${basename}` : `${rootDirFile}/${basename}`,
                 label: `【${rootDirFile}】${basename}`,
               });
             }
@@ -87,11 +88,21 @@ export function createNavItemByDir({
   return navbarItemList;
 }
 
-// const res = createNavItemByDir({
-//   targetPath: path.resolve("D:/CPS/MyProject/Projects_Personal/cps-blog/docs/【05】项目经历/原创作品/"),
-//   excludeDirList: ["index.md"],
-//   prefixUrl: "docs/【05】项目经历/原创作品",
-//   inDeep: true,
-// });
+const res = createNavItemByDir({
+  targetPath: path.resolve("./docs/【05】项目经历/原创作品/"),
+  excludeDirList: ["index.md"],
+  prefixUrl: "docs/【05】项目经历/原创作品",
+  inDeep: true,
+});
+
+const ret = createNavItemByDir({
+  targetPath: path.resolve("./docs/【05】项目经历/完整项目/"),
+  excludeDirList: ["index.md"],
+  prefixUrl: "docs/【05】项目经历/完整项目",
+  inDeep: true,
+});
 
 // console.log(res);
+console.log(ret);
+
+

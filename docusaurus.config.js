@@ -28,7 +28,7 @@ const navbarPersonalProjectItems = {
       targetPath: path.resolve("./docs/【05】项目经历/原创作品"),
       prefixUrl: "docs/【05】项目经历/原创作品",
       inDeep: true,
-      excludeDirList: ["index.md"],
+      excludeDirList: ["index.md", "1"],
     }),
     {
       type: "html",
@@ -49,7 +49,7 @@ const navbarOpenSourceItems = {
   items: [
     ...require("./scripts/lib/utils").createNavItemByDir({
       targetPath: path.resolve("./docs/【05】项目经历/完整项目"),
-      prefixUrl: "docs/【05】项目经历/原创作品",
+      prefixUrl: "docs/【05】项目经历/完整项目",
       inDeep: true,
       excludeDirList: ["index.md"],
     }),
