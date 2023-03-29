@@ -1,3 +1,11 @@
+/*
+ * @Author: cpasion-office-win10 373704015@qq.com
+ * @Date: 2023-03-28 16:25:46
+ * @LastEditors: cpasion-office-win10 373704015@qq.com
+ * @LastEditTime: 2023-03-29 17:13:08
+ * @FilePath: \cps-blog\src\pages\test\index.tsx
+ * @Description: 父级元素必须采用绝对定位
+ */
 import React from "react";
 import ReactDOM from "react-dom";
 
@@ -5,20 +13,21 @@ import TweenOne from "rc-tween-one";
 import ticker from "rc-tween-one/lib/ticker";
 
 interface LogoGatherProps {
-  image: string;
-  w: number;
-  h: number;
-  pixSize: number;
-  pointSizeMin: number;
+  image?: string;
+  w?: number;
+  h?: number;
+  pixSize?: number;
+  pointSizeMin?: number;
+  intervalTime?: number;
 }
 export default class LogoGather extends React.Component<LogoGatherProps, any> {
   static defaultProps = {
-    image: "logo/cps_200.png",
-    // image: "https://zos.alipayobjects.com/rmsportal/gsRUrUdxeGNDVfO.svg",
-    w: 1140,
-    h: 427,
-    pixSize: 35,
-    pointSizeMin: 20,
+    image: "logo/capsion.png",
+    w: 1000,
+    h: 300,
+    pixSize: 13,
+    pointSizeMin: 8,
+    intervalTime: 10000,
   };
 
   public gather: boolean;
@@ -37,33 +46,47 @@ export default class LogoGather extends React.Component<LogoGatherProps, any> {
 
     this.gather = true;
     this.interval = null;
-    this.intervalTime = 9000;
   }
 
   componentDidMount() {
     this.dom = ReactDOM.findDOMNode(this) as Element;
     this.createPointData();
+
+    setTimeout(() => {
+      this.onMouseLeave();
+    }, 2000);
   }
 
   componentWillUnmount() {
     ticker.clear(this.interval);
     this.interval = null;
+    console.log("in 3");
   }
 
   onMouseEnter = () => {
     // !this.gather && this.updateTweenData();
+    console.log("in 1");
     if (!this.gather) {
       this.updateTweenData();
+      console.log("in 2");
     }
     this.componentWillUnmount();
   };
 
   onMouseLeave = () => {
     // this.gather && this.updateTweenData();
+    console.log("out 1");
+
     if (this.gather) {
       this.updateTweenData();
+      console.log("out 2");
     }
-    this.interval = ticker.interval(this.updateTweenData, this.intervalTime);
+
+    if (this.interval == null) {
+      console.log("out 3");
+
+      this.interval = ticker.interval(this.updateTweenData, this.props.intervalTime);
+    }
   };
 
   setDataToDom(data, w, h) {
@@ -80,19 +103,28 @@ export default class LogoGather extends React.Component<LogoGatherProps, any> {
     const children = [];
     this.pointArray.forEach((item, i) => {
       const r = Math.random() * this.props.pointSizeMin + this.props.pointSizeMin;
-      const b = Math.random() * 0.4 + 0.1;
+      const opacity = Math.random() * 0.4 + 0.2;
+      const delay = Math.floor(Math.random() * (this.props.intervalTime / 3));
+      const start = this.props.intervalTime / 2 - delay;
+
+      const R = Math.round(Math.random() * 95 + 160);
+      const G = Math.round(Math.random() * 95 + 160);
+      const B = Math.round(Math.random() * 95 + 160);
+
       children.push(
-        <TweenOne className="point-wrapper" key={i} style={{ left: item.x, top: item.y }}>
+        <TweenOne className="absolute rounded-[100%]" key={i} style={{ left: item.x, top: item.y }}>
           <div
-            className="point"
+            className="point rounded-[100%]"
             style={{
               width: r,
               height: r,
-              opacity: b,
-              backgroundColor: `rgb(${Math.round(Math.random() * 95 + 160)},255,255)`,
+              opacity,
+              backgroundColor: `rgb(${R},${G},${B})`,
+              animation: `up-and-down-${(i % 2) + 1} ${start}ms ease-in-out ${delay}ms infinite`,
             }}
           ></div>
 
+          {/* 这里使用的是js控制，由于性能原因，尝试改成css3控制 */}
           {/* <TweenOne
             className="point"
             style={{
@@ -120,28 +152,24 @@ export default class LogoGather extends React.Component<LogoGatherProps, any> {
         boxAnim: { opacity: 0, type: "from", duration: 800 },
       },
       () => {
-        this.interval = ticker.interval(this.updateTweenData, this.intervalTime);
+        this.interval = ticker.interval(this.updateTweenData, this.props.intervalTime);
       }
     );
   }
 
   createPointData = () => {
     const { w, h } = this.props;
-    const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+    let canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, w, h);
     canvas.width = this.props.w;
     canvas.height = h;
     const img = new Image();
     img.onload = () => {
-      console.log({ w: img.width, h: img.height });
-      console.log({ w: canvas.width, h: canvas.height });
-      console.log({ w: this.props.w, h: this.props.h });
-
       ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, w, h);
       const data = ctx.getImageData(0, 0, w, h).data;
       this.setDataToDom(data, w, h);
-      this.dom.removeChild(canvas);
+      canvas.remove();
     };
     img.crossOrigin = "anonymous";
     img.src = this.props.image;
@@ -194,18 +222,18 @@ export default class LogoGather extends React.Component<LogoGatherProps, any> {
 
   render() {
     return (
-      <div className="logo-gather-demo-wrapper">
-        <canvas id="canvas" />
+      // <div className="relative overflow-hidden h-[500px]" style={{ background: "#019bf0" }}>
         <TweenOne
           animation={this.state.boxAnim}
-          className="right-side blur"
+          className="absolute"
+          style={{ width: `${this.props.w}px`, height: `${this.props.h}px` }}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
           ref={(c) => (this.sideBoxComp = c as any)}
         >
           {this.state.children}
         </TweenOne>
-      </div>
+      // </div>
     );
   }
 }
