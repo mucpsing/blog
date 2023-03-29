@@ -2,7 +2,7 @@
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-06 23:17:09
  * @LastEditors: CPS holy.dandelion@139.com
- * @LastEditTime: 2023-03-25 10:19:34
+ * @LastEditTime: 2023-03-30 01:04:13
  * @FilePath: \cps-blog\src\components\HomepageSwiper\rightSide.tsx
  * @Description: 首页标题区域
  */
@@ -14,6 +14,7 @@ import _ from "lodash";
 import Link from "@docusaurus/Link";
 import QueueAnim from "rc-queue-anim";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import Logo from "@site/src/pages/test";
 
 import Iconfont from "@site/src/components/Iconfont";
 import styles from "@site/src/pages/index.module.css";
@@ -43,10 +44,12 @@ function TypedTitle() {
 export default function HomeTitle() {
   const { siteConfig } = useDocusaurusContext();
   return (
-    <QueueAnim type="left" duration={800} className={"text-white text-center px-4 relative"}>
-      <h1 className="hero__title" key="title">
-        <strong className="text-green-700">{siteConfig.title}</strong> 的博客
+    <QueueAnim type="left" duration={800} className="px-4 text-center text-white">
+      {/* 仅作定位使用 */}
+      <h1 className="hero__title h-[100px] pointer-events-none" key="title">
+        {/* <strong className="text-green-700">{siteConfig.title}</strong> */}
       </h1>
+
       <p className="my-3 underline decoration-dotted" key="content">
         <a href="docs/【07】常识科普/社会真实/名人名言">这些年我们听到的名人疯言</a>
       </p>

@@ -1,8 +1,8 @@
 /*
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-02-07 19:55:02
- * @LastEditors: cpasion-office-win10 373704015@qq.com
- * @LastEditTime: 2023-03-24 15:51:05
+ * @LastEditors: CPS holy.dandelion@139.com
+ * @LastEditTime: 2023-03-29 23:23:09
  * @FilePath: \cps-blog\src\pages\index.tsx
  * @Description: 首页
  */
@@ -14,13 +14,15 @@ import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import HomepageFeatures from "@site/src/components/HomepageFeatures";
 import HomepageSwiper from "@site/src/components/HomepageSwiper";
 import HomePageImgShow from "@site/src/components/HomepageImgShow";
+import Logo from "@site/src/pages/test";
+
 import "./index.css";
 
 export default function Home(): JSX.Element {
   const { siteConfig } = useDocusaurusContext();
   return (
     <Layout title={`Hello from ${siteConfig.title}`} description="Description will go into a meta tag in <head />">
-      <header className="flex flex-col">
+      <header className="relative flex flex-col">
         <HomepageSwiper />
       </header>
 

@@ -1,8 +1,8 @@
 /*
  * @Author: cpasion-office-win10 373704015@qq.com
  * @Date: 2023-03-28 16:25:46
- * @LastEditors: cpasion-office-win10 373704015@qq.com
- * @LastEditTime: 2023-03-29 17:13:08
+ * @LastEditors: CPS holy.dandelion@139.com
+ * @LastEditTime: 2023-03-30 00:49:31
  * @FilePath: \cps-blog\src\pages\test\index.tsx
  * @Description: 父级元素必须采用绝对定位
  */
@@ -19,14 +19,22 @@ interface LogoGatherProps {
   pixSize?: number;
   pointSizeMin?: number;
   intervalTime?: number;
+  x?: number;
+  y?: number;
+  offsetX?: number;
+  offsetY?: number;
 }
 export default class LogoGather extends React.Component<LogoGatherProps, any> {
   static defaultProps = {
     image: "logo/capsion.png",
-    w: 1000,
-    h: 300,
-    pixSize: 13,
-    pointSizeMin: 8,
+    x: 0,
+    y: 0,
+    offsetX: 0,
+    offsetY: 0,
+    w: 600,
+    h: 200,
+    pixSize: 10,
+    pointSizeMin: 5,
     intervalTime: 10000,
   };
 
@@ -65,26 +73,18 @@ export default class LogoGather extends React.Component<LogoGatherProps, any> {
 
   onMouseEnter = () => {
     // !this.gather && this.updateTweenData();
-    console.log("in 1");
-    if (!this.gather) {
-      this.updateTweenData();
-      console.log("in 2");
-    }
+
+    if (!this.gather) this.updateTweenData();
+
     this.componentWillUnmount();
   };
 
   onMouseLeave = () => {
     // this.gather && this.updateTweenData();
-    console.log("out 1");
 
-    if (this.gather) {
-      this.updateTweenData();
-      console.log("out 2");
-    }
+    if (this.gather) this.updateTweenData();
 
     if (this.interval == null) {
-      console.log("out 3");
-
       this.interval = ticker.interval(this.updateTweenData, this.props.intervalTime);
     }
   };
@@ -222,18 +222,27 @@ export default class LogoGather extends React.Component<LogoGatherProps, any> {
 
   render() {
     return (
-      // <div className="relative overflow-hidden h-[500px]" style={{ background: "#019bf0" }}>
+      <div className="absolute w-full h-full overflow-hidden">
         <TweenOne
           animation={this.state.boxAnim}
           className="absolute"
-          style={{ width: `${this.props.w}px`, height: `${this.props.h}px` }}
+          style={{
+            width: `${this.props.w}px`,
+            height: `${this.props.h}px`,
+            top: this.props.y,
+            left: this.props.x,
+            transform: `translate(-${this.props.w / 2 - this.props.offsetX / 2}px,${
+              this.props.y / 2 - this.props.offsetY / 2
+            }px)`,
+            // transform: `translateX(-${this.props.w / 2}px`,
+          }}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
           ref={(c) => (this.sideBoxComp = c as any)}
         >
           {this.state.children}
         </TweenOne>
-      // </div>
+      </div>
     );
   }
 }
