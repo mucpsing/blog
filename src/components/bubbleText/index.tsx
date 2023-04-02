@@ -1,8 +1,8 @@
 /*
  * @Author: cpasion-office-win10 373704015@qq.com
  * @Date: 2023-03-28 16:25:46
- * @LastEditors: CPS-surfacePro7 holy.dandelion@139.com
- * @LastEditTime: 2023-04-02 11:36:34
+ * @LastEditors: CPS holy.dandelion@139.com
+ * @LastEditTime: 2023-04-02 22:44:59
  * @FilePath: \cps-blog\src\pages\test\index.tsx
  * @Description: 泡泡文字聚散效果组建，父级元素必须采用绝对定位，最终泡泡扩散的位置会根据最近一个绝对定位的父级来生成
  */
@@ -322,7 +322,7 @@ export default class LogoGather extends React.Component<LogoGatherProps, LogoGat
     if (!this.IS_CURRT_WEB_PAGE) return;
 
     this.dom = ReactDOM.findDOMNode(this) as Element;
-    this.sideBox = ReactDOM.findDOMNode(this.sideBoxComp);
+    this.sideBox = ReactDOM.findDOMNode(this.sideBoxComp) as Element;
 
     if (this.gather) {
       this.disperseData();
@@ -336,10 +336,10 @@ export default class LogoGather extends React.Component<LogoGatherProps, LogoGat
   render() {
     const { top, left, bottom, right, transform } = this.state;
     return (
-      <div id="logoContainer" className="absolute top-0 left-0 w-full h-full overflow-hidden">
+      <div id="logoContainer" className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
         <TweenOne
           animation={this.state.boxAnim}
-          className="absolute bg-orange-300/10 rounded-2xl shadow-slate-700"
+          className="absolute pointer-events-auto bg-orange-300/10 rounded-2xl shadow-slate-700"
           style={{
             width: `${this.props.width}px`,
             height: `${this.props.height}px`,

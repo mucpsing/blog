@@ -68,7 +68,7 @@ const navbarOpenSourceItems = {
 /** @type {import("@docusaurus/theme-common/src/utils/useThemeConfig").NavbarItem} */
 const navbarMyLab = {
   type: "dropdown",
-  label: "🧪我的实验",
+  label: "🧪 我的实验",
   position: "left",
   items: [
     {
@@ -103,8 +103,8 @@ const config = {
   // metadata like html lang. For example, if your site is Chinese, you may want
   // to replace "en" with "zh-Hans".
   i18n: {
-    defaultLocale: "en",
-    locales: ["en"],
+    defaultLocale: "cz",
+    locales: ["cz"],
   },
 
   plugins: [],
