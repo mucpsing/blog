@@ -1,8 +1,8 @@
 /*
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-06 23:17:09
- * @LastEditors: CPS holy.dandelion@139.com
- * @LastEditTime: 2023-03-30 01:04:13
+ * @LastEditors: CPS-surfacePro7 holy.dandelion@139.com
+ * @LastEditTime: 2023-04-01 19:10:39
  * @FilePath: \cps-blog\src\components\HomepageSwiper\rightSide.tsx
  * @Description: 首页标题区域
  */
@@ -14,7 +14,6 @@ import _ from "lodash";
 import Link from "@docusaurus/Link";
 import QueueAnim from "rc-queue-anim";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
-import Logo from "@site/src/pages/test";
 
 import Iconfont from "@site/src/components/Iconfont";
 import styles from "@site/src/pages/index.module.css";
@@ -46,7 +45,7 @@ export default function HomeTitle() {
   return (
     <QueueAnim type="left" duration={800} className="px-4 text-center text-white">
       {/* 仅作定位使用 */}
-      <h1 className="hero__title h-[100px] pointer-events-none" key="title">
+      <h1 id="postitionElement" className="hero__title h-[200px] pointer-events-none" key="title">
         {/* <strong className="text-green-700">{siteConfig.title}</strong> */}
       </h1>
 

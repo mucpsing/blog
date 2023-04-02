@@ -1,23 +1,22 @@
 /*
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-06 22:25:11
- * @LastEditors: CPS holy.dandelion@139.com
- * @LastEditTime: 2023-03-30 00:57:21
+ * @LastEditors: CPS-surfacePro7 holy.dandelion@139.com
+ * @LastEditTime: 2023-04-02 11:04:45
  * @FilePath: \cps-blog\src\components\HomepageSwiper\index.tsx
  * @Description: 首页轮播组件
  */
 import React from "react";
-import ReactDOM from "react-dom";
 
 import BannerAnim from "rc-banner-anim";
 import QueueAnim from "rc-queue-anim";
 import { TweenOneGroup } from "rc-tween-one";
-// import "rc-banner-anim/assets/index.css";
 import { RightOutlined, LeftOutlined } from "@ant-design/icons";
 
 import dataArray, { ICpsImgSwiperDataItem } from "./data";
 import HomeTitle from "./rightSide";
-import Logo from "@site/src/pages/test";
+import Logo from "@site/src/components/bubbleText";
+// import Logo from "@site/src/pages/test";
 
 const Element = BannerAnim.Element;
 
@@ -52,10 +51,6 @@ interface ICpsImgSwiperPropsState {
   showInt: number;
   delay: number;
   oneEnter: boolean;
-  logoX: number;
-  logoY: number;
-  logoOffsetX: number;
-  logoOffsetY: number;
 }
 export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, ICpsImgSwiperPropsState> {
   bannerImg: any;
@@ -84,26 +79,16 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
       showInt: 0,
       delay: 0,
       oneEnter: false,
-      logoX: 0,
-      logoY: 0,
-      logoOffsetX: 0,
-      logoOffsetY: 0,
     };
   }
 
   componentWillUnmount(): void {
     if (this.autoSwitchInterID) clearInterval(this.autoSwitchInterID);
-
-    document.removeEventListener("resize", this.onRise);
   }
 
   componentDidMount(): void {
-    this.titleElement = document.getElementById("homeTitleComment");
-    window.addEventListener("resize", this.onRise);
-
     if (this.props.autoSwitch > 0) {
       setTimeout(() => {
-        this.onRise();
         this.onRight("autoSwitch");
         this.autoSwitchInterID = setInterval(() => {
           this.onRight("autoSwitch");
@@ -111,13 +96,6 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
       }, 1000);
     }
   }
-
-  onRise = () => {
-    const { top, left, width, height, y } = this.titleElement.getBoundingClientRect();
-    const newState = { logoX: left, logoY: y, logoOffsetX: width, logoOffsetY: height };
-    console.log({ newState });
-    this.setState(newState);
-  };
 
   onChange = () => {
     this.state.showInt;
@@ -295,20 +273,12 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
         ].join(" ")}
         style={{ background: this.DATA[this.state.showInt].subColor, transition: "background 1s" }}
       >
-        <Logo
-          w={600}
-          h={200}
-          x={this.state.logoX}
-          // y={160}
-          y={this.state.logoY}
-          offsetX={this.state.logoOffsetX}
-          offsetY={this.state.logoOffsetY}
-        ></Logo>
-
         {/* 左边标题 */}
-        <div id="homeTitleComment" className="home-title w-[400px]" ref={(element) => (this.titleElement = element)}>
+        <div id="homeTitleComment" className="home-title w-[400px]">
           <HomeTitle />
         </div>
+
+        <Logo width={600} height={200} bubbleScale={1.5} positionElementId="postitionElement"></Logo>
 
         {/* 右边轮播 */}
         <div
