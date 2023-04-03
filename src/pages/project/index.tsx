@@ -1,19 +1,21 @@
 /*
  * @Author: CPS-surfacePro7 holy.dandelion@139.com
  * @Date: 2023-01-30 00:13:35
- * @LastEditors: CPS holy.dandelion@139.com
- * @LastEditTime: 2023-04-03 00:23:20
+ * @LastEditors: cpasion-office-win10 373704015@qq.com
+ * @LastEditTime: 2023-04-03 17:03:22
  * @FilePath: \blog-Docusaurus2\src\pages\project\index.jsx
- * @Description: 个人项目页
+ * @Description: 个人项目展示页
  */
+// import type { IprojectData } from "@site/src/typings";
 
 import React from "react";
 import Layout from "@theme/Layout";
 
-const TITLE = "展示一些个人项目";
+const TITLE = "项目作品展示";
 const DESCRIPTION = "以下展示的项目均由本人独立开发，商业产品类型的项目均已取得甲方同意方才展示或开源。";
 const GITHUB_URL = "https://github.com/muccppss";
 const GITEE_URL = "https://gitee.com/capsion";
+
 
 function ProjectHeader() {
   return (
@@ -34,6 +36,8 @@ function ProjectHeader() {
     </section>
   );
 }
+
+function ProjectCaseCards() {}
 
 export default function ProjectPage() {
   return (

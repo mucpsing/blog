@@ -103,8 +103,8 @@ const config = {
   // metadata like html lang. For example, if your site is Chinese, you may want
   // to replace "en" with "zh-Hans".
   i18n: {
-    defaultLocale: "cz",
-    locales: ["cz"],
+    defaultLocale: "en",
+    locales: ["en"],
   },
 
   plugins: [],
@@ -144,8 +144,8 @@ const config = {
       navbar: {
         title: "🍌 Capsion Lab 🍌",
         logo: {
-          alt: "My Site Logo",
-          src: "img/mimi.png",
+          alt: "My Bady Daughter",
+          src: "img/mimi_small.png",
         },
 
         // 导航栏

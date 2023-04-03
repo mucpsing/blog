@@ -1,8 +1,8 @@
 /*
  * @Author: cpasion-office-win10 373704015@qq.com
  * @Date: 2023-03-28 16:25:46
- * @LastEditors: CPS holy.dandelion@139.com
- * @LastEditTime: 2023-04-02 22:44:59
+ * @LastEditors: cpasion-office-win10 373704015@qq.com
+ * @LastEditTime: 2023-04-03 10:38:37
  * @FilePath: \cps-blog\src\pages\test\index.tsx
  * @Description: 泡泡文字聚散效果组建，父级元素必须采用绝对定位，最终泡泡扩散的位置会根据最近一个绝对定位的父级来生成
  */
@@ -39,7 +39,7 @@ interface LogoGatherState {
 }
 export default class LogoGather extends React.Component<LogoGatherProps, LogoGatherState> {
   static defaultProps = {
-    image: "logo/capsion.png",
+    image: "/logo/capsion.png",
     width: 600,
     height: 200,
     bubbleScale: 1,
