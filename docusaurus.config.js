@@ -1,6 +1,7 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 const path = require("path");
+const { addHeaderTag } = require("./scripts/lib/customPlugs");
 
 const lightCodeTheme = require("prism-react-renderer/themes/github");
 const darkCodeTheme = require("prism-react-renderer/themes/dracula");
@@ -107,7 +108,7 @@ const config = {
     locales: ["cz"],
   },
 
-  plugins: [],
+  plugins: [addHeaderTag],
 
   presets: [
     [
