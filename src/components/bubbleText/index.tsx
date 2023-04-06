@@ -2,16 +2,17 @@
  * @Author: cpasion-office-win10 373704015@qq.com
  * @Date: 2023-03-28 16:25:46
  * @LastEditors: CPS holy.dandelion@139.com
- * @LastEditTime: 2023-04-06 00:12:30
+ * @LastEditTime: 2023-04-06 22:43:09
  * @FilePath: \cps-blog\src\pages\test\index.tsx
  * @Description: 泡泡文字聚散效果组建，父级元素必须采用绝对定位，最终泡泡扩散的位置会根据最近一个绝对定位的父级来生成
  */
 import React from "react";
 import ReactDOM from "react-dom";
-
 import TweenOne from "rc-tween-one";
 import ticker from "rc-tween-one/lib/ticker";
-import { throttle } from "lodash";
+import { throttle, type DebouncedFunc } from "lodash";
+
+import "./bubble.css";
 
 interface LogoGatherProps {
   image?: string;
@@ -62,6 +63,7 @@ export default class LogoGather extends React.Component<LogoGatherProps, LogoGat
   public parent: Element;
   public positionElement: Element;
   public IS_CURRT_WEB_PAGE: boolean = true;
+  public resizeEvent: DebouncedFunc<() => boolean>;
 
   constructor(props) {
     super(props);
@@ -114,12 +116,17 @@ export default class LogoGather extends React.Component<LogoGatherProps, LogoGat
       }
     });
 
-    window.addEventListener("resize", throttle(this.updatePositions, 100));
+    this.resizeEvent = throttle(this.updatePositions, 200);
+    window.addEventListener("resize", this.resizeEvent);
   }
 
   componentWillUnmount() {
     ticker.clear(this.interval);
     this.interval = null;
+    this.updateTweenData.cancel();
+
+    window.removeEventListener("resize", this.resizeEvent);
+    this.resizeEvent.cancel();
   }
 
   onMouseEnter = (e) => {
@@ -176,26 +183,6 @@ export default class LogoGather extends React.Component<LogoGatherProps, LogoGat
               animation: `up-and-down-${(i % 2) + 1} ${start}ms ease-in-out ${delay}ms infinite`,
             }}
           ></div>
-
-          {/* 这里使用的是js控制，由于性能原因，尝试改成css3控制 */}
-          {/* <TweenOne
-            className="point"
-            style={{
-              width: r,
-              height: r,
-              opacity: b,
-              backgroundColor: `rgb(${Math.round(Math.random() * 95 + 160)},255,255)`,
-            }}
-            animation={{
-              y: (Math.random() * 2 - 1) * 10 || 5,
-              x: (Math.random() * 2 - 1) * 5 || 2.5,
-              delay: Math.random() * 1000,
-              repeat: -1,
-              duration: 3000,
-              yoyo: true,
-              ease: "easeInOutQuad",
-            }}
-          /> */}
         </TweenOne>
       );
     });
@@ -319,18 +306,22 @@ export default class LogoGather extends React.Component<LogoGatherProps, LogoGat
   };
 
   updateTweenData = throttle(() => {
-    if (!this.IS_CURRT_WEB_PAGE) return;
+    try {
+      if (!this.IS_CURRT_WEB_PAGE) return;
 
-    this.dom = ReactDOM.findDOMNode(this) as Element;
-    this.sideBox = ReactDOM.findDOMNode(this.sideBoxComp) as Element;
+      this.dom = ReactDOM.findDOMNode(this) as Element;
+      this.sideBox = ReactDOM.findDOMNode(this.sideBoxComp) as Element;
 
-    if (this.gather) {
-      this.disperseData();
-    } else {
-      this.gatherData();
+      if (this.gather) {
+        this.disperseData();
+      } else {
+        this.gatherData();
+      }
+
+      this.gather = !this.gather;
+    } catch (error) {
+      console.log("更新数据失败");
     }
-
-    this.gather = !this.gather;
   }, 1000);
 
   render() {

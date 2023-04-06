@@ -65,6 +65,13 @@ const navbarOpenSourceItems = {
   ],
 };
 
+/* 作品%项目 */
+const projectItems = {
+  label: "💼 完整项目 🌟",
+  position: "right",
+  to: "/project",
+};
+
 /* 【导航】实验项目 */
 /** @type {import("@docusaurus/theme-common/src/utils/useThemeConfig").NavbarItem} */
 const navbarMyLab = {
@@ -171,8 +178,9 @@ const config = {
           navbarMyLab,
 
           navBarDocsItems,
-          navbarPersonalProjectItems,
-          navbarOpenSourceItems,
+          // navbarPersonalProjectItems,
+          // navbarOpenSourceItems,
+          projectItems,
 
           {
             type: "dropdown",

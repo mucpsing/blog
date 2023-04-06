@@ -21,6 +21,7 @@ export interface ICpsImgSwiperProps {
   showArrow?: boolean; // 是否显示切换的箭头
   autoSwitch?: number; // 是否自动切换，默认0不开启，单位为ms
   data: ICpsImgSwiperDataItem[];
+  classNames?: string;
 }
 
 export interface ICpsImgSwiperPropsState {
@@ -61,6 +62,7 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
     showImg: true,
     showArrow: true,
     autoSwitch: 30000,
+    classNames: "md:w-[500px] md:h-[400px] lg:w-[500px] lg:h-[350px] xl:w-[950px] xl:h-[650px]",
     data: [
       {
         title: "cps-fileheader",
@@ -92,6 +94,8 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
 
   componentWillUnmount(): void {
     if (this.autoSwitchInterID) clearInterval(this.autoSwitchInterID);
+
+    this.setState = (state, callback) => null;
   }
 
   componentDidMount(): void {
@@ -227,7 +231,7 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
           }
         >
           <QueueAnim
-            className="flex flex-col items-start"
+            className="flex flex-col items-start text-gray-700"
             type="bottom"
             duration={800}
             delay={[!i ? this.state.delay + 500 : 800, 0]}
@@ -247,10 +251,8 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
     return (
       <div
         className={[
-          "md:w-[500px] md:h-[400px]",
-          "lg:w-[500px] lg:h-[350px]",
-          "xl:w-[950px] xl:h-[650px]",
-          "w-[4 50px] h-[550px] min-w-[300px]",
+          this.props.classNames,
+          "w-[450px] h-[550px] min-w-[300px]",
           "bg-white rounded-md overflow-hidden relative",
         ].join(" ")}
       >

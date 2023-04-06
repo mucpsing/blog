@@ -1,8 +1,8 @@
 /*
  * @Author: CPS-surfacePro7 holy.dandelion@139.com
  * @Date: 2023-01-30 00:13:35
- * @LastEditors: cpasion-office-win10 373704015@qq.com
- * @LastEditTime: 2023-04-06 18:12:34
+ * @LastEditors: CPS holy.dandelion@139.com
+ * @LastEditTime: 2023-04-06 21:45:37
  * @FilePath: \blog-Docusaurus2\src\pages\project\index.jsx
  * @Description: 个人项目展示页
  */
@@ -101,12 +101,17 @@ function ProjectHeader() {
 export default function ProjectPage() {
   return (
     <Layout title={TITLE} description={DESCRIPTION}>
-      <header className="flex justify-center my-20">
-        <CpsImgSwiper></CpsImgSwiper>
+      <header className="flex justify-center mt-10">
+        <CpsImgSwiper
+          classNames={"md:w-[650px] md:h-[450px] lg:w-[800px] lg:h-[600px] xl:w-[1050px] xl:h-[750px]"}
+        ></CpsImgSwiper>
       </header>
       <main>
-        <ProjectHeader />
-        <section className="w-[1000px] mx-auto"></section>
+        {/* <ProjectHeader />
+
+        <section className="w-[1000px] mx-auto my-2">
+          <CpsImgCards></CpsImgCards>
+        </section> */}
       </main>
     </Layout>
   );

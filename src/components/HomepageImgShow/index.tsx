@@ -286,7 +286,7 @@ export default class PicDetailsDemo extends React.Component<IPicDetailsProps, IP
           className={["cps-pic-click-will-close", "w-full h-full py-10 px-20", "overflow-hidden rounded-sm"].join(" ")}
         >
           {/* 标题部分 */}
-          <QueueAnim
+          {/* <QueueAnim
             type="bottom"
             className={["text-gray-500", "cps-pic-click-will-close", "w-full my-[20px] mx-auto text-center"].join(" ")}
           >
@@ -296,7 +296,7 @@ export default class PicDetailsDemo extends React.Component<IPicDetailsProps, IP
             <p key="p" className="mt-5 text-lg cps-pic-click-will-close">
               {this.props.subTitle}
             </p>
-          </QueueAnim>
+          </QueueAnim> */}
 
           {/* 图片展示部分 */}
           <QueueAnim
