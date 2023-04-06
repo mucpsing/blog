@@ -252,6 +252,7 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
       <div
         className={[
           this.props.classNames,
+          "shadow-xl",
           "w-[450px] h-[550px] min-w-[300px]",
           "bg-white rounded-md overflow-hidden relative",
         ].join(" ")}

@@ -2,7 +2,7 @@
  * @Author: cpasion-office-win10 373704015@qq.com
  * @Date: 2023-03-28 16:25:46
  * @LastEditors: CPS holy.dandelion@139.com
- * @LastEditTime: 2023-04-06 22:43:09
+ * @LastEditTime: 2023-04-06 23:01:52
  * @FilePath: \cps-blog\src\pages\test\index.tsx
  * @Description: 泡泡文字聚散效果组建，父级元素必须采用绝对定位，最终泡泡扩散的位置会根据最近一个绝对定位的父级来生成
  */
@@ -261,11 +261,11 @@ export default class LogoGather extends React.Component<LogoGatherProps, LogoGat
   };
 
   updatePositions = (): boolean => {
-    console.log("updatePositions");
+    // console.log("updatePositions");
 
     // 不需要获取定位信息
     if (!this.props.positionElementId) {
-      console.log("不需要定位");
+      // console.log("不需要定位");
       return true;
     }
 
@@ -320,7 +320,9 @@ export default class LogoGather extends React.Component<LogoGatherProps, LogoGat
 
       this.gather = !this.gather;
     } catch (error) {
-      console.log("更新数据失败");
+      // console.log("更新数据失败: ", error);
+      this.updateTweenData.cancel();
+      this.updateTweenData = null;
     }
   }, 1000);
 
