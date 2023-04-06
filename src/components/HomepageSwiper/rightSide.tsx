@@ -1,8 +1,8 @@
 /*
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-06 23:17:09
- * @LastEditors: CPS-surfacePro7 holy.dandelion@139.com
- * @LastEditTime: 2023-04-01 19:10:39
+ * @LastEditors: CPS holy.dandelion@139.com
+ * @LastEditTime: 2023-04-07 00:27:06
  * @FilePath: \cps-blog\src\components\HomepageSwiper\rightSide.tsx
  * @Description: 首页标题区域
  */
@@ -49,7 +49,7 @@ export default function HomeTitle() {
         {/* <strong className="text-green-700">{siteConfig.title}</strong> */}
       </h1>
 
-      <p className="my-3 underline decoration-dotted" key="content">
+      <p className="my-6 underline decoration-dotted" key="content">
         <a href="docs/【07】常识科普/社会真实/名人名言">这些年我们听到的名人疯言</a>
       </p>
 

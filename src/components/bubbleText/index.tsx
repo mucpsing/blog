@@ -2,14 +2,13 @@
  * @Author: cpasion-office-win10 373704015@qq.com
  * @Date: 2023-03-28 16:25:46
  * @LastEditors: CPS holy.dandelion@139.com
- * @LastEditTime: 2023-04-07 00:05:04
+ * @LastEditTime: 2023-04-07 00:23:30
  * @FilePath: \cps-blog\src\pages\test\index.tsx
  * @Description: 泡泡文字聚散效果组建，父级元素必须采用绝对定位，最终泡泡扩散的位置会根据最近一个绝对定位的父级来生成
  */
 import React from "react";
 import ReactDOM from "react-dom";
 import TweenOne from "rc-tween-one";
-// import ticker from "rc-tween-one/lib/ticker";
 import { throttle, type DebouncedFunc } from "lodash";
 
 import "./bubble.css";
@@ -59,6 +58,7 @@ export default class LogoGather extends React.Component<LogoGatherProps, LogoGat
     opacitymin: 0.7,
   };
 
+  public isInit: boolean = false;
   public gather: boolean;
   public interval: null | number;
   public intervalTime: number;
@@ -101,6 +101,7 @@ export default class LogoGather extends React.Component<LogoGatherProps, LogoGat
       if (isDone) {
         clearInterval(taskID);
         this.createPointData();
+        this.isInit = true;
 
         setTimeout(() => {
           this.onMouseLeave({ target: { id: "LogoGather.init" } });
@@ -249,10 +250,11 @@ export default class LogoGather extends React.Component<LogoGatherProps, LogoGat
 
   disperseData = () => {
     const rect = this.dom.getBoundingClientRect();
-
     const sideRect = this.sideBox.getBoundingClientRect();
+
     const sideTop = sideRect.top - rect.top;
     const sideLeft = sideRect.left - rect.left;
+
     const children = this.state.children.map((item) => {
       const r = (Math.random() * this.props.bubbleSizeMin + this.props.bubbleSizeMin) * 2;
 
@@ -342,20 +344,21 @@ export default class LogoGather extends React.Component<LogoGatherProps, LogoGat
   };
 
   render() {
-    const { top, left, bottom, right, transform } = this.state;
     return (
       <div id="logoContainer" className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
         <TweenOne
           animation={this.state.boxAnim}
-          className="absolute pointer-events-auto bg-orange-300/10 rounded-2xl shadow-slate-700"
+          className={["absolute pointer-events-auto bg-orange-300/10 rounded-xl", this.isInit ? "shadow-md" : ""].join(
+            " "
+          )}
           style={{
             width: `${this.props.width}px`,
             height: `${this.props.height}px`,
-            top,
-            left,
-            bottom,
-            right,
-            transform,
+            top: this.state.top,
+            left: this.state.left,
+            bottom: this.state.bottom,
+            right: this.state.right,
+            transform: this.state.transform,
           }}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
