@@ -20,6 +20,8 @@
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
     "@docusaurus/core": "^2.4.0",
+    "@docusaurus/module-type-aliases": "^2.4.0",
+    "@docusaurus/plugin-ideal-image": "^2.4.0",
     "@docusaurus/preset-classic": "^2.4.0",
     "@mdx-js/react": "^1.6.22",
     "clsx": "^1.2.1",
@@ -32,7 +34,7 @@
     "typed.js": "^2.0.12"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "^2.4.0",
+    "@popperjs/core": "^2.11.7",
     "@tsconfig/docusaurus": "^1.0.5",
     "@types/glob": "^8.0.1",
     "@types/lodash": "^4.14.191",
@@ -47,6 +49,7 @@
     "postcss-nested": "^6.0.1",
     "postcss-preset-env": "^8.0.1",
     "rc-queue-anim": "^2.0.0",
+    "react-popper": "^2.3.0",
     "stylus": "^0.59.0",
     "stylus-loader": "^7.1.0",
     "typescript": "^4.7.4"

@@ -1,11 +1,3 @@
-/*
- * @Author: CPS holy.dandelion@139.com
- * @Date: 2023-03-06 22:25:11
- * @LastEditors: cpasion-office-win10 373704015@qq.com
- * @LastEditTime: 2023-04-06 17:29:34
- * @FilePath: \cps-blog\src\components\HomepageSwiper\index.tsx
- * @Description: 首页轮播组件
- */
 import React from "react";
 
 import BannerAnim from "rc-banner-anim";
@@ -13,12 +5,29 @@ import QueueAnim from "rc-queue-anim";
 import { TweenOneGroup } from "rc-tween-one";
 import { RightOutlined, LeftOutlined } from "@ant-design/icons";
 
-import dataArray, { type ICpsImgSwiperDataItem } from "./data";
-import HomeTitle from "./rightSide";
-import Logo from "@site/src/components/bubbleText";
-// import Logo from "@site/src/pages/test";
+export interface ICpsImgSwiperDataItem {
+  title: string;
+  content: string;
+  subImg: string;
+  mainImg: string;
+  mainColor: string;
+  subColor: string;
+}
 
-const Element = BannerAnim.Element;
+export interface ICpsImgSwiperProps {
+  alignmentMode?: "horizontal" | "vertical"; // 横向|垂直
+  showText?: boolean;
+  showImg?: boolean;
+  showArrow?: boolean; // 是否显示切换的箭头
+  autoSwitch?: number; // 是否自动切换，默认0不开启，单位为ms
+  data: ICpsImgSwiperDataItem[];
+}
+
+export interface ICpsImgSwiperPropsState {
+  showInt: number;
+  delay: number;
+  oneEnter: boolean;
+}
 
 /**
  * @description: 左右两边的动画滑动效果
@@ -34,47 +43,46 @@ const ANIM_CONFIGS = {
   ],
 };
 
-enum AlignmentMode {
-  Vertical = "vertical", // 横向
-  Horizontal = "horizontal", // 垂直
-}
+const Element = BannerAnim.Element;
 
-interface ICpsImgSwiperProps {
-  alignmentMode?: AlignmentMode;
-  showText?: boolean;
-  showImg?: boolean;
-  showArrow?: boolean; // 是否显示切换的箭头
-  autoSwitch?: number; // 是否自动切换，默认0不开启，单位为ms
-}
-
-interface ICpsImgSwiperPropsState {
-  showInt: number;
-  delay: number;
-  oneEnter: boolean;
-}
 export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, ICpsImgSwiperPropsState> {
   bannerImg: any;
   bannerText: any;
   titleElement: Element;
-
   autoSwitchInterID: any;
 
   // 因为过渡效果分为左右两边，需要根据每次点击的按钮来重新指定是采用左边的过渡还是右边的过渡效果
-  currtAnim: any = ANIM_CONFIGS.right;
+  currtAnim = ANIM_CONFIGS.right;
   DATA: ICpsImgSwiperDataItem[] = [];
 
-  static defaultProps = {
-    alignmentMode: AlignmentMode.Horizontal,
+  static defaultProps: ICpsImgSwiperProps = {
+    alignmentMode: "horizontal",
     showText: false,
     showImg: true,
     showArrow: true,
     autoSwitch: 30000,
+    data: [
+      {
+        title: "cps-fileheader",
+        content: "快速插入文件头部信息，根据后缀名关联模板，一种后缀名可关联多个模板（vue2 和 vue3）",
+        subImg: "/logo/nodejs.svg",
+        mainImg: "/screenshot/sublimeTextPlugs/cps-fileheader/fileheader1.gif",
+        mainColor: "#FFF43D",
+        subColor: "#F6B429",
+      },
+      {
+        title: "cps-fileheader",
+        content: "快速插入文件头部信息，根据后缀名关联模板，一种后缀名可关联多个模板（vue2 和 vue3）",
+        subImg: "/logo/nodejs.svg",
+        mainImg: "/screenshot/sublimeTextPlugs/cps-fileheader/fileheader1.gif",
+        mainColor: "#FC1E4F",
+        subColor: "#FF4058",
+      },
+    ],
   };
 
   constructor(props) {
     super(props);
-
-    this.DATA = dataArray;
     this.state = {
       showInt: 0,
       delay: 0,
@@ -115,7 +123,7 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
     this.currtAnim = ANIM_CONFIGS.left;
 
     if (showInt <= 0) {
-      showInt = dataArray.length - 1;
+      showInt = this.props.data.length - 1;
     } else {
       showInt -= 1;
     }
@@ -135,7 +143,7 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
 
     this.currtAnim = ANIM_CONFIGS.right;
 
-    if (showInt >= dataArray.length - 1) {
+    if (showInt >= this.props.data.length - 1) {
       showInt = 0;
     } else {
       showInt += 1;
@@ -162,7 +170,7 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
     /**
      * @description: 根据数据渲染左边【图片展示】区域
      */
-    const leftChildrens = this.DATA.map((item, i) => {
+    const elementImgs = this.props.data.map((item, i) => {
       const { mainColor, mainImg, subImg } = item;
       return (
         <Element key={i} leaveChildHide>
@@ -209,7 +217,7 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
     /**
      * @description: 根据数据渲染右边【文字描述】区域
      */
-    const rightChildrens = this.DATA.map((item, i) => {
+    const elementTexts = this.props.data.map((item, i) => {
       const { title, content, subColor } = item;
       return (
         <Element
@@ -236,111 +244,65 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
       );
     });
 
-    /**
-     * @description: 位于组件中央的彩色轮播切换按钮
-     */
-    const Items = () => {
-      return (
-        <div className="absolute w-full h-10 bottom-0 z-[1] flex items-center justify-center gap-4">
-          {this.DATA.map((item, index) => {
-            const { mainColor } = item;
-            const key = index.toString();
-            return (
-              <div
-                key={key}
-                onClick={(e) => this.switchPage(index)}
-                style={{ background: mainColor }}
-                className={[
-                  "border-2 border-solid border-white",
-                  "w-5 h-5 rounded-full cursor-pointer",
-                  "hover:w-10 transition-all duration-300",
-                ].join(" ")}
-              ></div>
-            );
-          })}
-        </div>
-      );
-    };
-
     return (
       <div
         className={[
-          `overflow-hidden relative w-full h-[600px]`,
-          "md:h-[650px]",
-          "lg:h-[750px]",
-          "xl:h-[900px]",
-          "flex justify-evenly items-center pt-60 pb-64 px-4 text-gray-700",
+          "md:w-[500px] md:h-[400px]",
+          "lg:w-[500px] lg:h-[350px]",
+          "xl:w-[950px] xl:h-[650px]",
+          "w-[4 50px] h-[550px] min-w-[300px]",
+          "bg-white rounded-md overflow-hidden relative",
         ].join(" ")}
-        style={{ background: this.DATA[this.state.showInt].subColor, transition: "background 1s" }}
       >
-        {/* 左边标题 */}
-        <div id="homeTitleComment" className="home-title w-[400px]">
-          <HomeTitle />
-        </div>
-
-        <Logo width={600} height={200} bubbleScale={1.5} positionElementId="postitionElement"></Logo>
-
-        {/* 右边轮播 */}
-        <div
+        {/* 图片 */}
+        <BannerAnim
           className={[
-            "md:w-[500px] md:h-[400px]",
-            "lg:w-[500px] lg:h-[350px]",
-            "xl:w-[950px] xl:h-[650px]",
-            "w-[4 50px] h-[550px] min-w-[300px]",
-            "bg-white rounded-md overflow-hidden relative",
+            "cps-swiper-img relative overflow-hidden",
+            this.props.alignmentMode == "vertical"
+              ? `w-1/2 h-full inline-block z-[1]`
+              : "w-full min-w-[450px] h-full block absolute z-[2]",
           ].join(" ")}
+          sync
+          type="across"
+          duration={1000}
+          ease="easeInOutExpo"
+          arrow={false}
+          thumb={false}
+          ref={(c) => (this.bannerImg = c)}
+          onChange={this.onChange}
+          dragPlay={false}
         >
-          {/* 图片 */}
-          <BannerAnim
-            className={[
-              "cps-swiper-img relative overflow-hidden",
-              this.props.alignmentMode == "vertical"
-                ? `w-1/2 h-full inline-block z-[1]`
-                : "w-full min-w-[450px] h-full block absolute z-[2]",
-            ].join(" ")}
-            sync
-            type="across"
-            duration={1000}
-            ease="easeInOutExpo"
-            arrow={false}
-            thumb={false}
-            ref={(c) => (this.bannerImg = c)}
-            onChange={this.onChange}
-            dragPlay={false}
-          >
-            {leftChildrens}
-          </BannerAnim>
+          {elementImgs}
+        </BannerAnim>
 
-          {/* 文字 */}
-          <BannerAnim
-            style={{ backdropFilter: "blur(5px)" }}
-            className={[
-              "cps-swiper-text overflow-hidden z-[3]",
-              this.props.alignmentMode == "vertical"
-                ? `w-1/2 h-full inline-block relative`
-                : "w-full h-1/3 block absolute bottom-0 bg-white/50",
-            ].join(" ")}
-            sync
-            type="across"
-            duration={1000}
-            arrow={false}
-            thumb={false}
-            ease="easeInOutExpo"
-            ref={(c) => (this.bannerText = c)}
-            dragPlay={false}
-          >
-            {rightChildrens}
-          </BannerAnim>
+        {/* 文字 */}
+        <BannerAnim
+          style={{ backdropFilter: "blur(5px)" }}
+          className={[
+            "cps-swiper-text overflow-hidden z-[3]",
+            this.props.alignmentMode == "vertical"
+              ? `w-1/2 h-full inline-block relative`
+              : "w-full h-1/3 block absolute bottom-0 bg-white/50",
+          ].join(" ")}
+          sync
+          type="across"
+          duration={1000}
+          arrow={false}
+          thumb={false}
+          ease="easeInOutExpo"
+          ref={(c) => (this.bannerText = c)}
+          dragPlay={false}
+        >
+          {elementTexts}
+        </BannerAnim>
 
-          {this.props.showArrow ? (
-            <TweenOneGroup enter={{ opacity: 0, type: "from" }} leave={{ opacity: 0 }}>
-              <LeftOutlined className="z-[3] absolute text-2xl left-1 -mt-[20px] top-1/2" onClick={this.onLeft} />
-              <RightOutlined className="z-[3] right-1 absolute text-2xl -mt-[20px] top-1/2" onClick={this.onRight} />
-            </TweenOneGroup>
-          ) : null}
-        </div>
-
-        <Items key="items" />
+        {/* 左右切换的箭头 */}
+        {this.props.showArrow ? (
+          <TweenOneGroup enter={{ opacity: 0, type: "from" }} leave={{ opacity: 0 }}>
+            <LeftOutlined className="z-[3] absolute text-2xl left-1 -mt-[20px] top-1/2" onClick={this.onLeft} />
+            <RightOutlined className="z-[3] right-1 absolute text-2xl -mt-[20px] top-1/2" onClick={this.onRight} />
+          </TweenOneGroup>
+        ) : null}
       </div>
     );
   }

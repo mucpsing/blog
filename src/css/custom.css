@@ -39,3 +39,7 @@
 }
 
 /* @import "//at.alicdn.com/t/c/font_3959151_wj4ujygdnwh.js"; */
+
+input {
+  display: none;
+}
