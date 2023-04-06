@@ -2,14 +2,14 @@
  * @Author: cpasion-office-win10 373704015@qq.com
  * @Date: 2023-03-28 16:25:46
  * @LastEditors: CPS holy.dandelion@139.com
- * @LastEditTime: 2023-04-07 00:02:34
+ * @LastEditTime: 2023-04-07 00:05:04
  * @FilePath: \cps-blog\src\pages\test\index.tsx
  * @Description: 泡泡文字聚散效果组建，父级元素必须采用绝对定位，最终泡泡扩散的位置会根据最近一个绝对定位的父级来生成
  */
 import React from "react";
 import ReactDOM from "react-dom";
 import TweenOne from "rc-tween-one";
-import ticker from "rc-tween-one/lib/ticker";
+// import ticker from "rc-tween-one/lib/ticker";
 import { throttle, type DebouncedFunc } from "lodash";
 
 import "./bubble.css";
@@ -132,11 +132,6 @@ export default class LogoGather extends React.Component<LogoGatherProps, LogoGat
 
   componentWillUnmount() {
     window.CPS_ENV.CPS_INTERVAL_LIST.forEach((intervalID) => clearInterval(intervalID));
-
-    // ticker.clear(this.interval);
-    // this.interval = null;
-    // this.updateTweenData.cancel();
-
     window.removeEventListener("resize", this.resizeEvent);
     this.resizeEvent.cancel();
   }
@@ -148,27 +143,11 @@ export default class LogoGather extends React.Component<LogoGatherProps, LogoGat
 
     this.setState({ isMouseEnter: true }, () => {
       if (!this.gather) this.updateTweenData();
-
-      // if (this.interval) {
-      //   ticker.clear(this.interval);
-      //   this.interval = null;
-      // }
-
       if (window.CPS_ENV.CPS_INTERVAL_LIST.length > 0) {
         window.CPS_ENV.CPS_INTERVAL_LIST.forEach((intervalID) => clearInterval(intervalID));
         window.CPS_ENV.CPS_INTERVAL_LIST = [];
       }
     });
-
-    // if (!this.gather) {
-    //   this.updateTweenData();
-    //   // this.updateTweenData.cancel();
-    // }
-
-    // if (this.interval) {
-    //   ticker.clear(this.interval);
-    //   this.interval = null;
-    // }
   };
 
   onMouseLeave = (e) => {
@@ -178,25 +157,13 @@ export default class LogoGather extends React.Component<LogoGatherProps, LogoGat
 
     this.setState({ isMouseEnter: false }, () => {
       if (this.gather) this.updateTweenData();
-
-      // if (this.interval == null) {
-      //   this.interval = ticker.interval(this.updateTweenData, this.props.intervalTime);
-      // }
-
       if (window.CPS_ENV.CPS_INTERVAL_LIST.length > 0) {
         window.CPS_ENV.CPS_INTERVAL_LIST.forEach((intervalID) => clearInterval(intervalID));
         window.CPS_ENV.CPS_INTERVAL_LIST = [];
       }
 
       window.CPS_ENV.CPS_INTERVAL_LIST.push(setInterval(this.updateTweenData, this.props.intervalTime));
-      // window.CPS_ENV.CPS_INTERVAL_LIST.push(ticker.interval(this.updateTweenData, this.props.intervalTime));
     });
-
-    // if (this.gather) this.updateTweenData();
-
-    // if (this.interval == null) {
-    //   this.interval = ticker.interval(this.updateTweenData, this.props.intervalTime);
-    // }
   };
 
   setDataToDom(data: Uint8ClampedArray, w: number, h: number) {
@@ -239,16 +206,10 @@ export default class LogoGather extends React.Component<LogoGatherProps, LogoGat
       );
     });
 
-    this.setState(
-      {
-        children,
-        boxAnim: { opacity: 0, type: "from", duration: 800 },
-      },
-      () => {
-        // this.interval = ticker.interval(this.updateTweenData, this.props.intervalTime);
-        // this.interval = ticker.interval(this.updateTweenData, this.props.intervalTime);
-      }
-    );
+    this.setState({
+      children,
+      boxAnim: { opacity: 0, type: "from", duration: 800 },
+    });
   }
 
   createPointData = () => {
@@ -360,31 +321,6 @@ export default class LogoGather extends React.Component<LogoGatherProps, LogoGat
     return true;
   };
 
-  // updateTweenData = throttle(() => {
-  //   try {
-  //     console.log("updateTweenData run: ", { gather: this.gather, isMouseEnter: this.state.isMouseEnter });
-
-  //     if (this.state.isMouseEnter) return;
-
-  //     if (!this.IS_CURRT_WEB_PAGE) return;
-
-  //     this.dom = ReactDOM.findDOMNode(this) as Element;
-  //     this.sideBox = ReactDOM.findDOMNode(this.sideBoxComp) as Element;
-
-  //     if (this.gather) {
-  //       this.disperseData();
-  //     } else {
-  //       this.gatherData();
-  //     }
-
-  //     this.gather = !this.gather;
-  //   } catch (error) {
-  //     console.log("更新数据失败: ", error);
-  //     // this.updateTweenData.cancel();
-  //     // this.updateTweenData = null;
-  //   }
-  // }, 100);
-
   updateTweenData = () => {
     try {
       if (!this.IS_CURRT_WEB_PAGE) return;
@@ -402,8 +338,6 @@ export default class LogoGather extends React.Component<LogoGatherProps, LogoGat
       this.gather = !this.gather;
     } catch (error) {
       console.log("更新数据失败: ", error);
-      // this.updateTweenData.cancel();
-      // this.updateTweenData = null;
     }
   };
 
