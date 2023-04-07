@@ -116,7 +116,7 @@ const config = {
   },
 
   plugins: [
-    addHeaderTag,
+    // addHeaderTag,
     [
       "@docusaurus/plugin-ideal-image",
       {
