@@ -10,17 +10,12 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
-    title: "Easy to Use",
+    title: "前端技能",
     Svg: require("@site/static/img/undraw_docusaurus_mountain.svg").default,
-    description: (
-      <>
-        Docusaurus was designed from the ground up to be easily installed and used to get your website up and running
-        quickly.
-      </>
-    ),
+    description: <>Vue 全家桶 + React 全家桶双剑客，</>,
   },
   {
-    title: "Focus on What Matters",
+    title: "后端开发",
     Svg: require("@site/static/img/undraw_docusaurus_tree.svg").default,
     description: (
       <>
@@ -30,7 +25,7 @@ const FeatureList: FeatureItem[] = [
     ),
   },
   {
-    title: "Powered by React",
+    title: "硬件开发",
     Svg: require("@site/static/img/undraw_docusaurus_react.svg").default,
     description: (
       <>
