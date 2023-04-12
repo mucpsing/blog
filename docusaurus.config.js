@@ -11,7 +11,7 @@ const { extractTagline } = require("./scripts/lib/taglineList");
 const taglineList = extractTagline(path.resolve("./docs/【07】常识科普/社会真实/名人名言.md"));
 
 /* 【导航】学习笔记 */
-const excludeDirList = ["【18】副业开发"];
+const excludeDirList = ["【18】副业开发", ".obsidian"];
 const navBarDocsItems = {
   label: "📔 学习笔记",
   type: "dropdown",
@@ -20,54 +20,54 @@ const navBarDocsItems = {
 };
 
 /* 【导航】个人作品 */
-const navbarPersonalProjectItems = {
-  label: "🌟 原创作品",
-  type: "dropdown",
-  position: "right",
-  items: [
-    ...require("./scripts/lib/utils").createNavItemByDir({
-      targetPath: path.resolve("./docs/【05】项目经历/原创作品"),
-      prefixUrl: "docs/【05】项目经历/原创作品",
-      inDeep: true,
-      excludeDirList: ["index.md", "1"],
-    }),
-    {
-      type: "html",
-      value: '<hr class="dropdown-separator">',
-    },
-    {
-      to: "/project",
-      label: "🌟 作品汇总 🌟",
-    },
-  ],
-};
+// const navbarPersonalProjectItems = {
+//   label: "🌟 原创作品",
+//   type: "dropdown",
+//   position: "right",
+//   items: [
+//     ...require("./scripts/lib/utils").createNavItemByDir({
+//       targetPath: path.resolve("./docs/【05】项目经历/原创作品"),
+//       prefixUrl: "docs/【05】项目经历/原创作品",
+//       inDeep: true,
+//       excludeDirList: ["index.md", "1"],
+//     }),
+//     {
+//       type: "html",
+//       value: '<hr class="dropdown-separator">',
+//     },
+//     {
+//       to: "/project",
+//       label: "🌟 作品汇总 🌟",
+//     },
+//   ],
+// };
 
 /* 【导航】开源项目 */
-const navbarOpenSourceItems = {
-  type: "dropdown",
-  label: "💼 完整项目",
-  position: "right",
-  items: [
-    ...require("./scripts/lib/utils").createNavItemByDir({
-      targetPath: path.resolve("./docs/【05】项目经历/完整项目"),
-      prefixUrl: "docs/【05】项目经历/完整项目",
-      inDeep: true,
-      excludeDirList: ["index.md"],
-    }),
-    {
-      type: "html",
-      value: '<hr class="dropdown-separator">',
-    },
-    {
-      to: "/project",
-      label: "💼 项目汇总 💼",
-    },
-  ],
-};
+// const navbarOpenSourceItems = {
+//   type: "dropdown",
+//   label: "💼 完整项目",
+//   position: "right",
+//   items: [
+//     ...require("./scripts/lib/utils").createNavItemByDir({
+//       targetPath: path.resolve("./docs/【05】项目经历/完整项目"),
+//       prefixUrl: "docs/【05】项目经历/完整项目",
+//       inDeep: true,
+//       excludeDirList: ["index.md"],
+//     }),
+//     {
+//       type: "html",
+//       value: '<hr class="dropdown-separator">',
+//     },
+//     {
+//       to: "/project",
+//       label: "💼 项目汇总 💼",
+//     },
+//   ],
+// };
 
 /* 作品%项目 */
 const projectItems = {
-  label: "💼 完整项目 🌟",
+  label: "💼 完整&项目 🌟",
   position: "right",
   to: "/project",
 };
