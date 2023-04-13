@@ -19,7 +19,7 @@ import {
   type TagType,
   type Project,
   type Tag,
-} from '@site/src/data/project';
+} from '@site/src/pages/project/_components/data/project';
 import {sortBy} from '@site/src/utils/jsUtils';
 
 const TagComp = React.forwardRef<HTMLLIElement, Tag>(

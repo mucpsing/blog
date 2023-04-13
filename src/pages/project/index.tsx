@@ -12,12 +12,12 @@ import clsx from "clsx";
 
 import CpsImgSwiper from "@site/src/components/CpsImgSwiper";
 import FavoriteIcon from "@site/src/components/svgIcons/FavoriteIcon";
-import { sortedProjects, Tags, TagList, type Project, type TagType } from "@site/src/data/project";
 
 import ShowcaseCard from "./_components/ShowcaseCard";
 import ShowcaseTooltip from "./_components/ShowcaseTooltip";
-import { type Operator, readOperator } from "./_components/ShowcaseFilterToggle";
 import ShowcaseTagSelect, { readSearchTags } from "./_components/ShowcaseTagSelect";
+import { type Operator, readOperator } from "./_components/ShowcaseFilterToggle";
+import { sortedProjects, Tags, TagList, type Project, type TagType } from "./_components/data/project";
 
 import { useHistory, useLocation } from "@docusaurus/router";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";

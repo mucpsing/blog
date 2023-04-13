@@ -2,7 +2,7 @@
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-25 16:10:31
  * @LastEditors: cpasion-office-win10 373704015@qq.com
- * @LastEditTime: 2023-03-27 10:12:34
+ * @LastEditTime: 2023-04-13 19:01:21
  * @FilePath: \cps-blog\scripts\utils.ts
  * @Description: 一些会被重复调用的工具函数
  */
@@ -12,6 +12,14 @@ import * as path from "path";
 
 import type { NavbarItem } from "@docusaurus/theme-common/src/utils/useThemeConfig";
 
+type NewNavbarItem = {
+  title?: string;
+  tags?: string[];
+  description?: string;
+  website?: string;
+  github?: string;
+  gitee?: string;
+} & NavbarItem;
 export interface NavItemParams {
   targetPath: string;
   excludeDirList?: string[] | null;
@@ -37,7 +45,7 @@ export function createNavItemByDir({
   let resList = fs.readdirSync(targetPath);
   let dirname = path.basename(targetPath);
 
-  let navbarItemList: NavbarItem[] = [];
+  let navbarItemList: NewNavbarItem[] = [];
   resList.forEach((rootDirFile) => {
     let fullPath = path.join(targetPath, rootDirFile);
     let stat = fs.statSync(fullPath);
@@ -45,7 +53,7 @@ export function createNavItemByDir({
     // 存在与排除列表，不进行添加
     if ((excludeDirList as string[]).includes(rootDirFile)) return;
 
-    // 展开目录，仅支持2层
+    // inDeep空值是否展开目录，目前仅支持2层读取，不想处理太多递归问题
     if (!inDeep) {
       if (stat.isDirectory()) {
         navbarItemList.push({
@@ -60,7 +68,6 @@ export function createNavItemByDir({
         // 该目录存在index.md的话，仅将index.md暴露出来
         if (fileSubList.includes("index.md")) {
           navbarItemList.push({
-            // 
             to: prefixUrl ? `${prefixUrl}/${rootDirFile}` : `${rootDirFile}`,
             label: `${rootDirFile}`,
           });
@@ -88,6 +95,8 @@ export function createNavItemByDir({
   return navbarItemList;
 }
 
+export function readMdMetaData() {}
+
 const res = createNavItemByDir({
   targetPath: path.resolve("./docs/【05】项目经历/原创作品/"),
   excludeDirList: ["index.md"],
@@ -104,5 +113,3 @@ const ret = createNavItemByDir({
 
 // console.log(res);
 console.log(ret);
-
-

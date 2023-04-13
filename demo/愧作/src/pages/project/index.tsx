@@ -25,7 +25,7 @@ import {
   TagList,
   type Project,
   type TagType,
-} from '@site/src/data/project';
+} from '@site/src/pages/project/_components/data/project';
 import ShowcaseTooltip from './_components/ShowcaseTooltip';
 
 import ExecutionEnvironment from '@docusaurus/ExecutionEnvironment';

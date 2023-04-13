@@ -13,7 +13,7 @@ import Link from "@docusaurus/Link";
 import styles from "./styles.module.css";
 import FavoriteIcon from "@site/src/components/svgIcons/FavoriteIcon";
 import Tooltip from "../ShowcaseTooltip";
-import { Tags, TagList, type TagType, type Project, type Tag } from "@site/src/data/project";
+import { Tags, TagList, type TagType, type Project, type Tag } from "@site/src/pages/project/_components/data/project";
 import { sortBy } from "@site/src/utils/jsUtils";
 
 const TagComp = React.forwardRef<HTMLLIElement, Tag>(({ label, color, description }, ref) => (

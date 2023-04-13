@@ -8,11 +8,11 @@
  */
 
 import path from "path";
-import {createNavItemByDir} from './utils'
-import { Tags } from "../src/data/project";
-import type { TagType, Project, Tag } from "../src/data/project";
+import { createNavItemByDir } from "./utils";
+import { Tags } from "../src/pages/project/_components/data/project";
+import type { TagType, Project, Tag } from "../src/pages/project/_components/data/project";
 // import type { IprojectData } from "../src/dataTypes.d";
 
-const PATH_OPENSOURCE = path.resolve('./docs/【05】项目经历/完整项目')
+const PATH_OPENSOURCE = path.resolve("./docs/【05】项目经历/完整项目");
 
-console.log({PATH_OPENSOURCE})
+console.log({ PATH_OPENSOURCE });

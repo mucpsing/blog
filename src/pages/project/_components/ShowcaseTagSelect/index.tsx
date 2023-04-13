@@ -9,7 +9,7 @@ import React, { type ComponentProps, type ReactNode, type ReactElement, useCallb
 import { useHistory, useLocation } from "@docusaurus/router";
 import { toggleListItem } from "@site/src/utils/jsUtils";
 import { prepareUserState } from "../../index";
-import type { TagType } from "@site/src/data/project";
+import type { TagType } from "@site/src/pages/project/_components/data/project";
 
 import styles from "./styles.module.css";
 
