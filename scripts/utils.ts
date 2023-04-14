@@ -2,7 +2,7 @@
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-25 16:10:31
  * @LastEditors: cpasion-office-win10 373704015@qq.com
- * @LastEditTime: 2023-04-14 09:57:45
+ * @LastEditTime: 2023-04-14 17:57:13
  * @FilePath: \cps-blog\scripts\utils.ts
  * @Description: 一些会被重复调用的工具函数
  */
@@ -115,7 +115,7 @@ const ret = createNavItemByDir({
 
 export async function readMarkdownInfo(filePaths: string) {
   const data = await fsp.readFile(filePaths, { encoding: "utf8" });
-  let dataList = data.split("\n");
+  let dataList = data.split(/[(\r\n)\r\n]+/);
   console.log(dataList.length);
 
   const FIND_FLAG = "---";
@@ -142,8 +142,8 @@ export async function readMarkdownInfo(filePaths: string) {
   });
 
   try {
-    if(regionLine.length != 2) return{}
-    
+    if (regionLine.length != 2) return {};
+
     const infoData = dataList.slice(regionLine[0] + 1, regionLine[1] - regionLine[0]).join("\n");
     const yaml2Json = yaml.parse(infoData);
 
@@ -156,10 +156,15 @@ export async function readMarkdownInfo(filePaths: string) {
   return {};
 }
 
-const target = path.resolve("./docs/【05】项目经历/原创作品/ST插件/生成文件头.md");
-
 (async () => {
+  const output_js = path.resolve("./data/project.js");
+  const target = path.resolve("./docs/【05】项目经历/原创作品/ST插件/生成文件头.md");
+
   const data = await readMarkdownInfo(target);
 
-  console.log({ data });
+  const output_data = ["exports.projects = [", JSON.stringify(data, undefined, "  "), "];"].join("\n");
+
+  await fsp.writeFile(output_js, output_data);
+
+  console.log(output_data);
 })();
