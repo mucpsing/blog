@@ -2,7 +2,7 @@
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-06 22:25:11
  * @LastEditors: CPS holy.dandelion@139.com
- * @LastEditTime: 2023-04-06 21:53:31
+ * @LastEditTime: 2023-04-16 23:32:56
  * @FilePath: \cps-blog\src\components\HomepageSwiper\index.tsx
  * @Description: 首页轮播组件
  */
@@ -13,10 +13,10 @@ import QueueAnim from "rc-queue-anim";
 import { TweenOneGroup } from "rc-tween-one";
 import { RightOutlined, LeftOutlined } from "@ant-design/icons";
 
-import dataArray, { type ICpsImgSwiperDataItem } from "./data";
+// import CpsImgSwiper from "@site/src/components/CpsImgSwiper";
+import dataArray, { type ICpsImgSwiperDataItem } from "@site/src/components/CpsImgSwiper/data";
 import HomeTitle from "./rightSide";
 import Logo from "@site/src/components/bubbleText";
-// import Logo from "@site/src/pages/test";
 
 const Element = BannerAnim.Element;
 
@@ -52,7 +52,7 @@ interface ICpsImgSwiperPropsState {
   delay: number;
   oneEnter: boolean;
 }
-export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, ICpsImgSwiperPropsState> {
+export default class HomeImgSwiper extends React.Component<ICpsImgSwiperProps, ICpsImgSwiperPropsState> {
   bannerImg: any;
   bannerText: any;
   titleElement: Element;
@@ -282,6 +282,16 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
 
         <Logo width={600} height={200} bubbleScale={1.5} positionElementId="postitionElement"></Logo>
 
+        {/* <CpsImgSwiper
+          classNames={[
+            "md:w-[500px] md:h-[400px]",
+            "lg:w-[500px] lg:h-[350px]",
+            "xl:w-[950px] xl:h-[650px]",
+            "w-[4 50px] h-[550px] min-w-[300px]",
+            "bg-white rounded-md overflow-hidden relative",
+          ].join(" ")}
+        ></CpsImgSwiper> */}
+
         {/* 右边轮播 */}
         <div
           className={[
@@ -289,10 +299,9 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
             "lg:w-[500px] lg:h-[350px]",
             "xl:w-[950px] xl:h-[650px]",
             "w-[4 50px] h-[550px] min-w-[300px]",
-            "bg-white rounded-md overflow-hidden relative",
+            "shadow-xl bg-white rounded-md overflow-hidden relative",
           ].join(" ")}
         >
-          {/* 图片 */}
           <BannerAnim
             className={[
               "cps-swiper-img relative overflow-hidden",
@@ -313,7 +322,6 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
             {leftChildrens}
           </BannerAnim>
 
-          {/* 文字 */}
           <BannerAnim
             style={{ backdropFilter: "blur(5px)" }}
             className={[

@@ -5,14 +5,7 @@ import QueueAnim from "rc-queue-anim";
 import { TweenOneGroup } from "rc-tween-one";
 import { RightOutlined, LeftOutlined } from "@ant-design/icons";
 
-export interface ICpsImgSwiperDataItem {
-  title: string;
-  content: string;
-  subImg: string;
-  mainImg: string;
-  mainColor: string;
-  subColor: string;
-}
+import defaultData, { type ICpsImgSwiperDataItem } from "./data";
 
 export interface ICpsImgSwiperProps {
   alignmentMode?: "horizontal" | "vertical"; // 横向|垂直
@@ -63,24 +56,7 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
     showArrow: true,
     autoSwitch: 30000,
     classNames: "md:w-[500px] md:h-[400px] lg:w-[500px] lg:h-[350px] xl:w-[950px] xl:h-[650px]",
-    data: [
-      {
-        title: "cps-fileheader",
-        content: "快速插入文件头部信息，根据后缀名关联模板，一种后缀名可关联多个模板（vue2 和 vue3）",
-        subImg: "/logo/nodejs.svg",
-        mainImg: "/screenshot/sublimeTextPlugs/cps-fileheader/fileheader1.gif",
-        mainColor: "#FFF43D",
-        subColor: "#F6B429",
-      },
-      {
-        title: "cps-fileheader",
-        content: "快速插入文件头部信息，根据后缀名关联模板，一种后缀名可关联多个模板（vue2 和 vue3）",
-        subImg: "/logo/nodejs.svg",
-        mainImg: "/screenshot/sublimeTextPlugs/cps-fileheader/fileheader1.gif",
-        mainColor: "#FC1E4F",
-        subColor: "#FF4058",
-      },
-    ],
+    data: defaultData,
   };
 
   constructor(props) {

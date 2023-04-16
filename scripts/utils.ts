@@ -1,9 +1,9 @@
 /*
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-25 16:10:31
- * @LastEditors: cpasion-office-win10 373704015@qq.com
- * @LastEditTime: 2023-04-14 17:57:13
- * @FilePath: \cps-blog\scripts\utils.ts
+ * @LastEditors: CPS holy.dandelion@139.com
+ * @LastEditTime: 2023-04-16 22:45:34
+ * @filepath: \cps-blog\scripts\utils.ts
  * @Description: 一些会被重复调用的工具函数
  */
 
@@ -15,6 +15,7 @@ import * as yaml from "yaml";
 import type { NavbarItem } from "@docusaurus/theme-common/src/utils/useThemeConfig";
 
 type NewNavbarItem = {
+  filepath: string;
   title?: string;
   tags?: string[];
   description?: string;
@@ -61,6 +62,7 @@ export function createNavItemByDir({
         navbarItemList.push({
           to: prefixUrl ? `${prefixUrl}/${rootDirFile}` : `${dirname}/${rootDirFile}`,
           label: rootDirFile,
+          filepath: fullPath,
         });
       }
     } else {
@@ -72,6 +74,7 @@ export function createNavItemByDir({
           navbarItemList.push({
             to: prefixUrl ? `${prefixUrl}/${rootDirFile}` : `${rootDirFile}`,
             label: `${rootDirFile}`,
+            filepath: path.join(fullPath, "index.md"),
           });
         } else {
           // 不存在index.md 将生成 【目录名】+ 文件名 的方式进行暴露
@@ -86,6 +89,7 @@ export function createNavItemByDir({
               navbarItemList.push({
                 to: prefixUrl ? `${prefixUrl}/${rootDirFile}/${basename}` : `${rootDirFile}/${basename}`,
                 label: `【${rootDirFile}】${basename}`,
+                filepath: fullSubPath,
               });
             }
           });
@@ -97,28 +101,11 @@ export function createNavItemByDir({
   return navbarItemList;
 }
 
-export function readMdMetaData() {}
-
-const res = createNavItemByDir({
-  targetPath: path.resolve("./docs/【05】项目经历/原创作品/"),
-  excludeDirList: ["index.md"],
-  prefixUrl: "docs/【05】项目经历/原创作品",
-  inDeep: true,
-});
-
-const ret = createNavItemByDir({
-  targetPath: path.resolve("./docs/【05】项目经历/完整项目/"),
-  excludeDirList: ["index.md"],
-  prefixUrl: "docs/【05】项目经历/完整项目",
-  inDeep: true,
-});
-
-export async function readMarkdownInfo(filePaths: string) {
-  const data = await fsp.readFile(filePaths, { encoding: "utf8" });
-  let dataList = data.split(/[(\r\n)\r\n]+/);
-  console.log(dataList.length);
-
+export async function readMarkdownInfo(filepaths: string) {
+  const data = await fsp.readFile(filepaths, { encoding: "utf8" });
   const FIND_FLAG = "---";
+
+  let dataList = data.split(/[(\r\n)\r\n]+/);
   let regionLine: number[] = [];
   let hasStartFlag = false;
 
@@ -126,7 +113,6 @@ export async function readMarkdownInfo(filePaths: string) {
     if (eachLine.trim().includes(FIND_FLAG)) {
       // 查找头部
       if (!hasStartFlag) {
-        console.log(`${index}行找到flag, ${FIND_FLAG}`);
         regionLine.push(index);
         hasStartFlag = true;
         return;
@@ -142,29 +128,52 @@ export async function readMarkdownInfo(filePaths: string) {
   });
 
   try {
-    if (regionLine.length != 2) return {};
+    // 仅找到头部，没有找到尾部，不属于包裹
+    if (regionLine.length != 2) return undefined;
 
     const infoData = dataList.slice(regionLine[0] + 1, regionLine[1] - regionLine[0]).join("\n");
+
     const yaml2Json = yaml.parse(infoData);
 
     return yaml2Json;
   } catch (error) {
-    console.log({ error });
-    return {};
+    return undefined;
   }
 
-  return {};
+  return undefined;
 }
 
-(async () => {
-  const output_js = path.resolve("./data/project.js");
-  const target = path.resolve("./docs/【05】项目经历/原创作品/ST插件/生成文件头.md");
+export async function init(filepathList: string[], prefixUrl: string[], outputPath: string) {
+  const fileInfoList = [];
+  for (let index = 0; index < filepathList.length; index++) {
+    fileInfoList.push(
+      ...createNavItemByDir({
+        targetPath: filepathList[index],
+        excludeDirList: ["index.md"],
+        inDeep: true,
+        prefixUrl: prefixUrl[index],
+      })
+    );
+  }
 
-  const data = await readMarkdownInfo(target);
+  const mdDataList: object[] = [];
+  const fileList = fileInfoList.map((item) => ({ filepath: item.filepath, website: item.to }));
+  for (let index = 0; index < fileList.length; index++) {
+    let res = await readMarkdownInfo(fileList[index].filepath);
 
-  const output_data = ["exports.projects = [", JSON.stringify(data, undefined, "  "), "];"].join("\n");
+    if (res) mdDataList.push({ ...res, ...fileList[index] });
+  }
 
-  await fsp.writeFile(output_js, output_data);
+  if (mdDataList.length > 0) {
+    const firstLine = "module.exports = ";
+    const outputData = firstLine + [JSON.stringify(mdDataList, undefined, "  ")].join("\n");
 
-  console.log(output_data);
-})();
+    await fsp.writeFile(outputPath, outputData);
+  }
+}
+
+// (async () => {
+//   const defaultPath = ["./docs/【05】项目经历/原创作品/", "./docs/【05】项目经历/完整项目/"];
+//   const defaultPrefix = ["/docs/【05】项目经历/原创作品", "/docs/【05】项目经历/完整项目"];
+//   await init(defaultPath, defaultPrefix);
+// })();

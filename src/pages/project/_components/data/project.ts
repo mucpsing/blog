@@ -1,4 +1,4 @@
-import { projects } from "@site/data/project";
+import projects from "@site/data/project";
 
 export type Tag = {
   label: string;
@@ -6,6 +6,9 @@ export type Tag = {
   color: string;
 };
 
+/**
+ * @description: 仅支持必须小写
+ */
 export type TagType =
   | "favorite"
   | "opensource"
@@ -13,8 +16,9 @@ export type TagType =
   | "design"
   | "javascript"
   | "python"
-  | "SublimeText"
-  | "VScode";
+  | "sublimetext"
+  | "vscode"
+  | "nodejs";
 
 export type Project = {
   title: string;
@@ -23,20 +27,26 @@ export type Project = {
   website: string;
   source?: string | null;
   tags: TagType[];
+  filePath?: string;
 };
 
 export const Tags: Record<TagType, Tag> = {
+  nodejs: {
+    label: "nodejs",
+    description: "py相关项目，人工智能，ai模型等，赶上时代步伐，学起来",
+    color: "#43853d",
+  },
   python: {
     label: "python",
     description: "py相关项目，人工智能，ai模型等，赶上时代步伐，学起来",
     color: "#4281b3",
   },
-  VScode: {
+  vscode: {
     label: "VS插件",
     description: "原创VSCode插件，大大提供团队搬砖效率",
     color: "#2376ae",
   },
-  SublimeText: {
+  sublimetext: {
     label: "ST插件",
     description: "原创SublimeText插件，大大提供团队搬砖效率",
     color: "#ff8000",

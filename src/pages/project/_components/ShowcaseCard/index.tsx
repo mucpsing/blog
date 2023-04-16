@@ -47,7 +47,7 @@ function ShowcaseCardTag({ tags }: { tags: TagType[] }) {
 const ShowcaseCard = memo(({ user }: { user: Project }) => (
   <li key={user.title} className={clsx("card shadow--md", styles.showcaseCard)}>
     <div className={clsx("card__image", styles.showcaseCardImage)}>
-      <Image img={user.preview} alt={user.title} />
+      <Image img={user.preview ? user.preview : ""} alt={`${user.title}.preview`} />
     </div>
     <div className="card__body">
       <div className={clsx(styles.showcaseCardHeader)}>
