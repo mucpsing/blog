@@ -1,8 +1,8 @@
 /*
  * @Author: cpasion-office-win10 373704015@qq.com
  * @Date: 2023-03-28 16:25:46
- * @LastEditors: CPS holy.dandelion@139.com
- * @LastEditTime: 2023-04-07 00:23:30
+ * @LastEditors: cpasion-office-win10 373704015@qq.com
+ * @LastEditTime: 2023-04-17 15:35:50
  * @FilePath: \cps-blog\src\pages\test\index.tsx
  * @Description: 泡泡文字聚散效果组建，父级元素必须采用绝对定位，最终泡泡扩散的位置会根据最近一个绝对定位的父级来生成
  */
@@ -11,7 +11,7 @@ import ReactDOM from "react-dom";
 import TweenOne from "rc-tween-one";
 import { throttle, type DebouncedFunc } from "lodash";
 
-import "./bubble.css";
+// import "./bubble.css";
 
 interface LogoGatherProps {
   image?: string;

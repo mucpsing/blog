@@ -3,7 +3,7 @@
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-25 16:10:31
  * @LastEditors: cpasion-office-win10 373704015@qq.com
- * @LastEditTime: 2023-04-17 09:22:13
+ * @LastEditTime: 2023-04-17 10:51:35
  * @filepath: \cps-blog\scripts\utils.ts
  * @Description: 一些会被重复调用的工具函数
  */
@@ -110,13 +110,15 @@ async function readMarkdownInfo(filepath) {
     let regionLine = [];
     let hasStartFlag = false;
     dataList.forEach((eachLine, index) => {
-        if (eachLine.trim().includes(FIND_FLAG)) {
+        if (eachLine.trim() == FIND_FLAG) {
+            // console.log(1, eachLine);
             // 查找头部
             if (!hasStartFlag) {
                 regionLine.push(index);
                 hasStartFlag = true;
                 return;
             }
+            // console.log(2);
             if (hasStartFlag) {
                 // 查找尾部
                 regionLine.push(index);
@@ -160,8 +162,10 @@ async function createProjectDataByFolder(filepathList, prefixUrl, outputPath) {
     const fileList = fileInfoList.map((item) => ({ filepath: item.filepath, website: item.to }));
     for (let index = 0; index < fileList.length; index++) {
         let res = await readMarkdownInfo(fileList[index].filepath);
-        if (res)
+        if (res) {
+            // console.log("【项目】: ", fileList[index].filepath);
             mdDataList.push({ ...res, ...fileList[index] });
+        }
     }
     if (mdDataList.length > 0) {
         const firstLine = "module.exports = ";
@@ -170,8 +174,16 @@ async function createProjectDataByFolder(filepathList, prefixUrl, outputPath) {
     }
 }
 exports.createProjectDataByFolder = createProjectDataByFolder;
-// (async () => {
-//   const defaultPath = ["./docs/【05】项目经历/原创作品/", "./docs/【05】项目经历/完整项目/"];
-//   const defaultPrefix = ["/docs/【05】项目经历/原创作品", "/docs/【05】项目经历/完整项目"];
-//   await init(defaultPath, defaultPrefix);
+/* 文件夹试调 */
+(async () => {
+    const defaultPath = ["./docs/【05】项目经历/原创作品/", "./docs/【05】项目经历/完整项目/"];
+    const defaultPrefix = ["/docs/【05】项目经历/原创作品", "/docs/【05】项目经历/完整项目"];
+    const output = path.resolve("./data/project.js");
+    await createProjectDataByFolder(defaultPath, defaultPrefix, output);
+})();
+/* 文件试调 */
+// (async function test() {
+//   const target = path.resolve("./docs/【05】项目经历/完整项目/个人网站/index.md");
+//   let res = await readMarkdownInfo(target);
+//   console.log({ res });
 // })();

@@ -1,8 +1,8 @@
 /*
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-06 22:25:11
- * @LastEditors: CPS holy.dandelion@139.com
- * @LastEditTime: 2023-04-16 23:32:56
+ * @LastEditors: cpasion-office-win10 373704015@qq.com
+ * @LastEditTime: 2023-04-17 15:42:13
  * @FilePath: \cps-blog\src\components\HomepageSwiper\index.tsx
  * @Description: 首页轮播组件
  */
@@ -16,7 +16,7 @@ import { RightOutlined, LeftOutlined } from "@ant-design/icons";
 // import CpsImgSwiper from "@site/src/components/CpsImgSwiper";
 import dataArray, { type ICpsImgSwiperDataItem } from "@site/src/components/CpsImgSwiper/data";
 import HomeTitle from "./rightSide";
-import Logo from "@site/src/components/bubbleText";
+import Bubble from "@site/src/components/bubbleText";
 
 const Element = BannerAnim.Element;
 
@@ -280,7 +280,7 @@ export default class HomeImgSwiper extends React.Component<ICpsImgSwiperProps, I
           <HomeTitle />
         </div>
 
-        <Logo width={600} height={200} bubbleScale={1.5} positionElementId="postitionElement"></Logo>
+        <Bubble width={600} height={200} bubbleScale={1.5} positionElementId="postitionElement"></Bubble>
 
         {/* <CpsImgSwiper
           classNames={[
