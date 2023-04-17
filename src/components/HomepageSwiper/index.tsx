@@ -2,7 +2,7 @@
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-06 22:25:11
  * @LastEditors: cpasion-office-win10 373704015@qq.com
- * @LastEditTime: 2023-04-17 15:42:13
+ * @LastEditTime: 2023-04-17 15:51:56
  * @FilePath: \cps-blog\src\components\HomepageSwiper\index.tsx
  * @Description: 首页轮播组件
  */
@@ -192,7 +192,7 @@ export default class HomeImgSwiper extends React.Component<ICpsImgSwiperProps, I
               ].join(" ")}
               key="pic"
             >
-              <img src={subImg} width="100%" height="100%" alt="" loading="lazy" />
+              <img src={subImg} width="100%" height="100%" alt=""/>
             </div>
             <div
               className={[
