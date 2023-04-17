@@ -49,7 +49,7 @@
 input {
   display: none;
 }
-
+/* 
 @keyframes up-and-down-1 {
   0%,
   100% {
@@ -68,4 +68,4 @@ input {
   50% {
     transform: translateY(40%);
   }
-}
+} */

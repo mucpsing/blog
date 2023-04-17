@@ -62,7 +62,7 @@ const config = {
   themes: ["@docusaurus/theme-mermaid"],
 
   plugins: [
-    // addHeaderTag,
+    addHeaderTag,
     [
       "@docusaurus/plugin-ideal-image",
       {
