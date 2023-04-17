@@ -71,5 +71,19 @@ module.exports = [
     "preview": "/screenshot/sublimeTextPlugs/cps-auto-update-channel/cps-auto-update-channel.gif",
     "filepath": "docs\\【05】项目经历\\原创作品\\ST插件\\自动更新channel_v3.md",
     "website": "/docs/【05】项目经历/原创作品/ST插件/自动更新channel_v3"
+  },
+  {
+    "title": "个人博客",
+    "description": "CSDN > 有道云 > 本博客， 1500多篇个人学习笔记基于ReactJS的docusaurus框架搭建，除了是个人博客同时也是个人简历，战力展示~",
+    "tags": [
+      "opensource",
+      "nodejs",
+      "typescript",
+      "reatjs",
+      "favorite"
+    ],
+    "preview": "/screenshot/capsion.top1.gif",
+    "filepath": "docs\\【05】项目经历\\完整项目\\个人网站\\index.md",
+    "website": "/docs/【05】项目经历/完整项目/个人网站"
   }
 ]

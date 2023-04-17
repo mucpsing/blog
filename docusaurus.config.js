@@ -24,7 +24,7 @@ const navBarDocsItems = {
 const defaultPath = ["./docs/【05】项目经历/原创作品/", "./docs/【05】项目经历/完整项目/"];
 const defaultPrefix = ["/docs/【05】项目经历/原创作品", "/docs/【05】项目经历/完整项目"];
 const outputPath = path.resolve("./data/project.js");
-(async () => await utils.init(defaultPath, defaultPrefix, outputPath))();
+(async () => await utils.createProjectDataByFolder(defaultPath, defaultPrefix, outputPath))();
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {

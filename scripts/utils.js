@@ -2,8 +2,8 @@
 /*
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-25 16:10:31
- * @LastEditors: CPS holy.dandelion@139.com
- * @LastEditTime: 2023-04-16 22:45:34
+ * @LastEditors: cpasion-office-win10 373704015@qq.com
+ * @LastEditTime: 2023-04-17 09:22:13
  * @filepath: \cps-blog\scripts\utils.ts
  * @Description: 一些会被重复调用的工具函数
  */
@@ -31,7 +31,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.init = exports.readMarkdownInfo = exports.createNavItemByDir = void 0;
+exports.createProjectDataByFolder = exports.readMarkdownInfo = exports.createNavItemByDir = void 0;
 const fs = __importStar(require("fs"));
 const fsp = __importStar(require("fs/promises"));
 const path = __importStar(require("path"));
@@ -98,8 +98,13 @@ function createNavItemByDir({ targetPath, excludeDirList = null, inDeep = false,
     return navbarItemList;
 }
 exports.createNavItemByDir = createNavItemByDir;
-async function readMarkdownInfo(filepaths) {
-    const data = await fsp.readFile(filepaths, { encoding: "utf8" });
+/**
+ * @description: 读取.md文件的头部数据，头部以---开始和结束的yaml格式数据
+ * @param {string} filepath
+ * @return {Promise<object | undefined>}
+ */
+async function readMarkdownInfo(filepath) {
+    const data = await fsp.readFile(filepath, { encoding: "utf8" });
     const FIND_FLAG = "---";
     let dataList = data.split(/[(\r\n)\r\n]+/);
     let regionLine = [];
@@ -134,7 +139,14 @@ async function readMarkdownInfo(filepaths) {
     return undefined;
 }
 exports.readMarkdownInfo = readMarkdownInfo;
-async function init(filepathList, prefixUrl, outputPath) {
+/**
+ * @description: 根据指定文件夹生成动态的项目数据
+ * @param {string} filepathList 要读取的文件夹，主要调用createNavItemByDir生成基础数据
+ * @param {string} prefixUrl 对应文件夹要生成的url前缀
+ * @param {string} outputPath 数据最终导出的js文件，以CommontJS格式导出
+ * @return {*}
+ */
+async function createProjectDataByFolder(filepathList, prefixUrl, outputPath) {
     const fileInfoList = [];
     for (let index = 0; index < filepathList.length; index++) {
         fileInfoList.push(...createNavItemByDir({
@@ -157,7 +169,7 @@ async function init(filepathList, prefixUrl, outputPath) {
         await fsp.writeFile(outputPath, outputData);
     }
 }
-exports.init = init;
+exports.createProjectDataByFolder = createProjectDataByFolder;
 // (async () => {
 //   const defaultPath = ["./docs/【05】项目经历/原创作品/", "./docs/【05】项目经历/完整项目/"];
 //   const defaultPrefix = ["/docs/【05】项目经历/原创作品", "/docs/【05】项目经历/完整项目"];

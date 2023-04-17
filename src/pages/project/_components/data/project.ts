@@ -15,9 +15,12 @@ export type TagType =
   | "product"
   | "design"
   | "javascript"
+  | "typescript"
   | "python"
   | "sublimetext"
   | "vscode"
+  | "vue"
+  | "reactjs"
   | "nodejs";
 
 export type Project = {
@@ -27,13 +30,23 @@ export type Project = {
   website: string;
   source?: string | null;
   tags: TagType[];
-  filePath?: string;
+  filepath?: string;
 };
 
 export const Tags: Record<TagType, Tag> = {
+  vue: {
+    label: "Vue",
+    description: "好用又容易上手的SAP框架",
+    color: "#327959",
+  },
+  reactjs: {
+    label: "Reactjs",
+    description: "React最受欢迎的web框架之一",
+    color: "#087ea4",
+  },
   nodejs: {
     label: "nodejs",
-    description: "py相关项目，人工智能，ai模型等，赶上时代步伐，学起来",
+    description: "前端coder最友好的后端切入点",
     color: "#43853d",
   },
   python: {
@@ -59,7 +72,7 @@ export const Tags: Record<TagType, Tag> = {
   opensource: {
     label: "开源",
     description: "开源项目可以提供灵感!",
-    color: "#39ca30",
+    color: "#33ccb9",
   },
   product: {
     label: "产品",
@@ -76,11 +89,17 @@ export const Tags: Record<TagType, Tag> = {
     description: "JavaScript 项目",
     color: "#dfd545",
   },
+  typescript: {
+    label: "TypeScript",
+    description: "TypeScript 项目",
+    color: "#3178c6",
+  },
 };
 
 const Projects: Project[] = projects as Project[];
 
 export const TagList = Object.keys(Tags) as TagType[];
+
 function sortProject() {
   const result = Projects;
   // Sort by site name
