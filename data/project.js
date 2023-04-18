@@ -79,10 +79,10 @@ module.exports = [
       "opensource",
       "nodejs",
       "typescript",
-      "reatjs",
+      "reactjs",
       "favorite"
     ],
-    "preview": "/screenshot/capsion.top1.gif",
+    "preview": "/screenshot/capsion.top/capsion.top1.gif",
     "filepath": "docs\\【05】项目经历\\完整项目\\个人网站\\index.md",
     "website": "/docs/【05】项目经历/完整项目/个人网站"
   }

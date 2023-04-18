@@ -29,8 +29,8 @@ export type Project = {
   preview?: any;
   website: string;
   source?: string | null;
-  tags: TagType[];
   filepath?: string;
+  tags: TagType[];
 };
 
 export const Tags: Record<TagType, Tag> = {
