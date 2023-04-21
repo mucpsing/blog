@@ -6,6 +6,7 @@ import { TweenOneGroup } from "rc-tween-one";
 import { RightOutlined, LeftOutlined } from "@ant-design/icons";
 
 import defaultData, { type ICpsImgSwiperDataItem } from "./data";
+import ImgPreview from "./imagePreview";
 
 export interface ICpsImgSwiperProps {
   alignmentMode?: "horizontal" | "vertical"; // 横向|垂直
@@ -148,6 +149,10 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
     }
   };
 
+  showImg = (target: ICpsImgSwiperDataItem) => {
+    ImgPreview(target.mainImg);
+  };
+
   render() {
     /**
      * @description: 根据数据渲染左边【图片展示】区域
@@ -195,7 +200,7 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
               ].join(" ")}
               key="map"
             >
-              <img src={mainImg} className="object-fill w-full h-full" alt="" />
+              <img src={mainImg} className="object-fill w-full h-full" alt="" onClick={(e) => this.showImg(item)} />
             </div>
           </QueueAnim>
         </Element>
