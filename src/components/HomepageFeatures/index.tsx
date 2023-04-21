@@ -10,27 +10,27 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
-    title: "前端技能",
+    title: "前端开发",
     Svg: require("@site/static/img/undraw_docusaurus_mountain.svg").default,
-    description: <>Vue 全家桶 + React 全家桶双剑客，</>,
+    description: <>擅长使用Vue系技术栈进行web开发，略懂UI设计，能独立构建中小型web项目~</>,
   },
   {
     title: "后端开发",
     Svg: require("@site/static/img/undraw_docusaurus_tree.svg").default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go ahead and move your docs into the{" "}
-        <code>docs</code> directory.
+        擅长使用<code>python</code>和<code>lua</code>
+        进行后端开发，数据分析，AI模型训练，深度学习等均有涉及，最近在研究AI模特换装~
       </>
     ),
   },
   {
-    title: "硬件开发",
+    title: "网络运维",
     Svg: require("@site/static/img/undraw_docusaurus_react.svg").default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can be extended while reusing the same
-        header and footer.
+        熟读<a href="http://cn.linux.vbird.org/linux_server/0110network_basic.php">《鸟哥的linux私房菜-基础篇》</a>、
+        <a href="https://linux.vbird.org/linux_basic/">《鸟哥的linux私房菜-服务器篇》</a>一名合格的运维菜鸟。
       </>
     ),
   },

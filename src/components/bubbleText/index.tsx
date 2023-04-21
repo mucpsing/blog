@@ -1,8 +1,8 @@
 /*
  * @Author: cpasion-office-win10 373704015@qq.com
  * @Date: 2023-03-28 16:25:46
- * @LastEditors: cpasion-office-win10 373704015@qq.com
- * @LastEditTime: 2023-04-17 15:35:50
+ * @LastEditors: CPS holy.dandelion@139.com
+ * @LastEditTime: 2023-04-20 22:54:25
  * @FilePath: \cps-blog\src\pages\test\index.tsx
  * @Description: 泡泡文字聚散效果组建，父级元素必须采用绝对定位，最终泡泡扩散的位置会根据最近一个绝对定位的父级来生成
  */
@@ -95,8 +95,6 @@ export default class LogoGather extends React.Component<LogoGatherProps, LogoGat
     let isDone: boolean = false;
     const taskID = setInterval(() => {
       isDone = this.updatePositions();
-
-      console.log("查找定位元素", isDone);
 
       if (isDone) {
         clearInterval(taskID);

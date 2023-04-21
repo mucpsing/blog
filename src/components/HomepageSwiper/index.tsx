@@ -1,8 +1,8 @@
 /*
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-06 22:25:11
- * @LastEditors: cpasion-office-win10 373704015@qq.com
- * @LastEditTime: 2023-04-17 15:51:56
+ * @LastEditors: CPS holy.dandelion@139.com
+ * @LastEditTime: 2023-04-21 00:05:24
  * @FilePath: \cps-blog\src\components\HomepageSwiper\index.tsx
  * @Description: 首页轮播组件
  */
@@ -165,7 +165,7 @@ export default class HomeImgSwiper extends React.Component<ICpsImgSwiperProps, I
      * @description: 根据数据渲染左边【图片展示】区域
      */
     const leftChildrens = this.DATA.map((item, i) => {
-      const { mainColor, mainImg, subImg } = item;
+      let { mainColor, mainImg, subImg } = item;
       return (
         <Element key={i} leaveChildHide>
           <QueueAnim
@@ -184,7 +184,7 @@ export default class HomeImgSwiper extends React.Component<ICpsImgSwiperProps, I
               style={{ background: mainColor }}
             ></div>
 
-            {/* 主图片 */}
+            {/* 小图片 */}
             <div
               className={[
                 "absolute",
@@ -192,8 +192,10 @@ export default class HomeImgSwiper extends React.Component<ICpsImgSwiperProps, I
               ].join(" ")}
               key="pic"
             >
-              <img src={subImg} width="100%" height="100%" alt=""/>
+              <img src={subImg} width="100%" height="100%" alt="" />
             </div>
+
+            {/* 主图片 */}
             <div
               className={[
                 this.props.alignmentMode == "vertical" ? "bottom-[15%] w-4/5" : "w-4/5",
@@ -201,7 +203,14 @@ export default class HomeImgSwiper extends React.Component<ICpsImgSwiperProps, I
               ].join(" ")}
               key="map"
             >
-              <img src={mainImg} className="object-fill w-full h-full" alt="" />
+              <img
+                src={mainImg}
+                className="object-fill w-full h-full hover:opacity-90"
+                alt=""
+                onClick={(e) => {
+                  showImg(item);
+                }}
+              />
             </div>
           </QueueAnim>
         </Element>
@@ -227,7 +236,9 @@ export default class HomeImgSwiper extends React.Component<ICpsImgSwiperProps, I
             delay={[!i ? this.state.delay + 500 : 800, 0]}
           >
             <h2 key="title" className="py-2 my-1 text-xl">
-              {title}
+              <a className="text-gray-700" href={item.website}>
+                {title}
+              </a>
             </h2>
             <em key="line" style={{ background: subColor }} className="inline-block rounded-sm w-16 h-[2px]" />
             <p key="content" className="mt-3 text-sm">

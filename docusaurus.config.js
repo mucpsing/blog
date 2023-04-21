@@ -127,8 +127,12 @@ const config = {
             position: "left",
             items: [
               {
-                to: "/",
+                to: "/sample/jiuhao",
                 label: "🛵 真智能自电",
+              },
+              {
+                to: "/sample/ai",
+                label: "🤖 AI模特换装",
               },
             ],
           },

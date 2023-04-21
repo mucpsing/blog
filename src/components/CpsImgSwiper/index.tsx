@@ -37,6 +37,8 @@ const ANIM_CONFIGS = {
   ],
 };
 
+const GIF_LIST = [];
+
 const Element = BannerAnim.Element;
 
 export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, ICpsImgSwiperPropsState> {
@@ -151,7 +153,11 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
      * @description: 根据数据渲染左边【图片展示】区域
      */
     const elementImgs = this.props.data.map((item, i) => {
-      const { mainColor, mainImg, subImg } = item;
+      const { mainColor, subImg } = item;
+
+      let mainImg = item.gif ? item.gif : item.mainImg;
+      GIF_LIST.push(mainImg);
+
       return (
         <Element key={i} leaveChildHide>
           <QueueAnim
@@ -170,7 +176,7 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
               style={{ background: mainColor }}
             ></div>
 
-            {/* 主图片 */}
+            {/* 小图片 */}
             <div
               className={[
                 "absolute",
@@ -180,6 +186,8 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
             >
               <img src={subImg} width="100%" height="100%" alt="" loading="lazy" />
             </div>
+
+            {/* 主图片 */}
             <div
               className={[
                 this.props.alignmentMode == "vertical" ? "bottom-[15%] w-4/5" : "w-4/5",
