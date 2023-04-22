@@ -2,7 +2,7 @@
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-06 22:25:11
  * @LastEditors: CPS holy.dandelion@139.com
- * @LastEditTime: 2023-04-21 00:05:24
+ * @LastEditTime: 2023-04-22 08:50:04
  * @FilePath: \cps-blog\src\components\HomepageSwiper\index.tsx
  * @Description: 首页轮播组件
  */
@@ -17,6 +17,7 @@ import { RightOutlined, LeftOutlined } from "@ant-design/icons";
 import dataArray, { type ICpsImgSwiperDataItem } from "@site/src/components/CpsImgSwiper/data";
 import HomeTitle from "./rightSide";
 import Bubble from "@site/src/components/bubbleText";
+import ImgPreview from "@site/src/components/CpsImgSwiper/imagePreview";
 
 const Element = BannerAnim.Element;
 
@@ -207,9 +208,7 @@ export default class HomeImgSwiper extends React.Component<ICpsImgSwiperProps, I
                 src={mainImg}
                 className="object-fill w-full h-full hover:opacity-90"
                 alt=""
-                onClick={(e) => {
-                  showImg(item);
-                }}
+                onClick={(e) => ImgPreview(item)}
               />
             </div>
           </QueueAnim>
@@ -271,6 +270,14 @@ export default class HomeImgSwiper extends React.Component<ICpsImgSwiperProps, I
               ></div>
             );
           })}
+        </div>
+      );
+    };
+
+    const ImgShow = (target: ICpsImgSwiperDataItem) => {
+      return (
+        <div className="w-full mask">
+          <img src={target.gif} alt="" />
         </div>
       );
     };

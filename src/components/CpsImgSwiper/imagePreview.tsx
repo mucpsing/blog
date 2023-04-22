@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import type { ICpsImgSwiperDataItem } from "./data";
 
 export interface ImagePreviewProps {
   src?: string;
@@ -39,7 +40,9 @@ class ImagePreview extends React.Component<ImagePreviewProps, ImagePreviewState>
   }
 }
 
-export default (src: string) => {
+export default (target: ICpsImgSwiperDataItem) => {
+  console.log({ target });
+
   // 单例
   const createImgPreviewElement = () => {
     let div = document.createElement("div");
@@ -67,5 +70,5 @@ export default (src: string) => {
   }
 
   SHOW = true;
-  ReactDOM.render(<ImagePreview src={src} />, element);
+  ReactDOM.render(<ImagePreview src={target.gif ? target.gif : target.mainImg} />, element);
 };
