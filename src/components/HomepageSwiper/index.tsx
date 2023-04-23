@@ -1,10 +1,10 @@
 /*
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-06 22:25:11
- * @LastEditors: CPS holy.dandelion@139.com
- * @LastEditTime: 2023-04-22 08:50:04
+ * @LastEditors: cpasion-office-win10 373704015@qq.com
+ * @LastEditTime: 2023-04-23 15:37:27
  * @FilePath: \cps-blog\src\components\HomepageSwiper\index.tsx
- * @Description: 首页轮播组件
+ * @Description: 首页轮播组件，抽离了CpsImgSwiper的源码，进行了定制
  */
 import React from "react";
 
@@ -13,46 +13,17 @@ import QueueAnim from "rc-queue-anim";
 import { TweenOneGroup } from "rc-tween-one";
 import { RightOutlined, LeftOutlined } from "@ant-design/icons";
 
-// import CpsImgSwiper from "@site/src/components/CpsImgSwiper";
+import { ANIM_CONFIGS } from "@site/src/components/CpsImgSwiper/index";
+import { isSupportWebp } from "@site/src/components/CpsImgSwiper/utils";
 import dataArray, { type ICpsImgSwiperDataItem } from "@site/src/components/CpsImgSwiper/data";
+import type { ICpsImgSwiperProps, ICpsImgSwiperPropsState } from "@site/src/components/CpsImgSwiper/index";
+
 import HomeTitle from "./rightSide";
 import Bubble from "@site/src/components/bubbleText";
 import ImgPreview from "@site/src/components/CpsImgSwiper/imagePreview";
 
 const Element = BannerAnim.Element;
 
-/**
- * @description: 左右两边的动画滑动效果
- */
-const ANIM_CONFIGS = {
-  left: [
-    { translateX: [0, -300], opacity: [1, 0] },
-    { translateX: [0, 300], opacity: [1, 0] },
-  ],
-  right: [
-    { translateX: [0, 300], opacity: [1, 0] },
-    { translateX: [0, -300], opacity: [1, 0] },
-  ],
-};
-
-enum AlignmentMode {
-  Vertical = "vertical", // 横向
-  Horizontal = "horizontal", // 垂直
-}
-
-interface ICpsImgSwiperProps {
-  alignmentMode?: AlignmentMode;
-  showText?: boolean;
-  showImg?: boolean;
-  showArrow?: boolean; // 是否显示切换的箭头
-  autoSwitch?: number; // 是否自动切换，默认0不开启，单位为ms
-}
-
-interface ICpsImgSwiperPropsState {
-  showInt: number;
-  delay: number;
-  oneEnter: boolean;
-}
 export default class HomeImgSwiper extends React.Component<ICpsImgSwiperProps, ICpsImgSwiperPropsState> {
   bannerImg: any;
   bannerText: any;
@@ -65,7 +36,7 @@ export default class HomeImgSwiper extends React.Component<ICpsImgSwiperProps, I
   DATA: ICpsImgSwiperDataItem[] = [];
 
   static defaultProps = {
-    alignmentMode: AlignmentMode.Horizontal,
+    alignmentMode: "horizontal",
     showText: false,
     showImg: true,
     showArrow: true,
@@ -80,6 +51,7 @@ export default class HomeImgSwiper extends React.Component<ICpsImgSwiperProps, I
       showInt: 0,
       delay: 0,
       oneEnter: false,
+      webp: props.useWebp ? isSupportWebp() : false,
     };
   }
 
@@ -166,7 +138,14 @@ export default class HomeImgSwiper extends React.Component<ICpsImgSwiperProps, I
      * @description: 根据数据渲染左边【图片展示】区域
      */
     const leftChildrens = this.DATA.map((item, i) => {
-      let { mainColor, mainImg, subImg } = item;
+      let preview = item.preview;
+      let logo = item.logo;
+
+      if (this.state.webp) {
+        preview = item.preview.replace(".png", ".webp");
+        logo = item.logo.replace(".png", ".webp");
+      }
+
       return (
         <Element key={i} leaveChildHide>
           <QueueAnim
@@ -182,7 +161,7 @@ export default class HomeImgSwiper extends React.Component<ICpsImgSwiperProps, I
               className={["absolute top-0 w-full", this.props.alignmentMode == "vertical" ? "h-1/2" : "h-2/3"].join(
                 " "
               )}
-              style={{ background: mainColor }}
+              style={{ background: item.mainColor }}
             ></div>
 
             {/* 小图片 */}
@@ -193,7 +172,7 @@ export default class HomeImgSwiper extends React.Component<ICpsImgSwiperProps, I
               ].join(" ")}
               key="pic"
             >
-              <img src={subImg} width="100%" height="100%" alt="" />
+              <img src={logo} width="100%" height="100%" alt="" />
             </div>
 
             {/* 主图片 */}
@@ -205,7 +184,7 @@ export default class HomeImgSwiper extends React.Component<ICpsImgSwiperProps, I
               key="map"
             >
               <img
-                src={mainImg}
+                src={preview}
                 className="object-fill w-full h-full hover:opacity-90"
                 alt=""
                 onClick={(e) => ImgPreview(item)}

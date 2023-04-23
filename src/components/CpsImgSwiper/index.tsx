@@ -1,33 +1,28 @@
+/*
+ * @Author: cpasion-office-win10 373704015@qq.com
+ * @Date: 2023-04-21 09:15:12
+ * @LastEditors: cpasion-office-win10 373704015@qq.com
+ * @LastEditTime: 2023-04-23 16:02:54
+ * @FilePath: \cps-blog\src\components\CpsImgSwiper\index.tsx
+ * @Description: 这是一个图片轮播组件，支持横屏和竖屏排版，目前仅支持网页端浏览器，没做移动适配
+ */
 import React from "react";
 
 import BannerAnim from "rc-banner-anim";
 import QueueAnim from "rc-queue-anim";
 import { TweenOneGroup } from "rc-tween-one";
 import { RightOutlined, LeftOutlined } from "@ant-design/icons";
+import { isSupportWebp, imgUrl2Webp } from "./utils";
 
 import defaultData, { type ICpsImgSwiperDataItem } from "./data";
 import ImgPreview from "./imagePreview";
 
-export interface ICpsImgSwiperProps {
-  alignmentMode?: "horizontal" | "vertical"; // 横向|垂直
-  showText?: boolean;
-  showImg?: boolean;
-  showArrow?: boolean; // 是否显示切换的箭头
-  autoSwitch?: number; // 是否自动切换，默认0不开启，单位为ms
-  data: ICpsImgSwiperDataItem[];
-  classNames?: string;
-}
-
-export interface ICpsImgSwiperPropsState {
-  showInt: number;
-  delay: number;
-  oneEnter: boolean;
-}
+const Element = BannerAnim.Element;
 
 /**
  * @description: 左右两边的动画滑动效果
  */
-const ANIM_CONFIGS = {
+export const ANIM_CONFIGS = {
   left: [
     { translateX: [0, -300], opacity: [1, 0] },
     { translateX: [0, 300], opacity: [1, 0] },
@@ -38,9 +33,24 @@ const ANIM_CONFIGS = {
   ],
 };
 
-const GIF_LIST = [];
+export interface ICpsImgSwiperProps {
+  alignmentMode?: "horizontal" | "vertical"; // 横向|垂直
+  showText?: boolean;
+  showImg?: boolean;
+  showArrow?: boolean; // 是否显示切换的箭头
+  autoSwitch?: number; // 是否自动切换，默认0不开启，单位为ms
+  data: ICpsImgSwiperDataItem[];
+  classNames?: string;
+  imgPreview?: boolean; // 是否支持点击放大展示gif
+  useWebp?: boolean; // 是否使用webp
+}
 
-const Element = BannerAnim.Element;
+export interface ICpsImgSwiperPropsState {
+  showInt: number;
+  delay: number;
+  oneEnter: boolean;
+  webp: boolean; // 是否启用webp，首先通过props确定是否使用，在通过函数判断环境是否支持，最终生成布尔值状态存储
+}
 
 export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, ICpsImgSwiperPropsState> {
   bannerImg: any;
@@ -60,14 +70,17 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
     autoSwitch: 30000,
     classNames: "md:w-[500px] md:h-[400px] lg:w-[500px] lg:h-[350px] xl:w-[950px] xl:h-[650px]",
     data: defaultData,
+    imgPreview: false,
+    useWebp: false,
   };
 
-  constructor(props) {
+  constructor(props: ICpsImgSwiperProps) {
     super(props);
     this.state = {
       showInt: 0,
       delay: 0,
       oneEnter: false,
+      webp: props.useWebp ? isSupportWebp() : false,
     };
   }
 
@@ -150,7 +163,7 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
   };
 
   showImg = (target: ICpsImgSwiperDataItem) => {
-    ImgPreview(target.mainImg);
+    if (this.props.imgPreview) ImgPreview(target);
   };
 
   render() {
@@ -158,10 +171,13 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
      * @description: 根据数据渲染左边【图片展示】区域
      */
     const elementImgs = this.props.data.map((item, i) => {
-      const { mainColor, subImg } = item;
+      let preview = item.gif ? item.gif : item.preview;
+      let logo = item.logo;
 
-      let mainImg = item.gif ? item.gif : item.mainImg;
-      GIF_LIST.push(mainImg);
+      if (this.state.webp) {
+        preview = imgUrl2Webp(item.preview);
+        logo = imgUrl2Webp(item.logo);
+      }
 
       return (
         <Element key={i} leaveChildHide>
@@ -178,7 +194,7 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
               className={["absolute top-0 w-full", this.props.alignmentMode == "vertical" ? "h-1/2" : "h-2/3"].join(
                 " "
               )}
-              style={{ background: mainColor }}
+              style={{ background: item.mainColor }}
             ></div>
 
             {/* 小图片 */}
@@ -189,7 +205,7 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
               ].join(" ")}
               key="pic"
             >
-              <img src={subImg} width="100%" height="100%" alt="" loading="lazy" />
+              <img src={logo} width="100%" height="100%" alt="" loading="lazy" />
             </div>
 
             {/* 主图片 */}
@@ -200,7 +216,7 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
               ].join(" ")}
               key="map"
             >
-              <img src={mainImg} className="object-fill w-full h-full" alt="" onClick={(e) => this.showImg(item)} />
+              <img src={preview} className="object-fill w-full h-full" alt="" onClick={(e) => this.showImg(item)} />
             </div>
           </QueueAnim>
         </Element>

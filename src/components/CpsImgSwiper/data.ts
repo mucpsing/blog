@@ -4,8 +4,8 @@ export interface ICpsImgSwiperDataItem {
   example?: any;
   title: string;
   content: string;
-  subImg?: string;
-  mainImg: string;
+  logo?: string;
+  preview: string;
   mainColor: string;
   subColor: string;
   gif?: string;
@@ -35,11 +35,12 @@ function createData(): ICpsImgSwiperDataItem[] {
     let res = {
       title: item.title,
       content: item.description,
-      mainImg: item.preview,
+      preview: item.preview,
       mainColor: COLOR_LIST[colorIndex].mainColor,
       subColor: COLOR_LIST[colorIndex].subColor,
     };
 
+    if (item.logo) res["logo"] = item.logo;
     if (item.example) res["gif"] = item.example;
     if (item.website) res["website"] = item.website;
 
