@@ -8,8 +8,8 @@ module.exports = [
       "sublimetext",
       "nodejs"
     ],
-    "preview": "/screenshot/sublimeTextPlugs/cps-beautify/cps-beautify.gif",
-    "example": "/screenshot/sublimeTextPlugs/cps-beautify/cps-beautify.gif",
+    "preview": "/screenshot/sublimeTextPlugs/cps-beautify/cps-beautify_preview.png",
+    "gif": "/screenshot/sublimeTextPlugs/cps-beautify/cps-beautify.gif",
     "filepath": "docs\\【05】项目经历\\原创作品\\ST插件\\代码格式化.md",
     "website": "/docs/【05】项目经历/原创作品/ST插件/代码格式化"
   },
@@ -22,7 +22,7 @@ module.exports = [
       "sublimetext"
     ],
     "preview": "/screenshot/sublimeTextPlugs/cps-run-commands/cps-Run-Command.png",
-    "example": "/screenshot/sublimeTextPlugs/cps-run-commands/cps-Run-Command.gif",
+    "gif": "/screenshot/sublimeTextPlugs/cps-run-commands/cps-Run-Command.gif",
     "filepath": "docs\\【05】项目经历\\原创作品\\ST插件\\快捷运行shell命令.md",
     "website": "/docs/【05】项目经历/原创作品/ST插件/快捷运行shell命令"
   },
@@ -35,7 +35,7 @@ module.exports = [
       "sublimetext"
     ],
     "preview": "/screenshot/sublimeTextPlugs/cps-Comments-Creator/cps-Comments-Creator.png",
-    "example": "/screenshot/sublimeTextPlugs/cps-Comments-Creator/cps-Comments-Creator.gif",
+    "gif": "/screenshot/sublimeTextPlugs/cps-Comments-Creator/cps-Comments-Creator.gif",
     "filepath": "docs\\【05】项目经历\\原创作品\\ST插件\\生成函数注释.md",
     "website": "/docs/【05】项目经历/原创作品/ST插件/生成函数注释"
   },
@@ -48,7 +48,7 @@ module.exports = [
       "sublimetext"
     ],
     "preview": "/screenshot/sublimeTextPlugs/cps-fileheader/fileheader.png",
-    "example": "/screenshot/sublimeTextPlugs/cps-fileheader/fileheader.gif",
+    "gif": "/screenshot/sublimeTextPlugs/cps-fileheader/fileheader.gif",
     "filepath": "docs\\【05】项目经历\\原创作品\\ST插件\\生成文件头.md",
     "website": "/docs/【05】项目经历/原创作品/ST插件/生成文件头"
   },
@@ -60,8 +60,8 @@ module.exports = [
       "python",
       "sublimetext"
     ],
-    "preview": "/screenshot/sublimeTextPlugs/cps-auto-switch-language/cps-auto-switch-language1.gif",
-    "example": "/screenshot/sublimeTextPlugs/cps-auto-switch-language/cps-auto-switch-language1.gif",
+    "preview": "/screenshot/sublimeTextPlugs/cps-auto-switch-language/cps-auto-switch-language_preview.png",
+    "gif": "/screenshot/sublimeTextPlugs/cps-auto-switch-language/cps-auto-switch-language1.gif",
     "filepath": "docs\\【05】项目经历\\原创作品\\ST插件\\自动切换英文输入.md",
     "website": "/docs/【05】项目经历/原创作品/ST插件/自动切换英文输入"
   },
@@ -74,6 +74,7 @@ module.exports = [
       "sublimetext"
     ],
     "preview": "/screenshot/sublimeTextPlugs/cps-auto-update-channel/cps-auto-update-channel.png",
+    "gif": "/screenshot/sublimeTextPlugs/cps-auto-update-channel/cps-auto-update-channel.gif",
     "filepath": "docs\\【05】项目经历\\原创作品\\ST插件\\自动更新channel_v3.md",
     "website": "/docs/【05】项目经历/原创作品/ST插件/自动更新channel_v3"
   },
@@ -87,7 +88,8 @@ module.exports = [
       "reactjs",
       "favorite"
     ],
-    "preview": "/screenshot/capsion.top/capsion.top1.gif",
+    "preview": "/screenshot/capsion.top/capsion.top_proview_1.png",
+    "gif": "/screenshot/capsion.top/capsion.top.gif",
     "filepath": "docs\\【05】项目经历\\完整项目\\个人网站\\index.md",
     "website": "/docs/【05】项目经历/完整项目/个人网站"
   },
@@ -100,8 +102,22 @@ module.exports = [
       "sublimetext"
     ],
     "preview": "/screenshot/cps-cli/cps-cli.png",
-    "example": "/screenshot/cps-cli/cps-cli.gif",
+    "gif": "/screenshot/cps-cli/cps-cli.gif",
     "filepath": "docs\\【05】项目经历\\完整项目\\个人自用脚手架\\index.md",
     "website": "/docs/【05】项目经历/完整项目/个人自用脚手架"
+  },
+  {
+    "title": "全栈app-后台",
+    "description": "全栈窗帘小程序的后台，基于vue2.x全家桶+elementUI+axios搭建，独立项目且以上线3年，稳定运行",
+    "tags": [
+      "opensource",
+      "nodejs",
+      "vue",
+      "favorite"
+    ],
+    "preview": "/screenshot/yibu/admin/image-20230505161924362.png",
+    "gif": "/screenshot/capsion.top/capsion.top.gif",
+    "filepath": "docs\\【05】项目经历\\完整项目\\全栈小程序后台\\index.md",
+    "website": "/docs/【05】项目经历/完整项目/全栈小程序后台"
   }
 ]
