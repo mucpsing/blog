@@ -2,8 +2,8 @@
 /*
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-25 16:10:31
- * @LastEditors: cpasion-office-win10 373704015@qq.com
- * @LastEditTime: 2023-04-17 10:51:35
+ * @LastEditors: CPS holy.dandelion@139.com
+ * @LastEditTime: 2023-05-06 00:32:24
  * @filepath: \cps-blog\scripts\utils.ts
  * @Description: 一些会被重复调用的工具函数
  */
@@ -158,7 +158,7 @@ async function createProjectDataByFolder(filepathList, prefixUrl, outputPath) {
             prefixUrl: prefixUrl[index],
         }));
     }
-    const mdDataList = [];
+    let mdDataList = [];
     const fileList = fileInfoList.map((item) => ({ filepath: item.filepath, website: item.to }));
     for (let index = 0; index < fileList.length; index++) {
         let res = await readMarkdownInfo(fileList[index].filepath);
@@ -168,6 +168,7 @@ async function createProjectDataByFolder(filepathList, prefixUrl, outputPath) {
         }
     }
     if (mdDataList.length > 0) {
+        // mdDataList = shuffle(mdDataList);
         const firstLine = "module.exports = ";
         const outputData = firstLine + [JSON.stringify(mdDataList, undefined, "  ")].join("\n");
         await fsp.writeFile(outputPath, outputData);

@@ -1,5 +1,5 @@
 import projects from "@site/data/project";
-
+import { shuffle } from "lodash";
 export type Tag = {
   label: string;
   description: string;
@@ -132,8 +132,14 @@ const Projects: Project[] = projects as Project[];
 
 export const TagList = Object.keys(Tags) as TagType[];
 
-function sortProject() {
+function sortProject(sortMode: string = "suffle") {
   const result = Projects;
+
+  switch (sortMode) {
+    case "suffle":
+      return shuffle(Projects);
+  }
+
   // Sort by site name
   // result = sortBy(result, (user) => user.title.toLowerCase());
   // Sort by favorite tag, favorites first

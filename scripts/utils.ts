@@ -1,8 +1,8 @@
 /*
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-25 16:10:31
- * @LastEditors: cpasion-office-win10 373704015@qq.com
- * @LastEditTime: 2023-04-17 10:51:35
+ * @LastEditors: CPS holy.dandelion@139.com
+ * @LastEditTime: 2023-05-06 00:32:24
  * @filepath: \cps-blog\scripts\utils.ts
  * @Description: 一些会被重复调用的工具函数
  */
@@ -11,7 +11,7 @@ import * as fs from "fs";
 import * as fsp from "fs/promises";
 import * as path from "path";
 import * as yaml from "yaml";
-
+// import { shuffle } from "lodash";
 import type { NavbarItem } from "@docusaurus/theme-common/src/utils/useThemeConfig";
 
 type NewNavbarItem = {
@@ -174,7 +174,7 @@ export async function createProjectDataByFolder(
     );
   }
 
-  const mdDataList: object[] = [];
+  let mdDataList: object[] = [];
   const fileList = fileInfoList.map((item) => ({ filepath: item.filepath, website: item.to }));
   for (let index = 0; index < fileList.length; index++) {
     let res = await readMarkdownInfo(fileList[index].filepath);
@@ -186,6 +186,8 @@ export async function createProjectDataByFolder(
   }
 
   if (mdDataList.length > 0) {
+    // mdDataList = shuffle(mdDataList);
+
     const firstLine = "module.exports = ";
     const outputData = firstLine + [JSON.stringify(mdDataList, undefined, "  ")].join("\n");
 
