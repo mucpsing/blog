@@ -12,7 +12,7 @@ const { extractTagline } = require("./scripts/taglineList");
 const taglineList = extractTagline(path.resolve("./docs/【07】常识科普/社会真实/名人名言.md"));
 
 /* 【导航】学习笔记 */
-const excludeDirList = ["【18】副业开发", ".obsidian"];
+const excludeDirList = ["【18】副业开发", ".obsidian", "gg"];
 const navBarDocsItems = {
   label: "📔 学习笔记",
   type: "dropdown",
@@ -42,7 +42,7 @@ const config = {
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: "capsion", // Usually your GitHub org/user name.
-  projectName: "blog", // Usually your repo name.
+  // projectName: "blog", // Usually your repo name.
 
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
@@ -61,8 +61,22 @@ const config = {
 
   themes: ["@docusaurus/theme-mermaid"],
 
+  // headTags: [
+  //   {
+  //     tagName: "script",
+  //     attributes: { charset: "utf-8", src: "/scripts/beforeWindowLoad.js" },
+  //   },
+  // ],
+
+  scripts: [
+    {
+      src: "/scripts/beforeWindowLoad.js",
+      async: false,
+    },
+  ],
+
   plugins: [
-    addHeaderTag,
+    // addHeaderTag,
     [
       "@docusaurus/plugin-ideal-image",
       {
