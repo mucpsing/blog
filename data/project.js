@@ -61,7 +61,7 @@ module.exports = [
       "sublimetext"
     ],
     "preview": "/screenshot/sublimeTextPlugs/cps-auto-switch-language/cps-auto-switch-language_preview.png",
-    "gif": "/screenshot/sublimeTextPlugs/cps-auto-switch-language/cps-auto-switch-language1.gif",
+    "gif": "/screenshot/sublimeTextPlugs/cps-auto-switch-language/cps-auto-switch-language1_800.gif",
     "filepath": "docs\\【05】项目经历\\原创作品\\ST插件\\自动切换英文输入.md",
     "website": "/docs/【05】项目经历/原创作品/ST插件/自动切换英文输入"
   },
@@ -107,17 +107,50 @@ module.exports = [
     "website": "/docs/【05】项目经历/完整项目/个人自用脚手架"
   },
   {
+    "title": "窗帘换装小程序",
+    "description": "产品换装小程序，基于uni-app的webview，核心是vue2全家桶+Vant，支持全平台小程序实现了，产品更换，透视实时变形（2D），产品现场试装等",
+    "tags": [
+      "opensource",
+      "nodejs",
+      "vue",
+      "favorite",
+      "uni-app"
+    ],
+    "preview": "/screenshot/hongqi/uni-app/uni-app1.png",
+    "gif": "/screenshot/hongqi/uni-app/uni-app.gif",
+    "filepath": "docs\\【05】项目经历\\完整项目\\全栈小程序\\index.md",
+    "website": "/docs/【05】项目经历/完整项目/全栈小程序"
+  },
+  {
     "title": "全栈app-后台",
     "description": "全栈窗帘小程序的后台，基于vue2.x全家桶+elementUI+axios搭建，独立项目且以上线3年，稳定运行",
     "tags": [
       "opensource",
       "nodejs",
       "vue",
-      "favorite"
+      "favorite",
+      "element"
     ],
-    "preview": "/screenshot/yibu/admin/image-20230505161924362.png",
+    "preview": "/screenshot/hongqi/admin/image-20230505161924362.png",
     "gif": "/screenshot/capsion.top/capsion.top.gif",
     "filepath": "docs\\【05】项目经历\\完整项目\\全栈小程序后台\\index.md",
     "website": "/docs/【05】项目经历/完整项目/全栈小程序后台"
+  },
+  {
+    "title": "Electron截图客户端",
+    "description": "基于Electron+vue3+TailwindCss的一次尝试，自用程序后台截图工具，具体用来做什么，懂得小伙伴自认懂，前端UI部分开源。",
+    "tags": [
+      "opensource",
+      "nodejs",
+      "vue",
+      "favorite",
+      "electron",
+      "tailwindcss",
+      "typescript"
+    ],
+    "preview": "/screenshot/hongqi/admin/image-20230505161924362.png",
+    "gif": "/screenshot/capsion.top/capsion.top.gif",
+    "filepath": "docs\\【05】项目经历\\完整项目\\截图插件\\index.md",
+    "website": "/docs/【05】项目经历/完整项目/截图插件"
   }
 ]

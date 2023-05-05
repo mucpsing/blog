@@ -10,11 +10,15 @@ export interface ImagePreviewState {
 }
 
 const IMG_CACHE = [];
+const SHOW_HREF = ["http://localhost:3000/", "https://capsion.top/"];
 let SHOW: boolean = false;
 
 class ImagePreview extends React.Component<ImagePreviewProps, ImagePreviewState> {
+  public parent: HTMLElement;
   constructor(props) {
     super(props);
+
+    this.parent = document.getElementById("cps-img-preview");
   }
 
   close = () => {
@@ -23,12 +27,33 @@ class ImagePreview extends React.Component<ImagePreviewProps, ImagePreviewState>
     SHOW = false;
   };
 
+  show = () => {
+    console.log("show");
+
+    if (!this.parent) {
+      this.parent = document.getElementById("cps-img-preview");
+    }
+    this.parent.style.display = "";
+
+    return "";
+  };
+
+  hidden = () => {
+    console.log("hidden");
+
+    if (!this.parent) {
+      this.parent = document.getElementById("cps-img-preview");
+    }
+    this.parent.style.display = "none";
+    return "hidden";
+  };
+
   render(): React.ReactNode {
     return (
       <div
         className={[
           "overlay z-[1000]",
-          SHOW ? "" : "hidden",
+          SHOW ? this.show() : this.hidden(),
           "absolute w-full h-full top-0 left-0 flex justify-center items-center",
           "bg-black/70",
         ].join(" ")}
@@ -52,7 +77,7 @@ export default (target: ICpsImgSwiperDataItem) => {
     div.style.left = "0";
     div.style.width = "100%";
     div.style.height = "100%";
-    // div.style.pointerEvents = "none"
+    // div.style.pointerEvents = "none";
 
     document.body.appendChild(div);
     return div;
@@ -71,5 +96,5 @@ export default (target: ICpsImgSwiperDataItem) => {
   }
 
   SHOW = true;
-  ReactDOM.render(<ImagePreview src={target.gif ? target.gif : target.mainImg} />, element);
+  ReactDOM.render(<ImagePreview src={target.gif ? target.gif : target.preview} />, element);
 };

@@ -21,12 +21,18 @@ export type TagType =
   | "vscode"
   | "vue"
   | "reactjs"
-  | "nodejs";
+  | "nodejs"
+  | "element"
+  | "uni-app"
+  | "vant"
+  | "tailwindcss"
+  | "electron";
 
 export type Project = {
   title: string;
   description: string;
-  preview?: any;
+  preview?: string;
+  gif?: string;
   website: string;
   source?: string | null;
   filepath?: string;
@@ -34,6 +40,32 @@ export type Project = {
 };
 
 export const Tags: Record<TagType, Tag> = {
+  electron: {
+    label: "Electron",
+    description: "JavaScript、HTML 和 CSS 构建跨平台的桌面应用程序，简单好用，前端福音",
+    color: "#8fd3e0",
+  },
+  tailwindcss: {
+    label: "TailwindCSS",
+    description: "目前为止最好用的书写css框架，没有之一",
+    color: "#38bdf8",
+  },
+  vant: {
+    label: "Vant",
+    description: "Vant 是一个轻量、可靠的移动端组件库，于 2017 年开源。",
+    color: "#36d7b7",
+  },
+  "uni-app": {
+    label: "uni-app",
+    description:
+      "使用 Vue.js 开发所有前端应用的框架，开发者编写一套代码，可发布到iOS、Android、Web（响应式）、以及各种小程序",
+    color: "#2b993a",
+  },
+  element: {
+    label: "ElementUI",
+    description: "基于 Vue 3，面向设计师和开发者的组件库",
+    color: "#3f85ed",
+  },
   vue: {
     label: "Vue",
     description: "好用又容易上手的SAP框架",
@@ -50,12 +82,12 @@ export const Tags: Record<TagType, Tag> = {
     color: "#43853d",
   },
   python: {
-    label: "python",
+    label: "Python",
     description: "py相关项目，人工智能，ai模型等，赶上时代步伐，学起来",
     color: "#4281b3",
   },
   vscode: {
-    label: "VS插件",
+    label: "VScode插件",
     description: "原创VSCode插件，大大提供团队搬砖效率",
     color: "#2376ae",
   },
