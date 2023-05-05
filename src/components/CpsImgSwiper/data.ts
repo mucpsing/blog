@@ -41,7 +41,7 @@ function createData(): ICpsImgSwiperDataItem[] {
     };
 
     if (item.logo) res["logo"] = item.logo;
-    if (item.example) res["gif"] = item.example;
+    if (item.gif) res["gif"] = item.gif;
     if (item.website) res["website"] = item.website;
 
     return res;
