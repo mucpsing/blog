@@ -79,12 +79,27 @@ module.exports = [
     "website": "/docs/【05】项目经历/原创作品/ST插件/自动更新channel_v3"
   },
   {
+    "title": "psd文件解析接口",
+    "description": "解析psd文件，调用官方接口或者调用本地ps软件对文件进行图层内容修改，最终导出图片，合适用了模特换装，产品变色等",
+    "tags": [
+      "python",
+      "fastapi",
+      "favorite",
+      "swagger"
+    ],
+    "preview": "/screenshot/psd-api/image-20220607152510720.png",
+    "gif": "/screenshot/psd-api/接口测试1.gif",
+    "filepath": "docs\\【05】项目经历\\完整项目\\psd文件解析接口\\index.md",
+    "website": "/docs/【05】项目经历/完整项目/psd文件解析接口"
+  },
+  {
     "title": "个人博客",
-    "description": "CSDN > 有道云 > 本博客， 1500多篇个人学习笔记基于ReactJS的docusaurus框架搭建，除了是个人博客同时也是个人简历，战力展示~",
+    "description": "1500多篇个人学习笔记通过Typora记录在本地，基于Docusaurus框架搭建了本博客，努力更新中",
     "tags": [
       "opensource",
       "nodejs",
       "typescript",
+      "javascript",
       "reactjs",
       "favorite"
     ],
@@ -97,6 +112,8 @@ module.exports = [
     "title": "cps-cli自用脚手架",
     "description": "整合了很多个人常用的脚本功能，快速生成项目，Typora上传图片、",
     "tags": [
+      "typescript",
+      "nodejs",
       "opensource",
       "python",
       "sublimetext"
@@ -105,36 +122,6 @@ module.exports = [
     "gif": "/screenshot/cps-cli/cps-cli.gif",
     "filepath": "docs\\【05】项目经历\\完整项目\\个人自用脚手架\\index.md",
     "website": "/docs/【05】项目经历/完整项目/个人自用脚手架"
-  },
-  {
-    "title": "窗帘换装小程序",
-    "description": "产品换装小程序，基于uni-app的webview，核心是vue2全家桶+Vant，支持全平台小程序实现了，产品更换，透视实时变形（2D），产品现场试装等",
-    "tags": [
-      "opensource",
-      "nodejs",
-      "vue",
-      "favorite",
-      "uni-app"
-    ],
-    "preview": "/screenshot/hongqi/uni-app/uni-app1.png",
-    "gif": "/screenshot/hongqi/uni-app/uni-app.gif",
-    "filepath": "docs\\【05】项目经历\\完整项目\\全栈小程序\\index.md",
-    "website": "/docs/【05】项目经历/完整项目/全栈小程序"
-  },
-  {
-    "title": "全栈app-后台",
-    "description": "全栈窗帘小程序的后台，基于vue2.x全家桶+elementUI+axios搭建，独立项目且以上线3年，稳定运行",
-    "tags": [
-      "opensource",
-      "nodejs",
-      "vue",
-      "favorite",
-      "element"
-    ],
-    "preview": "/screenshot/hongqi/admin/image-20230505161924362.png",
-    "gif": "/screenshot/capsion.top/capsion.top.gif",
-    "filepath": "docs\\【05】项目经历\\完整项目\\全栈小程序后台\\index.md",
-    "website": "/docs/【05】项目经历/完整项目/全栈小程序后台"
   },
   {
     "title": "Electron截图客户端",
@@ -146,11 +133,44 @@ module.exports = [
       "favorite",
       "electron",
       "tailwindcss",
-      "typescript"
+      "typescript",
+      "javascript"
     ],
     "preview": "/screenshot/hongqi/admin/image-20230505161924362.png",
     "gif": "/screenshot/capsion.top/capsion.top.gif",
     "filepath": "docs\\【05】项目经历\\完整项目\\截图插件\\index.md",
     "website": "/docs/【05】项目经历/完整项目/截图插件"
+  },
+  {
+    "title": "窗帘换装小程序后台",
+    "description": "全栈窗帘小程序的后台，基于vue2.x全家桶+elementUI+axios搭建，独立项目且以上线3年，稳定运行",
+    "tags": [
+      "opensource",
+      "vue",
+      "favorite",
+      "element",
+      "javascript"
+    ],
+    "preview": "/screenshot/hongqi/admin/image-20230505161924362.png",
+    "gif": "/screenshot/capsion.top/capsion.top.gif",
+    "filepath": "docs\\【05】项目经历\\完整项目\\窗帘换装后台前端\\index.md",
+    "website": "/docs/【05】项目经历/完整项目/窗帘换装后台前端"
+  },
+  {
+    "title": "窗帘换装小程序",
+    "description": "产品换装小程序，基于uni-app的webview，核心是vue2全家桶+Vant，支持全平台小程序实现了，产品更换，透视实时变形（2D），产品现场试装等",
+    "tags": [
+      "opensource",
+      "nodejs",
+      "vue",
+      "favorite",
+      "uni-app",
+      "vant",
+      "javascript"
+    ],
+    "preview": "/screenshot/hongqi/uni-app/uni-app1.png",
+    "gif": "/screenshot/hongqi/uni-app/uni-app.gif",
+    "filepath": "docs\\【05】项目经历\\完整项目\\窗帘换装小程序\\index.md",
+    "website": "/docs/【05】项目经历/完整项目/窗帘换装小程序"
   }
 ]

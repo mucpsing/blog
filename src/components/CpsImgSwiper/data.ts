@@ -1,4 +1,5 @@
 import rawData from "@site/data/project";
+import { shuffle } from "lodash";
 
 export interface ICpsImgSwiperDataItem {
   example?: any;
@@ -29,7 +30,7 @@ const COLOR_LIST = [
 ];
 
 function createData(): ICpsImgSwiperDataItem[] {
-  return rawData.map((item, index): ICpsImgSwiperDataItem => {
+  return shuffle(rawData).map((item, index): ICpsImgSwiperDataItem => {
     // 因为颜色的数量不一定能与项目数据一一对上
     let colorIndex = index % COLOR_LIST.length;
     let res = {

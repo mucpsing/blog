@@ -1,5 +1,4 @@
 import projects from "@site/data/project";
-import { shuffle } from "lodash";
 export type Tag = {
   label: string;
   description: string;
@@ -26,7 +25,9 @@ export type TagType =
   | "uni-app"
   | "vant"
   | "tailwindcss"
-  | "electron";
+  | "electron"
+  | "fastapi"
+  | "swagger";
 
 export type Project = {
   title: string;
@@ -40,6 +41,16 @@ export type Project = {
 };
 
 export const Tags: Record<TagType, Tag> = {
+  swagger: {
+    label: "SwaggerUI",
+    description: "",
+    color: "#85ea2d",
+  },
+  fastapi: {
+    label: "FastAPI",
+    description: "高性能，易用，轻量，高效！",
+    color: "#05988a",
+  },
   electron: {
     label: "Electron",
     description: "JavaScript、HTML 和 CSS 构建跨平台的桌面应用程序，简单好用，前端福音",
@@ -135,10 +146,10 @@ export const TagList = Object.keys(Tags) as TagType[];
 function sortProject(sortMode: string = "suffle") {
   const result = Projects;
 
-  switch (sortMode) {
-    case "suffle":
-      return shuffle(Projects);
-  }
+  // switch (sortMode) {
+  //   case "suffle":
+  //     return shuffle(Projects);
+  // }
 
   // Sort by site name
   // result = sortBy(result, (user) => user.title.toLowerCase());
