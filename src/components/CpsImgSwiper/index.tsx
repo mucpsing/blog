@@ -2,7 +2,7 @@
  * @Author: cpasion-office-win10 373704015@qq.com
  * @Date: 2023-04-21 09:15:12
  * @LastEditors: cpasion-office-win10 373704015@qq.com
- * @LastEditTime: 2023-04-23 16:02:54
+ * @LastEditTime: 2023-05-09 09:30:29
  * @FilePath: \cps-blog\src\components\CpsImgSwiper\index.tsx
  * @Description: 这是一个图片轮播组件，支持横屏和竖屏排版，目前仅支持网页端浏览器，没做移动适配
  */
@@ -205,7 +205,7 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
               ].join(" ")}
               key="pic"
             >
-              <img src={logo} width="100%" height="100%" alt="" loading="lazy" />
+              <img src={logo} width="100%" height="100%" alt="" loading="lazy" crossOrigin="anonymous" />
             </div>
 
             {/* 主图片 */}
@@ -216,7 +216,13 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
               ].join(" ")}
               key="map"
             >
-              <img src={preview} className="object-fill w-full h-full" alt="" onClick={(e) => this.showImg(item)} />
+              <img
+                src={preview}
+                className="object-fill w-full h-full"
+                alt=""
+                onClick={(e) => this.showImg(item)}
+                crossOrigin="anonymous"
+              />
             </div>
           </QueueAnim>
         </Element>

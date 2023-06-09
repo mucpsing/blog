@@ -172,7 +172,7 @@ export default class HomeImgSwiper extends React.Component<ICpsImgSwiperProps, I
               ].join(" ")}
               key="pic"
             >
-              <img src={logo} width="100%" height="100%" alt="" />
+              <img src={logo} width="100%" height="100%" alt="" crossOrigin="anonymous" />
             </div>
 
             {/* 主图片 */}
@@ -188,6 +188,7 @@ export default class HomeImgSwiper extends React.Component<ICpsImgSwiperProps, I
                 className="object-fill w-full h-full hover:opacity-90"
                 alt=""
                 onClick={(e) => ImgPreview(item)}
+                crossOrigin="anonymous"
               />
             </div>
           </QueueAnim>

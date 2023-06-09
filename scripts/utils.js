@@ -176,12 +176,12 @@ async function createProjectDataByFolder(filepathList, prefixUrl, outputPath) {
 }
 exports.createProjectDataByFolder = createProjectDataByFolder;
 /* 文件夹试调 */
-(async () => {
-    const defaultPath = ["./docs/【05】项目经历/原创作品/", "./docs/【05】项目经历/完整项目/"];
-    const defaultPrefix = ["/docs/【05】项目经历/原创作品", "/docs/【05】项目经历/完整项目"];
-    const output = path.resolve("./data/project.js");
-    await createProjectDataByFolder(defaultPath, defaultPrefix, output);
-})();
+// (async () => {
+//   const defaultPath = ["./docs/【05】项目经历/原创作品/", "./docs/【05】项目经历/完整项目/"];
+//   const defaultPrefix = ["/docs/【05】项目经历/原创作品", "/docs/【05】项目经历/完整项目"];
+//   const output = path.resolve("./data/project.js");
+//   await createProjectDataByFolder(defaultPath, defaultPrefix, output);
+// })();
 /* 文件试调 */
 // (async function test() {
 //   const target = path.resolve("./docs/【05】项目经历/完整项目/个人网站/index.md");
