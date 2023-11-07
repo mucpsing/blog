@@ -4,6 +4,7 @@ import type { ICpsImgSwiperDataItem } from "./data";
 
 export interface ImagePreviewProps {
   src?: string;
+  onload?: (param: any) => void;
 }
 export interface ImagePreviewState {
   show?: boolean;
@@ -20,6 +21,13 @@ class ImagePreview extends React.Component<ImagePreviewProps, ImagePreviewState>
 
     this.parent = document.getElementById("cps-img-preview");
   }
+
+  /**
+   * @description: 当大图加载成功时，执行本函数
+   */
+  onload = (input: any) => {
+    if (this.props.onload) this.props.onload(input);
+  };
 
   close = () => {
     console.log("关闭");
@@ -59,7 +67,7 @@ class ImagePreview extends React.Component<ImagePreviewProps, ImagePreviewState>
         ].join(" ")}
         onClick={this.close}
       >
-        <img className="" src={this.props.src} alt="img" />
+        <img className="" src={this.props.src} alt="img" onLoad={(e) => this.onload(this.props.src)} />
       </div>
     );
   }

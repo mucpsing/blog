@@ -2,15 +2,15 @@ import rawData from "@site/data/project";
 import { shuffle } from "lodash";
 
 export interface ICpsImgSwiperDataItem {
-  example?: any;
-  title: string;
-  content: string;
-  logo?: string;
-  preview: string;
-  mainColor: string;
-  subColor: string;
-  gif?: string;
-  website?: string;
+  example?: any; //
+  title: string; // 项目名称
+  content: string; // 项目简介
+  logo?: string; // logo
+  preview: string; // 预览图
+  mainColor: string; // 主颜色
+  subColor: string; // 副颜色
+  gif?: string; // 动态图
+  website?: string; // 项目地址
 }
 
 /* 配色 */

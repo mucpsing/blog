@@ -12,7 +12,7 @@ const { extractTagline } = require("./scripts/taglineList");
 const taglineList = extractTagline(path.resolve("./docs/【07】常识科普/社会真实/名人名言.md"));
 
 /* 【导航】学习笔记 */
-const excludeDirList = ["【18】副业开发", ".obsidian", "gg"];
+const excludeDirList = ["【18】副业开发", ".obsidian", "gg", ".trash"];
 const navBarDocsItems = {
   label: "📔 学习笔记",
   type: "dropdown",
@@ -68,6 +68,7 @@ const config = {
   //   },
   // ],
 
+  // 优先插入脚本
   scripts: [
     {
       src: "/scripts/beforeWindowLoad.js",

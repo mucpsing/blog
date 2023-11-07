@@ -2,9 +2,9 @@
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-06 22:25:11
  * @LastEditors: cpasion-office-win10 373704015@qq.com
- * @LastEditTime: 2023-04-23 15:37:27
+ * @LastEditTime: 2023-07-17 17:37:27
  * @FilePath: \cps-blog\src\components\HomepageSwiper\index.tsx
- * @Description: 首页轮播组件，抽离了CpsImgSwiper的源码，进行了定制
+ * @Description: 首页轮播组件，抽离自CpsImgSwiper组件，进行了定制化
  */
 import React from "react";
 
@@ -16,7 +16,7 @@ import { RightOutlined, LeftOutlined } from "@ant-design/icons";
 import { ANIM_CONFIGS } from "@site/src/components/CpsImgSwiper/index";
 import { isSupportWebp } from "@site/src/components/CpsImgSwiper/utils";
 import dataArray, { type ICpsImgSwiperDataItem } from "@site/src/components/CpsImgSwiper/data";
-import type { ICpsImgSwiperProps, ICpsImgSwiperPropsState } from "@site/src/components/CpsImgSwiper/index";
+import type { ICpsImgSwiperProps, ICpsImgSwiperState } from "@site/src/components/CpsImgSwiper/index";
 
 import HomeTitle from "./rightSide";
 import Bubble from "@site/src/components/bubbleText";
@@ -24,7 +24,7 @@ import ImgPreview from "@site/src/components/CpsImgSwiper/imagePreview";
 
 const Element = BannerAnim.Element;
 
-export default class HomeImgSwiper extends React.Component<ICpsImgSwiperProps, ICpsImgSwiperPropsState> {
+export default class HomeImgSwiper extends React.Component<ICpsImgSwiperProps, ICpsImgSwiperState> {
   bannerImg: any;
   bannerText: any;
   titleElement: Element;
