@@ -7,7 +7,7 @@
     "start": "tsc -p ./scripts & docusaurus start",
     "start:scripts": "tsc -p ./scripts",
     "watch:scripts": "tsc -p ./scripts --watch",
-    "build": "tsc -p ./scripts & docusaurus build & cps -c ./build",
+    "build": "tsc -p ./scripts & docusaurus build",
     "compress": "cps -c ./build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
