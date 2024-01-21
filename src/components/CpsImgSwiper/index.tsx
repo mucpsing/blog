@@ -2,7 +2,7 @@
  * @Author: cpasion-office-win10 373704015@qq.com
  * @Date: 2023-04-21 09:15:12
  * @LastEditors: cpasion-office-win10 373704015@qq.com
- * @LastEditTime: 2023-04-23 16:02:54
+ * @LastEditTime: 2023-07-17 17:26:50
  * @FilePath: \cps-blog\src\components\CpsImgSwiper\index.tsx
  * @Description: 这是一个图片轮播组件，支持横屏和竖屏排版，目前仅支持网页端浏览器，没做移动适配
  */
@@ -41,18 +41,18 @@ export interface ICpsImgSwiperProps {
   autoSwitch?: number; // 是否自动切换，默认0不开启，单位为ms
   data?: ICpsImgSwiperDataItem[];
   classNames?: string;
-  imgPreview?: boolean; // 是否支持点击放大展示gif
+  imgPreview?: boolean; // 是否开启点击放大展示gif
   useWebp?: boolean; // 是否使用webp
 }
 
-export interface ICpsImgSwiperPropsState {
+export interface ICpsImgSwiperState {
   showInt: number;
   delay: number;
   oneEnter: boolean;
   webp: boolean; // 是否启用webp，首先通过props确定是否使用，在通过函数判断环境是否支持，最终生成布尔值状态存储
 }
 
-export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, ICpsImgSwiperPropsState> {
+export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, ICpsImgSwiperState> {
   bannerImg: any;
   bannerText: any;
   titleElement: Element;
@@ -205,7 +205,7 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
               ].join(" ")}
               key="pic"
             >
-              <img src={logo} width="100%" height="100%" alt="" loading="lazy" />
+              <img src={logo} width="100%" height="100%" alt="" loading="lazy" crossOrigin="anonymous" />
             </div>
 
             {/* 主图片 */}
@@ -216,7 +216,13 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
               ].join(" ")}
               key="map"
             >
-              <img src={preview} className="object-fill w-full h-full" alt="" onClick={(e) => this.showImg(item)} />
+              <img
+                src={preview}
+                className="object-fill w-full h-full"
+                alt=""
+                onClick={(e) => this.showImg(item)}
+                crossOrigin="anonymous"
+              />
             </div>
           </QueueAnim>
         </Element>

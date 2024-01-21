@@ -16,41 +16,42 @@ const CND_HOST = "qiniu.capsion.top/blog";
  * @param {string} searchHost 需要替换的url host
  * @return {URL}
  */
-function fixLocalHostToSiteHost(imgSrc, searchHost = SEARCH_HOST, newHost = CND_HOST) {
+function fixLocalHostToSiteHost(inputHost, searchHost = "localhost:45462", newHost = "") {
   try {
     // 当前host相同，可能是网络原因加载失败，此处进行忽略或者替换成通用cdn再尝试
     if (location.host == searchHost) return "";
 
-    if (imgSrc.indexOf(searchHost) > -1) {
+    if (inputHost.indexOf(searchHost) > -1) {
+      // 如果没有指定替换新的host，则替换为当前源
       if (newHost) {
-        imgSrc.replace(searchHost, newHost).replace("https://", "http://");
+        return inputHost.replace(searchHost, newHost);
       } else {
-        imgSrc.replace(searchHost, location.host);
+        return inputHost.replace(searchHost, location.host);
       }
-      return imgSrc;
     }
   } catch (error) {
-    console.log("图片替换失败：", imgSrc);
+    console.log("图片替换失败：", inputHost);
     console.log({ error });
     return "";
   }
 }
 
 /**
- * @description: 检查url，确保要替换的url跟之前不是同一个url
+ * @description: 检查当前的请求的url与源地址是否匹配
  * @param {Element} imgElement
  * @return {Boolean}
  */
-function checkUrl(imgElement) {
+function isSameDomain(inputUrlStr) {
   try {
-    return new URL(imgElement.src).host === location.host;
+    return new URL(inputUrlStr).host === location.host;
   } catch (error) {
-    console.log();
+    console.log("isSameDomain: error", error);
     return false;
   }
 }
 
-const REPLACE_URL_HOST = "localhost:45462";
+let REPLACE_URL_HOST = "qiniu.capsion.top";
+let SEARCH_URL_HOST = "localhost:45462";
 
 window.addEventListener("DOMContentLoaded", () => {
   console.log("cps-scripts on loaded");
@@ -61,12 +62,16 @@ window.addEventListener("DOMContentLoaded", () => {
     (e) => {
       const elem = e.target;
       if (elem.tagName.toLowerCase() === "img") {
-        if (!checkUrl(elem)) return;
 
-        const newSrc = fixLocalHostToSiteHost(elem.src, REPLACE_URL_HOST);
+        if (isSameDomain(elem.src)) return;
+
+        const newSrc = fixLocalHostToSiteHost(elem.src, SEARCH_URL_HOST, REPLACE_URL_HOST);
 
         // 这里有可能触发无限重新赋值同一个无法加载url的死循环
-        if (newSrc && elem.src != newSrc) elem.src = newSrc;
+        if (newSrc && elem.src != newSrc) {
+          console.log("尝试替换cdn图片: ", newSrc);
+          elem.src = newSrc;
+        }
       }
     },
     true
