@@ -2,24 +2,32 @@
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-04-04 17:09:26
  * @LastEditors: CPS holy.dandelion@139.com
- * @LastEditTime: 2023-04-06 00:06:03
+ * @LastEditTime: 2023-07-17 13:04:09
  * @FilePath: \cps-blog-test\static\cps.js
  * @Description: 用来修复docs中，所有采用了本地服务器图片的链接
  */
 
+const SEARCH_HOST = "localhost:45462";
+const CND_HOST = "qiniu.capsion.top/blog";
+
 /**
  * @description: 替换url中的host为指定的host
  * @param {URL} imgSrc img标签的src内容，必须是url格式
- * @param {string} fixHost 需要替换的url host
+ * @param {string} searchHost 需要替换的url host
  * @return {URL}
  */
-function fixLocalHostToSiteHost(imgSrc, fixHost = "localhost:45462") {
+function fixLocalHostToSiteHost(imgSrc, searchHost = SEARCH_HOST, newHost = CND_HOST) {
   try {
     // 当前host相同，可能是网络原因加载失败，此处进行忽略或者替换成通用cdn再尝试
-    if (location.host == fixHost) return "";
+    if (location.host == searchHost) return "";
 
-    if (imgSrc.indexOf(fixHost) > -1) {
-      return imgSrc.replace(fixHost, location.host);
+    if (imgSrc.indexOf(searchHost) > -1) {
+      if (newHost) {
+        imgSrc.replace(searchHost, newHost).replace("https://", "http://");
+      } else {
+        imgSrc.replace(searchHost, location.host);
+      }
+      return imgSrc;
     }
   } catch (error) {
     console.log("图片替换失败：", imgSrc);
