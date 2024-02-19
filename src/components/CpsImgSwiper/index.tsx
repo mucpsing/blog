@@ -39,7 +39,7 @@ export interface ICpsImgSwiperProps {
   showImg?: boolean;
   showArrow?: boolean; // 是否显示切换的箭头
   autoSwitch?: number; // 是否自动切换，默认0不开启，单位为ms
-  data: ICpsImgSwiperDataItem[];
+  data?: ICpsImgSwiperDataItem[];
   classNames?: string;
   imgPreview?: boolean; // 是否开启点击放大展示gif
   useWebp?: boolean; // 是否使用webp

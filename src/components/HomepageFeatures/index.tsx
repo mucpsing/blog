@@ -10,12 +10,12 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
-    title: "前端开发",
+    title: "前端技能",
     Svg: require("@site/static/img/undraw_docusaurus_mountain.svg").default,
     description: <>擅长使用Vue系技术栈进行web开发，略懂UI设计，能独立构建中小型web项目~</>,
   },
   {
-    title: "后端开发",
+    title: "后端技能",
     Svg: require("@site/static/img/undraw_docusaurus_tree.svg").default,
     description: (
       <>
