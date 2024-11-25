@@ -28,7 +28,7 @@ const outputPath = path.resolve("./data/project.js");
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "Capsion", // 网站主题
+  title: "Capsion | 编程资料整理", // 网站主题
   // tagline: '好记性不如烂笔头',
   tagline: taglineList.join(","),
   favicon: "img/favicon.ico",
@@ -227,8 +227,18 @@ const config = {
               },
             ],
           },
+
+          {
+            title: "备案信息",
+            items: [
+              {
+                label: "备案号： 粤ICP备2020116876号-1",
+                href: "https://beian.miit.gov.cn/",
+              },
+            ],
+          },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+        // copyright: `{<a>https://beian.miit.gov.cn/</a>}`,
       },
       prism: {
         theme: lightCodeTheme,
