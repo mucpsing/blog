@@ -2,8 +2,8 @@
 /*
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-25 16:10:31
- * @LastEditors: CPS holy.dandelion@139.com
- * @LastEditTime: 2023-05-06 00:32:24
+ * @LastEditors: cpasion-office-win10 373704015@qq.com
+ * @LastEditTime: 2023-12-21 15:59:01
  * @filepath: \cps-blog\scripts\utils.ts
  * @Description: 一些会被重复调用的工具函数
  */
@@ -43,7 +43,7 @@ const yaml = __importStar(require("yaml"));
  * @param {boolean} inDeep 是否递归读取，如果递归，则列出所有md文件，否则仅列出顶层的目录
  * @param {string} prefixUrl url的前缀，如果使用inDeep，这个是必须的
  */
-function createNavItemByDir({ targetPath, excludeDirList = null, inDeep = false, prefixUrl = "", }) {
+function createNavItemByDir({ targetPath, excludeDirList = null, inDeep = false, prefixUrl = "" }) {
     if (!excludeDirList)
         excludeDirList = Array();
     let resList = fs.readdirSync(targetPath);

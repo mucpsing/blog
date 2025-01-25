@@ -1,1 +1,1 @@
-yarn start
+yarn start --port 3002
