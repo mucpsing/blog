@@ -12,7 +12,7 @@ const { extractTagline } = require("./scripts/taglineList");
 const taglineList = extractTagline(path.resolve("./docs/【07】常识科普/社会真实/名人名言.md"));
 
 /* 【导航】学习笔记 */
-const excludeDirList = ["【18】副业开发", ".obsidian", "gg", ".trash"];
+const excludeDirList = ["【18】副业开发", ".obsidian", "gg", ".trash", "资源收集", "临时"];
 const navBarDocsItems = {
   label: "📔 学习笔记",
   type: "dropdown",
@@ -97,6 +97,7 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve("./sidebars.js"),
+          exclude: excludeDirList,
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           // editUrl: "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
