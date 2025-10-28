@@ -1,6 +1,8 @@
 const path = require("path");
-
 const utils = require("./scripts/utils");
+
+const currentDocsPath = path.resolve("./docs");
+const outputPath = path.resolve("./data/project.js");
 
 const { addHeaderTag } = require("./scripts/customPlugs");
 
@@ -12,18 +14,35 @@ const { extractTagline } = require("./scripts/taglineList");
 const taglineList = extractTagline(path.resolve("./docs/【07】常识科普/社会真实/名人名言.md"));
 
 /* 【导航】学习笔记 */
-const excludeDirList = ["【18】副业开发", ".obsidian", "gg", ".trash", "资源收集", "临时"];
+const excludeDirList = [
+  "【00】安卓开发",
+  "【10】work",
+  "【14】面试相关",
+  "【17】读书笔记",
+  "【18】副业开发",
+  "【18】副业开发",
+  "【19】AR增强现实",
+  "【21】个人收藏",
+  ".obsidian",
+  "gg",
+  ".trash",
+  "资源收集",
+  "临时",
+];
+
+const includeDirList = ["【00】编程相关", "【01】前端开发", "【02】后端开发", "【03】运维相关", "【05】项目经历", "【05】项目经历", "【13】Game"];
+// const includeDirList = ["【00】安卓开发", "【00】编程相关", "【01】前端开发", "【02】后端开发","【03】运维相关", "【05】项目经历"];
 const navBarDocsItems = {
   label: "📔 学习笔记",
   type: "dropdown",
   position: "right",
-  items: utils.createNavItemByDir({ targetPath: path.resolve("./docs"), excludeDirList }),
+  items: utils.createNavItemByDir({ targetPath: currentDocsPath, excludeDirList, includeDirList }),
 };
 
 /* 【路由】生成项目页 /project 的数据 */
 const defaultPath = ["./docs/【05】项目经历/原创作品/", "./docs/【05】项目经历/完整项目/"];
 const defaultPrefix = ["/docs/【05】项目经历/原创作品", "/docs/【05】项目经历/完整项目"];
-const outputPath = path.resolve("./data/project.js");
+
 (async () => await utils.createProjectDataByFolder(defaultPath, defaultPrefix, outputPath))();
 
 /** @type {import('@docusaurus/types').Config} */
@@ -77,6 +96,18 @@ const config = {
   ],
 
   plugins: [
+    // [
+    //   require.resolve("@easyops-cn/docusaurus-search-local"),
+    //   {
+    //     indexDocs: true,
+    //     indexBlog: false,
+    //     indexPages: true,
+    //     language: ["zh"], // 支持中文和英文
+    //     hashed: true,
+    //     highlightSearchTermsOnTargetPage: true,
+    //     explicitSearchResultPath: true,
+    //   },
+    // ],
     // addHeaderTag,
     [
       "@docusaurus/plugin-ideal-image",
@@ -97,7 +128,9 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve("./sidebars.js"),
-          exclude: excludeDirList,
+          // exclude: excludeDirList,
+          include: includeDirList,
+          path: currentDocsPath,
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           // editUrl: "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
@@ -142,11 +175,11 @@ const config = {
             position: "left",
             items: [
               {
-                to: "/sample/jiuhao",
+                to: "/",
                 label: "🛵 真智能自电",
               },
               {
-                to: "/sample/ai",
+                to: "/",
                 label: "🤖 AI模特换装",
               },
             ],

@@ -2,8 +2,8 @@
 /*
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-25 16:10:31
- * @LastEditors: Capsion 373704015@qq.com
- * @LastEditTime: 2025-03-18 10:07:18
+ * @LastEditors: cpasion-office-win10 373704015@qq.com
+ * @LastEditTime: 2025-10-27 15:06:02
  * @filepath: \cps-blog\scripts\utils.ts
  * @Description: 一些会被重复调用的工具函数
  */
@@ -43,11 +43,21 @@ const yaml = __importStar(require("yaml"));
  * @param {boolean} inDeep 是否递归读取，如果递归，则列出所有md文件，否则仅列出顶层的目录
  * @param {string} prefixUrl url的前缀，如果使用inDeep，这个是必须的
  */
-function createNavItemByDir({ targetPath, excludeDirList = null, inDeep = false, prefixUrl = "" }) {
+function createNavItemByDir({ targetPath, includeDirList = null, excludeDirList = null, inDeep = false, prefixUrl = "" }) {
     if (!excludeDirList)
         excludeDirList = Array();
+    if (!includeDirList)
+        includeDirList = Array();
+    const urlDocsPath = "docs";
     let resList = fs.readdirSync(targetPath);
+    // 新增过滤逻辑：优先使用 includeDirList
+    if (includeDirList && includeDirList.length > 0) {
+        resList = resList.filter((item) => includeDirList.includes(item));
+    }
     let dirname = path.basename(targetPath);
+    if (dirname == "docs_dev")
+        dirname = dirname.replace(dirname, urlDocsPath);
+    console.log({ dirname });
     let navbarItemList = [];
     resList.forEach((rootDirFile) => {
         let fullPath = path.join(targetPath, rootDirFile);
@@ -142,7 +152,7 @@ async function readMarkdownInfo(filepath) {
 }
 exports.readMarkdownInfo = readMarkdownInfo;
 /**
- * @description: 根据指定文件夹生成动态的项目数据
+ * @description: 生成/data/project.js数据，对应项目project页和home页组件使用的数据
  * @param {string} filepathList 要读取的文件夹，主要调用createNavItemByDir生成基础数据
  * @param {string} prefixUrl 对应文件夹要生成的url前缀
  * @param {string} outputPath 数据最终导出的js文件，以CommontJS格式导出

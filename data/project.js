@@ -93,6 +93,18 @@ module.exports = [
     "website": "/docs/【05】项目经历/完整项目/psd文件解析接口"
   },
   {
+    "title": "YYS相关",
+    "description": "yys自动识别项目，yys是一个游戏，懂的都懂",
+    "tags": [
+      "python",
+      "fastapi"
+    ],
+    "preview": "/screenshot/psd-api/image-20220607152510720.png",
+    "gif": "/screenshot/psd-api/接口测试1.gif",
+    "filepath": "docs\\【05】项目经历\\完整项目\\YYS相关\\index.md",
+    "website": "/docs/【05】项目经历/完整项目/YYS相关"
+  },
+  {
     "title": "个人博客",
     "description": "1500多篇个人学习笔记通过Typora记录在本地，基于Docusaurus框架搭建了本博客，努力更新中",
     "tags": [

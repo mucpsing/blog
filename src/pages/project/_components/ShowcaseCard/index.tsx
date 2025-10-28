@@ -1,3 +1,11 @@
+/*
+ * @Author: cpasion-office-win10 373704015@qq.com
+ * @Date: 2023-04-17 08:59:56
+ * @LastEditors: cpasion-office-win10 373704015@qq.com
+ * @LastEditTime: 2025-06-19 17:32:32
+ * @FilePath: \cps-blog\src\pages\project\_components\ShowcaseCard\index.tsx
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 /**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
@@ -24,7 +32,23 @@ const TagComp = React.forwardRef<HTMLLIElement, Tag>(({ label, color, descriptio
 ));
 
 function ShowcaseCardTag({ tags }: { tags: TagType[] }) {
-  const tagObjects = tags.map((tag) => ({ tag, ...Tags[tag] }));
+  // const tagObjects = tags.map((tag) => ({ tag, ...Tags[tag] }));
+  const tagObjects = tags
+    .map((tag) => {
+      if (!(tag in Tags)) {
+        console.error(`⚠️ 未知标签: ${tag}`, Tags);
+        return null;
+      }
+      return { tag, ...Tags[tag] };
+    })
+    .filter(Boolean); // 过滤掉无效标签
+  // 添加标签索引检查
+  tagObjects.forEach((obj) => {
+    const index = TagList.indexOf(obj.tag);
+    if (index === -1) {
+      console.warn(`🚨 标签 "${obj.label}" (${obj.tag}) 不在主标签列表中!`, TagList);
+    }
+  });
 
   // Keep same order for all tags
   const tagObjectsSorted = sortBy(tagObjects, (tagObject) => TagList.indexOf(tagObject.tag));
