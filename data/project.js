@@ -10,7 +10,7 @@ module.exports = [
     ],
     "preview": "/screenshot/sublimeTextPlugs/cps-beautify/cps-beautify_preview.png",
     "gif": "/screenshot/sublimeTextPlugs/cps-beautify/cps-beautify.gif",
-    "filepath": "docs\\【05】项目经历\\原创作品\\ST插件\\代码格式化.md",
+    "filepath": "W:\\CPS\\MyProject\\cps\\docusaurus-v2\\docs\\【05】项目经历\\原创作品\\ST插件\\代码格式化.md",
     "website": "/docs/【05】项目经历/原创作品/ST插件/代码格式化"
   },
   {
@@ -23,7 +23,7 @@ module.exports = [
     ],
     "preview": "/screenshot/sublimeTextPlugs/cps-run-commands/cps-Run-Command.png",
     "gif": "/screenshot/sublimeTextPlugs/cps-run-commands/cps-Run-Command.gif",
-    "filepath": "docs\\【05】项目经历\\原创作品\\ST插件\\快捷运行shell命令.md",
+    "filepath": "W:\\CPS\\MyProject\\cps\\docusaurus-v2\\docs\\【05】项目经历\\原创作品\\ST插件\\快捷运行shell命令.md",
     "website": "/docs/【05】项目经历/原创作品/ST插件/快捷运行shell命令"
   },
   {
@@ -36,7 +36,7 @@ module.exports = [
     ],
     "preview": "/screenshot/sublimeTextPlugs/cps-Comments-Creator/cps-Comments-Creator.png",
     "gif": "/screenshot/sublimeTextPlugs/cps-Comments-Creator/cps-Comments-Creator.gif",
-    "filepath": "docs\\【05】项目经历\\原创作品\\ST插件\\生成函数注释.md",
+    "filepath": "W:\\CPS\\MyProject\\cps\\docusaurus-v2\\docs\\【05】项目经历\\原创作品\\ST插件\\生成函数注释.md",
     "website": "/docs/【05】项目经历/原创作品/ST插件/生成函数注释"
   },
   {
@@ -49,7 +49,7 @@ module.exports = [
     ],
     "preview": "/screenshot/sublimeTextPlugs/cps-fileheader/fileheader.png",
     "gif": "/screenshot/sublimeTextPlugs/cps-fileheader/fileheader.gif",
-    "filepath": "docs\\【05】项目经历\\原创作品\\ST插件\\生成文件头.md",
+    "filepath": "W:\\CPS\\MyProject\\cps\\docusaurus-v2\\docs\\【05】项目经历\\原创作品\\ST插件\\生成文件头.md",
     "website": "/docs/【05】项目经历/原创作品/ST插件/生成文件头"
   },
   {
@@ -62,7 +62,7 @@ module.exports = [
     ],
     "preview": "/screenshot/sublimeTextPlugs/cps-auto-switch-language/cps-auto-switch-language_preview.png",
     "gif": "/screenshot/sublimeTextPlugs/cps-auto-switch-language/cps-auto-switch-language1_800.gif",
-    "filepath": "docs\\【05】项目经历\\原创作品\\ST插件\\自动切换英文输入.md",
+    "filepath": "W:\\CPS\\MyProject\\cps\\docusaurus-v2\\docs\\【05】项目经历\\原创作品\\ST插件\\自动切换英文输入.md",
     "website": "/docs/【05】项目经历/原创作品/ST插件/自动切换英文输入"
   },
   {
@@ -75,7 +75,7 @@ module.exports = [
     ],
     "preview": "/screenshot/sublimeTextPlugs/cps-auto-update-channel/cps-auto-update-channel.png",
     "gif": "/screenshot/sublimeTextPlugs/cps-auto-update-channel/cps-auto-update-channel.gif",
-    "filepath": "docs\\【05】项目经历\\原创作品\\ST插件\\自动更新channel_v3.md",
+    "filepath": "W:\\CPS\\MyProject\\cps\\docusaurus-v2\\docs\\【05】项目经历\\原创作品\\ST插件\\自动更新channel_v3.md",
     "website": "/docs/【05】项目经历/原创作品/ST插件/自动更新channel_v3"
   },
   {
@@ -89,7 +89,7 @@ module.exports = [
     ],
     "preview": "/screenshot/psd-api/image-20220607152510720.png",
     "gif": "/screenshot/psd-api/接口测试1.gif",
-    "filepath": "docs\\【05】项目经历\\完整项目\\psd文件解析接口\\index.md",
+    "filepath": "W:\\CPS\\MyProject\\cps\\docusaurus-v2\\docs\\【05】项目经历\\完整项目\\psd文件解析接口\\index.md",
     "website": "/docs/【05】项目经历/完整项目/psd文件解析接口"
   },
   {
@@ -101,7 +101,7 @@ module.exports = [
     ],
     "preview": "/screenshot/psd-api/image-20220607152510720.png",
     "gif": "/screenshot/psd-api/接口测试1.gif",
-    "filepath": "docs\\【05】项目经历\\完整项目\\YYS相关\\index.md",
+    "filepath": "W:\\CPS\\MyProject\\cps\\docusaurus-v2\\docs\\【05】项目经历\\完整项目\\YYS相关\\index.md",
     "website": "/docs/【05】项目经历/完整项目/YYS相关"
   },
   {
@@ -117,7 +117,7 @@ module.exports = [
     ],
     "preview": "/screenshot/capsion.top/capsion.top_proview_1.png",
     "gif": "/screenshot/capsion.top/capsion.top.gif",
-    "filepath": "docs\\【05】项目经历\\完整项目\\个人网站\\index.md",
+    "filepath": "W:\\CPS\\MyProject\\cps\\docusaurus-v2\\docs\\【05】项目经历\\完整项目\\个人网站\\index.md",
     "website": "/docs/【05】项目经历/完整项目/个人网站"
   },
   {
@@ -132,7 +132,7 @@ module.exports = [
     ],
     "preview": "/screenshot/cps-cli/cps-cli.png",
     "gif": "/screenshot/cps-cli/cps-cli.gif",
-    "filepath": "docs\\【05】项目经历\\完整项目\\个人自用脚手架\\index.md",
+    "filepath": "W:\\CPS\\MyProject\\cps\\docusaurus-v2\\docs\\【05】项目经历\\完整项目\\个人自用脚手架\\index.md",
     "website": "/docs/【05】项目经历/完整项目/个人自用脚手架"
   },
   {
@@ -150,8 +150,25 @@ module.exports = [
     ],
     "preview": "/screenshot/hongqi/admin/image-20230505161924362.png",
     "gif": "/screenshot/capsion.top/capsion.top.gif",
-    "filepath": "docs\\【05】项目经历\\完整项目\\截图插件\\index.md",
+    "filepath": "W:\\CPS\\MyProject\\cps\\docusaurus-v2\\docs\\【05】项目经历\\完整项目\\截图插件\\index.md",
     "website": "/docs/【05】项目经历/完整项目/截图插件"
+  },
+  {
+    "title": "mike21流速流场分析系统",
+    "description": "分析dfsu文件，提取指定区域流速流场数据进行对比分析，后期接入AI得出分析报告，然后调用ArcMap和Arcpy对团队内定好的模板进行可视化输出",
+    "tags": [
+      "python",
+      "fastapi",
+      "vue",
+      "swagger",
+      "Electron",
+      "TailwindCSS",
+      "product",
+      "favorite",
+      "tdesign"
+    ],
+    "filepath": "W:\\CPS\\MyProject\\cps\\docusaurus-v2\\docs\\【05】项目经历\\完整项目\\流速流场数据分析系统\\readme.md",
+    "website": "/docs/【05】项目经历/完整项目/流速流场数据分析系统/readme"
   },
   {
     "title": "窗帘换装小程序后台",
@@ -165,7 +182,7 @@ module.exports = [
     ],
     "preview": "/screenshot/hongqi/admin/image-20230505161924362.png",
     "gif": "/screenshot/capsion.top/capsion.top.gif",
-    "filepath": "docs\\【05】项目经历\\完整项目\\窗帘换装后台前端\\index.md",
+    "filepath": "W:\\CPS\\MyProject\\cps\\docusaurus-v2\\docs\\【05】项目经历\\完整项目\\窗帘换装后台前端\\index.md",
     "website": "/docs/【05】项目经历/完整项目/窗帘换装后台前端"
   },
   {
@@ -182,7 +199,7 @@ module.exports = [
     ],
     "preview": "/screenshot/hongqi/uni-app/uni-app1.png",
     "gif": "/screenshot/hongqi/uni-app/uni-app.gif",
-    "filepath": "docs\\【05】项目经历\\完整项目\\窗帘换装小程序\\index.md",
+    "filepath": "W:\\CPS\\MyProject\\cps\\docusaurus-v2\\docs\\【05】项目经历\\完整项目\\窗帘换装小程序\\index.md",
     "website": "/docs/【05】项目经历/完整项目/窗帘换装小程序"
   }
 ]

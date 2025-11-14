@@ -348,7 +348,7 @@ export default class HomeImgSwiper extends React.Component<ICpsImgSwiperProps, I
           ) : null}
         </div>
 
-        <Items key="items" />
+        {/*<Items key="items" />*/}
       </div>
     );
   }

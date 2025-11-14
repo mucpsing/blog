@@ -3,7 +3,7 @@
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-25 16:10:31
  * @LastEditors: cpasion-office-win10 373704015@qq.com
- * @LastEditTime: 2025-10-27 15:06:02
+ * @LastEditTime: 2025-11-14 10:00:28
  * @filepath: \cps-blog\scripts\utils.ts
  * @Description: 一些会被重复调用的工具函数
  */
@@ -59,6 +59,7 @@ function createNavItemByDir({ targetPath, includeDirList = null, excludeDirList 
         dirname = dirname.replace(dirname, urlDocsPath);
     console.log({ dirname });
     let navbarItemList = [];
+    const exportFileName = ["readme.md", "index.md", "README.md", "INDEX.md"];
     resList.forEach((rootDirFile) => {
         let fullPath = path.join(targetPath, rootDirFile);
         let stat = fs.statSync(fullPath);
@@ -156,7 +157,6 @@ exports.readMarkdownInfo = readMarkdownInfo;
  * @param {string} filepathList 要读取的文件夹，主要调用createNavItemByDir生成基础数据
  * @param {string} prefixUrl 对应文件夹要生成的url前缀
  * @param {string} outputPath 数据最终导出的js文件，以CommontJS格式导出
- * @return {*}
  */
 async function createProjectDataByFolder(filepathList, prefixUrl, outputPath) {
     const fileInfoList = [];
@@ -172,16 +172,14 @@ async function createProjectDataByFolder(filepathList, prefixUrl, outputPath) {
     const fileList = fileInfoList.map((item) => ({ filepath: item.filepath, website: item.to }));
     for (let index = 0; index < fileList.length; index++) {
         let res = await readMarkdownInfo(fileList[index].filepath);
-        if (res) {
-            // console.log("【项目】: ", fileList[index].filepath);
+        if (res)
             mdDataList.push({ ...res, ...fileList[index] });
-        }
     }
     if (mdDataList.length > 0) {
-        // mdDataList = shuffle(mdDataList);
         const firstLine = "module.exports = ";
         const outputData = firstLine + [JSON.stringify(mdDataList, undefined, "  ")].join("\n");
         await fsp.writeFile(outputPath, outputData);
+        console.log("【项目数据生成完毕】\n", outputData);
     }
 }
 exports.createProjectDataByFolder = createProjectDataByFolder;
