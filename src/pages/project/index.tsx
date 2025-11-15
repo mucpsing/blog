@@ -17,7 +17,7 @@ import ShowcaseCard from "./_components/ShowcaseCard";
 import ShowcaseTooltip from "./_components/ShowcaseTooltip";
 import ShowcaseTagSelect, { readSearchTags } from "./_components/ShowcaseTagSelect";
 import { type Operator, readOperator } from "./_components/ShowcaseFilterToggle";
-import { sortedProjects, Tags, TagList, type Project, type TagType } from "./_components/data/project";
+import { sortedProjects, TagsObj, TagList, type Project, type TagType } from "./_components/data/project";
 
 import { useHistory, useLocation } from "@docusaurus/router";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
@@ -30,114 +30,115 @@ const GITHUB_URL = "https://github.com/muccppss";
 const GITEE_URL = "https://gitee.com/capsion";
 
 type ProjectState = {
-  scrollTopPosition: number;
-  focusedElementId: string | undefined;
+    scrollTopPosition: number;
+    focusedElementId: string | undefined;
 };
 
 function restoreProjectState(projectState: ProjectState | null) {
-  const { scrollTopPosition, focusedElementId } = projectState ?? {
-    scrollTopPosition: 0,
-    focusedElementId: undefined,
-  };
+    const { scrollTopPosition, focusedElementId } = projectState ?? {
+        scrollTopPosition: 0,
+        focusedElementId: undefined,
+    };
 
-  document.getElementById(focusedElementId)?.focus();
-  window.scrollTo({ top: scrollTopPosition });
+    document.getElementById(focusedElementId)?.focus();
+    window.scrollTo({ top: scrollTopPosition });
 }
 
 export function prepareUserState(): ProjectState | undefined {
-  if (ExecutionEnvironment.canUseDOM) {
-    return {
-      scrollTopPosition: window.scrollY,
-      focusedElementId: document.activeElement?.id,
-    };
-  }
+    if (ExecutionEnvironment.canUseDOM) {
+        return {
+            scrollTopPosition: window.scrollY,
+            focusedElementId: document.activeElement?.id,
+        };
+    }
 
-  return undefined;
+    return undefined;
 }
 
 const SearchNameQueryKey = "name";
 
 function readSearchName(search: string) {
-  return new URLSearchParams(search).get(SearchNameQueryKey);
+    return new URLSearchParams(search).get(SearchNameQueryKey);
 }
 
 function filterUsers(users: Project[], selectedTags: TagType[], operator: Operator, searchName: string | null) {
-  if (searchName) {
-    users = users.filter((user) => user.title.toLowerCase().includes(searchName.toLowerCase()));
-  }
-  if (selectedTags.length === 0) {
-    return users;
-  }
-  return users.filter((user) => {
-    if (user.tags.length === 0) {
-      return false;
+    if (searchName) {
+        users = users.filter((user) => user.title.toLowerCase().includes(searchName.toLowerCase()));
     }
-    if (operator === "AND") {
-      return selectedTags.every((tag) => user.tags.includes(tag));
-    } else {
-      return selectedTags.some((tag) => user.tags.includes(tag));
+    if (selectedTags.length === 0) {
+        return users;
     }
-  });
+    return users.filter((user) => {
+        if (user.tags.length === 0) {
+            return false;
+        }
+        if (operator === "AND") {
+            return selectedTags.every((tag) => user.tags.includes(tag));
+        } else {
+            return selectedTags.some((tag) => user.tags.includes(tag));
+        }
+    });
 }
 
 function useFilteredProjects() {
-  const location = useLocation<ProjectState>();
-  const [operator, setOperator] = useState<Operator>("OR");
-  // On SSR / first mount (hydration) no tag is selected
-  const [selectedTags, setSelectedTags] = useState<TagType[]>([]);
-  const [searchName, setSearchName] = useState<string | null>(null);
-  // Sync tags from QS to state (delayed on purpose to avoid SSR/Client hydration mismatch)
-  useEffect(() => {
-    setSelectedTags(readSearchTags(location.search));
-    setOperator(readOperator(location.search));
-    setSearchName(readSearchName(location.search));
-    restoreProjectState(location.state);
-  }, [location]);
+    const location = useLocation<ProjectState>();
+    const [operator, setOperator] = useState<Operator>("OR");
+    // On SSR / first mount (hydration) no tag is selected
+    const [selectedTags, setSelectedTags] = useState<TagType[]>([]);
+    const [searchName, setSearchName] = useState<string | null>(null);
+    // Sync tags from QS to state (delayed on purpose to avoid SSR/Client hydration mismatch)
+    useEffect(() => {
+        setSelectedTags(readSearchTags(location.search));
+        setOperator(readOperator(location.search));
+        setSearchName(readSearchName(location.search));
+        restoreProjectState(location.state);
+    }, [location]);
 
-  return useMemo(
-    () => filterUsers(sortedProjects, selectedTags, operator, searchName),
-    [selectedTags, operator, searchName]
-  );
+    return useMemo(() => filterUsers(sortedProjects, selectedTags, operator, searchName), [selectedTags, operator, searchName]);
 }
 
+/**
+ * @description: 生成标签按钮群组
+ * @return {*}
+ */
 function ShowcaseFilters() {
-  return (
-    <section className="container flex flex-col items-center justify-center margin-top--l margin-bottom--lg">
-      <ul className={clsx("flex justify-center my-5", styles.checkboxList)}>
-        {TagList.map((tag, i) => {
-          const { label, description, color } = Tags[tag];
-          const id = `showcase_checkbox_id_${tag}`;
+    return (
+        <section className="container flex flex-col items-center justify-center margin-top--l margin-bottom--lg">
+            <ul className={clsx("flex justify-center my-5", styles.checkboxList)}>
+                {TagList.map((tag, i) => {
+                    const { label, description, color } = TagsObj[tag];
+                    const id = `showcase_checkbox_id_${tag}`;
 
-          return (
-            <li key={i} className={styles.checkboxListItem}>
-              <ShowcaseTooltip id={id} text={description} anchorEl="#__docusaurus">
-                <ShowcaseTagSelect
-                  tag={tag}
-                  id={id}
-                  label={label}
-                  icon={
-                    tag === "favorite" ? (
-                      <FavoriteIcon svgClass={styles.svgIconFavoriteXs} />
-                    ) : (
-                      <span
-                        style={{
-                          backgroundColor: color,
-                          width: 10,
-                          height: 10,
-                          borderRadius: "50%",
-                          marginLeft: 8,
-                        }}
-                      />
-                    )
-                  }
-                />
-              </ShowcaseTooltip>
-            </li>
-          );
-        })}
-      </ul>
-    </section>
-  );
+                    return (
+                        <li key={i} className={styles.checkboxListItem}>
+                            <ShowcaseTooltip id={id} text={description} anchorEl="#__docusaurus">
+                                <ShowcaseTagSelect
+                                    tag={tag}
+                                    id={id}
+                                    label={label}
+                                    icon={
+                                        tag === "favorite" ? (
+                                            <FavoriteIcon svgClass={styles.svgIconFavoriteXs} />
+                                        ) : (
+                                            <span
+                                                style={{
+                                                    backgroundColor: color,
+                                                    width: 10,
+                                                    height: 10,
+                                                    borderRadius: "50%",
+                                                    marginLeft: 8,
+                                                }}
+                                            />
+                                        )
+                                    }
+                                />
+                            </ShowcaseTooltip>
+                        </li>
+                    );
+                })}
+            </ul>
+        </section>
+    );
 }
 
 // function SearchBar() {
@@ -174,96 +175,93 @@ function ShowcaseFilters() {
 //   );
 // }
 interface ShowcaseCardsProps {
-  title?: string;
+    title?: string;
 }
 function ShowcaseCards(props: ShowcaseCardsProps) {
-  const filteredUsers = useFilteredProjects();
+    const filteredUsers = useFilteredProjects();
 
-  if (filteredUsers.length === 0) {
+    if (filteredUsers.length === 0) {
+        return (
+            <section className="margin-top--lg margin-bottom--xl">
+                <div className="container padding-vert--md text--center">
+                    <h2>No result</h2>
+                </div>
+            </section>
+        );
+    }
+
     return (
-      <section className="margin-top--lg margin-bottom--xl">
-        <div className="container padding-vert--md text--center">
-          <h2>No result</h2>
-        </div>
-      </section>
+        <section className="margin-top--lg margin-bottom--xl">
+            {filteredUsers.length === sortedProjects.length ? (
+                <>
+                    <div className="container margin-top--lg">
+                        <div className={clsx("margin-bottom--md", styles.showcaseFavoriteHeader)}>
+                            <h2>{props.title ? props.title : "所有项目"}</h2>
+                        </div>
+
+                        <ul className={styles.showcaseList}>
+                            {sortedProjects.map((user) => (
+                                <ShowcaseCard key={user.title} user={user} />
+                            ))}
+                        </ul>
+                    </div>
+                </>
+            ) : (
+                <div className="container">
+                    <div className={clsx("margin-bottom--md", styles.showcaseFavoriteHeader)}>
+                        <h2>{props.title ? props.title : "所有项目"}</h2>
+                    </div>
+                    <ul className={styles.showcaseList}>
+                        {filteredUsers.map((user) => (
+                            <ShowcaseCard key={user.title} user={user} />
+                        ))}
+                    </ul>
+                </div>
+            )}
+        </section>
     );
-  }
-
-  return (
-    <section className="margin-top--lg margin-bottom--xl">
-      {filteredUsers.length === sortedProjects.length ? (
-        <>
-          <div className="container margin-top--lg">
-            <div className={clsx("margin-bottom--md", styles.showcaseFavoriteHeader)}>
-              <h2>{props.title ? props.title : "所有项目"}</h2>
-            </div>
-
-            <ul className={styles.showcaseList}>
-              {sortedProjects.map((user) => (
-                <ShowcaseCard key={user.title} user={user} />
-              ))}
-            </ul>
-          </div>
-        </>
-      ) : (
-        <div className="container">
-          <div className={clsx("margin-bottom--md", styles.showcaseFavoriteHeader)}>
-            <h2>{props.title ? props.title : "所有项目"}</h2>
-          </div>
-          <ul className={styles.showcaseList}>
-            {filteredUsers.map((user) => (
-              <ShowcaseCard key={user.title} user={user} />
-            ))}
-          </ul>
-        </div>
-      )}
-    </section>
-  );
 }
 
 function ProjectHeader({ title }: { title: string }) {
-  const filteredUsers = useFilteredProjects();
+    const filteredUsers = useFilteredProjects();
 
-  return (
-    <section className="mb-5 text-center">
-      <div className="mb-5">
-        <h1 className="mb-0">{title}</h1>
-        <span>{`(${filteredUsers.length} site${filteredUsers.length > 1 ? "s" : ""})`}</span>
-      </div>
-      <p>
-        <strong>重要声明：</strong>
-        {DESCRIPTION}
-      </p>
-      <div>
-        <a className="mr-2 button button--primary" href={GITHUB_URL} target="_blank" rel="noreferrer">
-          前往 Github
-        </a>
-        <a className="button button--primary" href={GITEE_URL} target="_blank" rel="noreferrer">
-          前往 Gitee
-        </a>
-      </div>
-    </section>
-  );
+    return (
+        <section className="mb-5 text-center">
+            <div className="mb-5">
+                <h1 className="mb-0">{title}</h1>
+                <span>{`(${filteredUsers.length} site${filteredUsers.length > 1 ? "s" : ""})`}</span>
+            </div>
+            <p>
+                <strong>重要声明：</strong>
+                {DESCRIPTION}
+            </p>
+            <div>
+                <a className="mr-2 button button--primary" href={GITHUB_URL} target="_blank" rel="noreferrer">
+                    前往 Github
+                </a>
+                <a className="button button--primary" href={GITEE_URL} target="_blank" rel="noreferrer">
+                    前往 Gitee
+                </a>
+            </div>
+        </section>
+    );
 }
 
 function Showcase(): JSX.Element {
-  return (
-    <Layout title={TITLE} description={DESCRIPTION}>
-      <header className="flex justify-center my-10">
-        <CpsImgSwiper
-          classNames={"md:w-[650px] md:h-[450px] lg:w-[800px] lg:h-[600px] xl:w-[1050px] xl:h-[750px]"}
-        ></CpsImgSwiper>
-      </header>
-      <main className="margin-vert--lg">
-        <ProjectHeader title={TITLE} />
+    return (
+        <Layout title={TITLE} description={DESCRIPTION}>
+            <header className="flex justify-center my-10">
+                <CpsImgSwiper classNames={"md:w-[650px] md:h-[450px] lg:w-[800px] lg:h-[600px] xl:w-[1050px] xl:h-[750px]"}></CpsImgSwiper>
+            </header>
+            <main className="margin-vert--lg">
+                <ProjectHeader title={TITLE} />
 
-        <ShowcaseFilters />
+                <ShowcaseFilters />
 
-        <ShowcaseCards />
-        {/* <ShowcaseCards /> */}
-      </main>
-    </Layout>
-  );
+                <ShowcaseCards />
+            </main>
+        </Layout>
+    );
 }
 
 export default Showcase;
