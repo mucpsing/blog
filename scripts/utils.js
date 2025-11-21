@@ -3,7 +3,7 @@
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-25 16:10:31
  * @LastEditors: cpasion-office-win10 373704015@qq.com
- * @LastEditTime: 2025-11-14 10:00:28
+ * @LastEditTime: 2025-11-21 09:01:47
  * @filepath: \cps-blog\scripts\utils.ts
  * @Description: 一些会被重复调用的工具函数
  */
@@ -43,11 +43,7 @@ const yaml = __importStar(require("yaml"));
  * @param {boolean} inDeep 是否递归读取，如果递归，则列出所有md文件，否则仅列出顶层的目录
  * @param {string} prefixUrl url的前缀，如果使用inDeep，这个是必须的
  */
-function createNavItemByDir({ targetPath, includeDirList = null, excludeDirList = null, inDeep = false, prefixUrl = "" }) {
-    if (!excludeDirList)
-        excludeDirList = Array();
-    if (!includeDirList)
-        includeDirList = Array();
+function createNavItemByDir({ targetPath, includeDirList = [], excludeDirList = [], inDeep = false, prefixUrl = "" }) {
     const urlDocsPath = "docs";
     let resList = fs.readdirSync(targetPath);
     // 新增过滤逻辑：优先使用 includeDirList
@@ -57,9 +53,7 @@ function createNavItemByDir({ targetPath, includeDirList = null, excludeDirList 
     let dirname = path.basename(targetPath);
     if (dirname == "docs_dev")
         dirname = dirname.replace(dirname, urlDocsPath);
-    console.log({ dirname });
     let navbarItemList = [];
-    const exportFileName = ["readme.md", "index.md", "README.md", "INDEX.md"];
     resList.forEach((rootDirFile) => {
         let fullPath = path.join(targetPath, rootDirFile);
         let stat = fs.statSync(fullPath);
@@ -78,13 +72,20 @@ function createNavItemByDir({ targetPath, includeDirList = null, excludeDirList 
         }
         else {
             if (stat.isDirectory()) {
-                let fileSubList = fs.readdirSync(fullPath);
+                const fileSubList = fs.readdirSync(fullPath);
                 // 该目录存在index.md的话，仅将index.md暴露出来
                 if (fileSubList.includes("index.md")) {
                     navbarItemList.push({
                         to: prefixUrl ? `${prefixUrl}/${rootDirFile}` : `${rootDirFile}`,
                         label: `${rootDirFile}`,
                         filepath: path.join(fullPath, "index.md"),
+                    });
+                }
+                else if (fileSubList.includes("readme.md")) {
+                    navbarItemList.push({
+                        to: prefixUrl ? `${prefixUrl}/${rootDirFile}` : `${rootDirFile}`,
+                        label: `${rootDirFile}`,
+                        filepath: path.join(fullPath, "readme.md"),
                     });
                 }
                 else {
@@ -179,7 +180,6 @@ async function createProjectDataByFolder(filepathList, prefixUrl, outputPath) {
         const firstLine = "module.exports = ";
         const outputData = firstLine + [JSON.stringify(mdDataList, undefined, "  ")].join("\n");
         await fsp.writeFile(outputPath, outputData);
-        console.log("【项目数据生成完毕】\n", outputData);
     }
 }
 exports.createProjectDataByFolder = createProjectDataByFolder;

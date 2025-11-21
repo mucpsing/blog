@@ -2,18 +2,14 @@ const path = require("path");
 const utils = require("./scripts/utils");
 const fse = require("fs-extra");
 
-const docsList = [
-    path.resolve("../cps-blog/docs"),
-    "D:/CPS/docs"
-]
+const docsList = [path.resolve("../cps-blog/docs"), "D:/CPS/docs"];
 
-docsList.forEach(docsPath => {
-    if(fse.existsSync(docsPath)){
+docsList.forEach((docsPath) => {
+    if (fse.existsSync(docsPath)) {
         fse.copySync(path.join(docsPath, "/【05】项目经历"), path.join(path.resolve("./docs"), "/【05】项目经历"));
         fse.copySync(path.join(docsPath, "/【07】常识科普"), path.join(path.resolve("./docs"), "/【07】常识科普"));
     }
-})
-
+});
 
 // const { addHeaderTag } = require("./scripts/customPlugs");
 const currentDocsPath = path.resolve("./docs");
@@ -56,6 +52,7 @@ const navBarDocsItems = {
 const defaultPath = [path.join(currentDocsPath, "【05】项目经历/原创作品/"), path.join(currentDocsPath, "【05】项目经历/完整项目/")];
 const defaultPrefix = ["/docs/【05】项目经历/原创作品", "/docs/【05】项目经历/完整项目"];
 
+// 创建项目数据/data/project.js，这个文件根据"/docs/【05】项目经历/原创作品" 实时生成
 (async () => await utils.createProjectDataByFolder(defaultPath, defaultPrefix, path.resolve("./data/project.js")))();
 
 /** @type {import('@docusaurus/types').Config} */
@@ -174,10 +171,10 @@ const config = {
         ({
             docs: {
                 sidebar: {
-                  hideable: true,
-                  autoCollapseCategories: true,
+                    hideable: true,
+                    autoCollapseCategories: true,
                 },
-              },
+            },
             image: "img/docusaurus-social-card.jpg",
             navbar: {
                 title: "🍌 Capsion Lab 🍌",
