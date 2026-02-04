@@ -1,25 +1,8 @@
 const path = require("path");
 const utils = require("./scripts/utils");
-const fse = require("fs-extra");
-
-const docsList = [path.resolve("../cps-blog/docs"), "D:/CPS/docs"];
 
 const includeDirList = ["【00】编程相关", "【01】前端开发", "【02】后端开发", "【03】运维相关", "【05】项目经历", "【05】项目经历", "【13】Game"];
 
-docsList.forEach((docsPath) => {
-    if (fse.existsSync(docsPath)) {
-        // 这两个文件夹动态生成一些与处理数据
-        fse.copySync(path.join(docsPath, "/【05】项目经历"), path.join(path.resolve("./docs"), "/【05】项目经历"));
-        fse.copySync(path.join(docsPath, "/【07】常识科普"), path.join(path.resolve("./docs"), "/【07】常识科普"));
-
-        //
-        // includeDirList.foeEach((eachIncludeDir) => {
-        //     fse.copySync(path.join(docsPath, eachIncludeDir), path.join(path.resolve("./docs"), eachIncludeDir));
-        // });
-    }
-});
-
-// const { addHeaderTag } = require("./scripts/customPlugs");
 const currentDocsPath = path.resolve("./docs");
 console.log("工作目录:", currentDocsPath);
 
@@ -32,27 +15,27 @@ const taglineList = extractTagline(path.join(currentDocsPath, "【07】常识科
 
 /* 不想包含的目录 */
 const excludeDirList = [
-    "【00】安卓开发",
-    "【10】work",
-    "【14】面试相关",
-    "【17】读书笔记",
-    "【18】副业开发",
-    "【18】副业开发",
-    "【19】AR增强现实",
-    "【21】个人收藏",
-    ".obsidian",
-    "gg",
-    ".trash",
-    "资源收集",
-    "临时",
+  "【00】安卓开发",
+  "【10】work",
+  "【14】面试相关",
+  "【17】读书笔记",
+  "【18】副业开发",
+  "【18】副业开发",
+  "【19】AR增强现实",
+  "【21】个人收藏",
+  ".obsidian",
+  "gg",
+  ".trash",
+  "资源收集",
+  "临时",
 ];
 
 // const includeDirList = ["【00】安卓开发", "【00】编程相关", "【01】前端开发", "【02】后端开发","【03】运维相关", "【05】项目经历"];
 const navBarDocsItems = {
-    label: "📔 学习笔记",
-    type: "dropdown",
-    position: "right",
-    items: utils.createNavItemByDir({ targetPath: currentDocsPath, excludeDirList, includeDirList }),
+  label: "📔 学习笔记",
+  type: "dropdown",
+  position: "right",
+  items: utils.createNavItemByDir({ targetPath: currentDocsPath, excludeDirList, includeDirList }),
 };
 
 /* 【路由】生成项目页 /project 的数据 */
@@ -64,249 +47,249 @@ const defaultPrefix = ["/docs/【05】项目经历/原创作品", "/docs/【05�
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-    title: "Capsion | 编程资料整理", // 网站主题
-    tagline: taglineList.join(","),
-    favicon: "img/favicon.ico",
+  title: "Capsion | 编程资料整理", // 网站主题
+  tagline: taglineList.join(","),
+  favicon: "img/favicon.ico",
 
-    // Set the production url of your site here
-    url: "https://www.capsion.top",
-    // Set the /<baseUrl>/ pathname under which your site is served
-    // For GitHub pages deployment, it is often '/<projectName>/'
-    baseUrl: "/",
+  // Set the production url of your site here
+  url: "https://www.capsion.top",
+  // Set the /<baseUrl>/ pathname under which your site is served
+  // For GitHub pages deployment, it is often '/<projectName>/'
+  baseUrl: "/",
 
-    // GitHub pages deployment config.
-    // If you aren't using GitHub pages, you don't need these.
-    organizationName: "capsion", // Usually your GitHub org/user name.
-    // projectName: "blog", // Usually your repo name.
+  // GitHub pages deployment config.
+  // If you aren't using GitHub pages, you don't need these.
+  organizationName: "capsion", // Usually your GitHub org/user name.
+  // projectName: "blog", // Usually your repo name.
 
-    onBrokenLinks: "throw",
-    onBrokenMarkdownLinks: "warn",
+  onBrokenLinks: "throw",
+  onBrokenMarkdownLinks: "warn",
 
-    // Even if you don't use internalization, you can use this field to set useful
-    // metadata like html lang. For example, if your site is Chinese, you may want
-    // to replace "en" with "zh-Hans".
-    i18n: {
-        defaultLocale: "zh",
-        locales: ["en", "zh"],
+  // Even if you don't use internalization, you can use this field to set useful
+  // metadata like html lang. For example, if your site is Chinese, you may want
+  // to replace "en" with "zh-Hans".
+  i18n: {
+    defaultLocale: "zh",
+    locales: ["en", "zh"],
+  },
+
+  markdown: {
+    mermaid: true,
+  },
+
+  themes: ["@docusaurus/theme-mermaid"],
+
+  // headTags: [
+  //   {
+  //     tagName: "script",
+  //     attributes: { charset: "utf-8", src: "/scripts/beforeWindowLoad.js" },
+  //   },
+  // ],
+
+  // 优先插入脚本
+  scripts: [
+    {
+      src: "/scripts/beforeWindowLoad.js",
+      async: false,
     },
+  ],
 
-    markdown: {
-        mermaid: true,
-    },
-
-    themes: ["@docusaurus/theme-mermaid"],
-
-    // headTags: [
+  plugins: [
+    // [
+    //   require.resolve("@easyops-cn/docusaurus-search-local"),
     //   {
-    //     tagName: "script",
-    //     attributes: { charset: "utf-8", src: "/scripts/beforeWindowLoad.js" },
+    //     indexDocs: true,
+    //     indexBlog: false,
+    //     indexPages: true,
+    //     language: ["zh"], // 支持中文和英文
+    //     hashed: true,
+    //     highlightSearchTermsOnTargetPage: true,
+    //     explicitSearchResultPath: true,
     //   },
     // ],
+    // addHeaderTag,
+    [
+      require.resolve("docusaurus-lunr-search"),
+      {
+        languages: ["en", "zh"], // language codes
+      },
+    ],
+    // [
+    //     "@docusaurus/plugin-ideal-image",
+    //     {
+    //         quality: 70,
+    //         max: 1030, // max resized image's size.
+    //         min: 640, // min resized image's size. if original is lower, use that size.
+    //         steps: 2, // the max number of images generated between min and max (inclusive)
+    //         disableInDev: false,
+    //     },
+    // ],
+  ],
 
-    // 优先插入脚本
-    scripts: [
-        {
-            src: "/scripts/beforeWindowLoad.js",
-            async: false,
+  presets: [
+    [
+      "@docusaurus/preset-classic",
+      /** @type {import('@docusaurus/preset-classic').Options} */
+      ({
+        docs: {
+          sidebarPath: require.resolve("./sidebars.js"),
+          // exclude: excludeDirList,
+          include: includeDirList,
+          path: currentDocsPath,
+          // Please change this to your repo.
+          // Remove this to remove the "edit this page" links.
+          // editUrl: "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
         },
+        blog: {
+          // routeBasePath: "/",
+          showReadingTime: true,
+          blogSidebarTitle: "最近更新",
+          blogSidebarCount: "ALL",
+          // Please change this to your repo.
+          // Remove this to remove the "edit this page" links.
+          // editUrl: "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
+        },
+        theme: {
+          customCss: require.resolve("./src/css/custom.css"),
+        },
+      }),
     ],
+  ],
 
-    plugins: [
-        // [
-        //   require.resolve("@easyops-cn/docusaurus-search-local"),
-        //   {
-        //     indexDocs: true,
-        //     indexBlog: false,
-        //     indexPages: true,
-        //     language: ["zh"], // 支持中文和英文
-        //     hashed: true,
-        //     highlightSearchTermsOnTargetPage: true,
-        //     explicitSearchResultPath: true,
-        //   },
-        // ],
-        // addHeaderTag,
-        [
-            require.resolve("docusaurus-lunr-search"),
-            {
-                languages: ["en", "zh"], // language codes
-            },
+  themeConfig:
+    /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
+    ({
+      docs: {
+        sidebar: {
+          hideable: true,
+          autoCollapseCategories: true,
+        },
+      },
+      image: "img/docusaurus-social-card.jpg",
+      navbar: {
+        title: "🍌 Capsion Lab 🍌",
+        logo: {
+          alt: "My Bady Daughter",
+          src: "img/mimi_small.png",
+        },
+
+        // 导航栏
+        items: [
+          { to: "/", label: "🏠 首页", position: "left" },
+          {
+            type: "search",
+            position: "left",
+          },
+          // {
+          //     type: "dropdown",
+          //     label: "🧪 我的实验",
+          //     position: "left",
+          //     items: [
+          //         {
+          //             to: "/",
+          //             label: "🛵 真智能自电",
+          //         },
+          //         {
+          //             to: "/",
+          //             label: "🤖 AI模特换装",
+          //         },
+          //     ],
+          // },
+
+          navBarDocsItems,
+          {
+            label: "💼 完整&项目 🌟",
+            position: "right",
+            to: "/project",
+          },
+
+          {
+            type: "dropdown",
+            label: "🤸 关于我",
+            position: "right",
+            items: [
+              {
+                type: "html",
+                className: "dropdown-archived-versions",
+                value: "<b>代码托管</b>",
+              },
+              {
+                href: "https://gitee.com/capsion/capsion",
+                label: "Gitee",
+              },
+              {
+                href: "https://github.com/mucpsing/mucpsing",
+                label: "GitHub",
+              },
+
+              {
+                type: "html",
+                value: '<hr class="dropdown-separator">',
+              },
+              {
+                type: "html",
+                className: "dropdown-archived-versions",
+                value: "<b>个人信息</b>",
+              },
+              {
+                href: "https://gitee.com/capsion/resume",
+                label: "📃 个人简历",
+              },
+            ],
+          },
         ],
-        // [
-        //     "@docusaurus/plugin-ideal-image",
-        //     {
-        //         quality: 70,
-        //         max: 1030, // max resized image's size.
-        //         min: 640, // min resized image's size. if original is lower, use that size.
-        //         steps: 2, // the max number of images generated between min and max (inclusive)
-        //         disableInDev: false,
-        //     },
-        // ],
-    ],
+      },
+      footer: {
+        style: "dark",
+        links: [
+          {
+            title: "Community",
+            items: [
+              {
+                label: "Stack Overflow",
+                href: "https://stackoverflow.com/questions/tagged/docusaurus",
+              },
+              {
+                label: "Discord",
+                href: "https://discordapp.com/invite/docusaurus",
+              },
+              {
+                label: "Twitter",
+                href: "https://twitter.com/docusaurus",
+              },
+            ],
+          },
+          {
+            title: "More",
+            items: [
+              {
+                label: "Blog",
+                to: "/blog",
+              },
+              {
+                label: "GitHub",
+                href: "https://github.com/facebook/docusaurus",
+              },
+            ],
+          },
 
-    presets: [
-        [
-            "@docusaurus/preset-classic",
-            /** @type {import('@docusaurus/preset-classic').Options} */
-            ({
-                docs: {
-                    sidebarPath: require.resolve("./sidebars.js"),
-                    // exclude: excludeDirList,
-                    include: includeDirList,
-                    path: currentDocsPath,
-                    // Please change this to your repo.
-                    // Remove this to remove the "edit this page" links.
-                    // editUrl: "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
-                },
-                blog: {
-                    // routeBasePath: "/",
-                    showReadingTime: true,
-                    blogSidebarTitle: "最近更新",
-                    blogSidebarCount: "ALL",
-                    // Please change this to your repo.
-                    // Remove this to remove the "edit this page" links.
-                    // editUrl: "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
-                },
-                theme: {
-                    customCss: require.resolve("./src/css/custom.css"),
-                },
-            }),
+          {
+            title: "备案信息",
+            items: [
+              {
+                label: "备案号： 粤ICP备2020116876号-1",
+                href: "https://beian.miit.gov.cn/",
+              },
+            ],
+          },
         ],
-    ],
-
-    themeConfig:
-        /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
-        ({
-            docs: {
-                sidebar: {
-                    hideable: true,
-                    autoCollapseCategories: true,
-                },
-            },
-            image: "img/docusaurus-social-card.jpg",
-            navbar: {
-                title: "🍌 Capsion Lab 🍌",
-                logo: {
-                    alt: "My Bady Daughter",
-                    src: "img/mimi_small.png",
-                },
-
-                // 导航栏
-                items: [
-                    { to: "/", label: "🏠 首页", position: "left" },
-                    {
-                        type: "search",
-                        position: "left",
-                    },
-                    // {
-                    //     type: "dropdown",
-                    //     label: "🧪 我的实验",
-                    //     position: "left",
-                    //     items: [
-                    //         {
-                    //             to: "/",
-                    //             label: "🛵 真智能自电",
-                    //         },
-                    //         {
-                    //             to: "/",
-                    //             label: "🤖 AI模特换装",
-                    //         },
-                    //     ],
-                    // },
-
-                    navBarDocsItems,
-                    {
-                        label: "💼 完整&项目 🌟",
-                        position: "right",
-                        to: "/project",
-                    },
-
-                    {
-                        type: "dropdown",
-                        label: "🤸 关于我",
-                        position: "right",
-                        items: [
-                            {
-                                type: "html",
-                                className: "dropdown-archived-versions",
-                                value: "<b>代码托管</b>",
-                            },
-                            {
-                                href: "https://gitee.com/capsion/capsion",
-                                label: "Gitee",
-                            },
-                            {
-                                href: "https://github.com/mucpsing/mucpsing",
-                                label: "GitHub",
-                            },
-
-                            {
-                                type: "html",
-                                value: '<hr class="dropdown-separator">',
-                            },
-                            {
-                                type: "html",
-                                className: "dropdown-archived-versions",
-                                value: "<b>个人信息</b>",
-                            },
-                            {
-                                href: "https://gitee.com/capsion/resume",
-                                label: "📃 个人简历",
-                            },
-                        ],
-                    },
-                ],
-            },
-            footer: {
-                style: "dark",
-                links: [
-                    {
-                        title: "Community",
-                        items: [
-                            {
-                                label: "Stack Overflow",
-                                href: "https://stackoverflow.com/questions/tagged/docusaurus",
-                            },
-                            {
-                                label: "Discord",
-                                href: "https://discordapp.com/invite/docusaurus",
-                            },
-                            {
-                                label: "Twitter",
-                                href: "https://twitter.com/docusaurus",
-                            },
-                        ],
-                    },
-                    {
-                        title: "More",
-                        items: [
-                            {
-                                label: "Blog",
-                                to: "/blog",
-                            },
-                            {
-                                label: "GitHub",
-                                href: "https://github.com/facebook/docusaurus",
-                            },
-                        ],
-                    },
-
-                    {
-                        title: "备案信息",
-                        items: [
-                            {
-                                label: "备案号： 粤ICP备2020116876号-1",
-                                href: "https://beian.miit.gov.cn/",
-                            },
-                        ],
-                    },
-                ],
-                // copyright: `{<a>https://beian.miit.gov.cn/</a>}`,
-            },
-            prism: {
-                theme: lightCodeTheme,
-                darkTheme: darkCodeTheme,
-            },
-        }),
+        // copyright: `{<a>https://beian.miit.gov.cn/</a>}`,
+      },
+      prism: {
+        theme: lightCodeTheme,
+        darkTheme: darkCodeTheme,
+      },
+    }),
 };
 
 module.exports = config;

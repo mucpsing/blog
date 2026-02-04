@@ -22,6 +22,8 @@ import { sortedProjects, TagsObj, TagList, type Project, type TagType } from "./
 import { useHistory, useLocation } from "@docusaurus/router";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 
+import { useWindowAspectRatio, type AlignmentModeType } from "./_components/useWindowAspectRatioHook";
+
 import styles from "./styles.module.css";
 
 const TITLE = "🌟作品&项目💼";
@@ -248,11 +250,21 @@ function ProjectHeader({ title }: { title: string }) {
 }
 
 function Showcase(): JSX.Element {
+    // project的全局状态
+    // 记录整个页面纵向状态
+    const AlignmentModeState = useWindowAspectRatio();
+
     return (
         <Layout title={TITLE} description={DESCRIPTION}>
-            <header className="flex justify-center my-10">
-                <CpsImgSwiper classNames={"md:w-[650px] md:h-[450px] lg:w-[800px] lg:h-[600px] xl:w-[1050px] xl:h-[750px]"}></CpsImgSwiper>
+            <header className="flex justify-center">
+                <CpsImgSwiper
+                    alignmentMode={AlignmentModeState}
+                    // classNames={"md:w-[650px] md:h-[450px] lg:w-[800px] lg:h-[600px] xl:w-[1050px] xl:h-[750px]"}
+                ></CpsImgSwiper>
             </header>
+
+            <div>当前纵向比：{AlignmentModeState}</div>
+
             <main className="margin-vert--lg">
                 <ProjectHeader title={TITLE} />
 
