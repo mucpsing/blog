@@ -17,7 +17,7 @@
 ## 网站展示
 
 <div>
-<img flex="center" src="/static/screenshot/capsion.top/capsion.top.png"/>
+<img flex="center" src="/static/screenshot/capsion.top/capsion.top.gif"/>
 <img flex="center" src="/static/screenshot/capsion.top/capsion.top_proview_1.png"/>
 <img flex="center" src="/static/screenshot/capsion.top/capsion.top_proview_2.png"/>
 <img flex="center" src="/static/screenshot/capsion.top/capsion.top_proview_3.png"/>
