@@ -4,10 +4,18 @@ const fse = require("fs-extra");
 
 const docsList = [path.resolve("../cps-blog/docs"), "D:/CPS/docs"];
 
+const includeDirList = ["【00】编程相关", "【01】前端开发", "【02】后端开发", "【03】运维相关", "【05】项目经历", "【05】项目经历", "【13】Game"];
+
 docsList.forEach((docsPath) => {
     if (fse.existsSync(docsPath)) {
+        // 这两个文件夹动态生成一些与处理数据
         fse.copySync(path.join(docsPath, "/【05】项目经历"), path.join(path.resolve("./docs"), "/【05】项目经历"));
         fse.copySync(path.join(docsPath, "/【07】常识科普"), path.join(path.resolve("./docs"), "/【07】常识科普"));
+
+        //
+        // includeDirList.foeEach((eachIncludeDir) => {
+        //     fse.copySync(path.join(docsPath, eachIncludeDir), path.join(path.resolve("./docs"), eachIncludeDir));
+        // });
     }
 });
 
@@ -22,7 +30,7 @@ const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 const { extractTagline } = require("./scripts/taglineList");
 const taglineList = extractTagline(path.join(currentDocsPath, "【07】常识科普/社会真实/名人名言.md"));
 
-/* 【导航】学习笔记 */
+/* 不想包含的目录 */
 const excludeDirList = [
     "【00】安卓开发",
     "【10】work",
@@ -39,7 +47,6 @@ const excludeDirList = [
     "临时",
 ];
 
-const includeDirList = ["【00】编程相关", "【01】前端开发", "【02】后端开发", "【03】运维相关", "【05】项目经历", "【05】项目经历", "【13】Game"];
 // const includeDirList = ["【00】安卓开发", "【00】编程相关", "【01】前端开发", "【02】后端开发","【03】运维相关", "【05】项目经历"];
 const navBarDocsItems = {
     label: "📔 学习笔记",
