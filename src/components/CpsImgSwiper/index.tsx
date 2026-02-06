@@ -2,7 +2,7 @@
  * @Author: cpasion-office-win10 373704015@qq.com
  * @Date: 2023-04-21 09:15:12
  * @LastEditors: cpasion-office-win10 373704015@qq.com
- * @LastEditTime: 2026-02-04 16:55:11
+ * @LastEditTime: 2026-02-06 10:15:47
  * @FilePath: \cps-blog\src\components\CpsImgSwiper\index.tsx
  * @Description: 这是一个图片轮播组件，支持横屏和竖屏排版，目前仅支持网页端浏览器，没做移动适配
  */
@@ -71,7 +71,7 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
         showArrow: true,
         autoSwitch: 30000,
         // classNames: "md:w-[500px] md:h-[400px] lg:w-[500px] lg:h-[350px] xl:w-[950px] xl:h-[650px]",
-        classNames: ["w-[750px] h-[500px]"].join(" "),
+        classNames: [].join(" "),
         data: defaultData,
         imgPreview: false,
         useWebp: false,
@@ -185,7 +185,7 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
             return (
                 <Element key={i} leaveChildHide>
                     <QueueAnim
-                        className="relative flex items-center justify-center w-full h-full"
+                        className={["relative flex items-center w-full h-full justify-center"].join("")}
                         animConfig={this.currtAnim}
                         duration={(e) => (e.key === "map" ? 800 : 1000)}
                         delay={[!i ? this.state.delay : 300, 0]}
@@ -220,18 +220,33 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
         const elementTexts = this.props.data.map((item, i) => {
             const { title, content, subColor } = item;
             return (
-                <Element key={i} prefixCls={this.props.alignmentMode == "portrait" ? "px-6 py-12 md:px-3 md:py-6" : "px-10 py-4 md:px-5 md:py-2"}>
+                <Element key={i} prefixCls={this.props.alignmentMode == "portrait" ? "" : "px-10 py-4 md:px-5 md:py-2"}>
                     <QueueAnim
-                        className="flex flex-col items-start text-gray-700"
+                        className={[
+                            this.props.alignmentMode == "portrait" ? "justify-start p-1" : "justify-center",
+                            "flex flex-col items-start text-gray-700",
+                        ].join(" ")}
                         type="bottom"
                         duration={800}
                         delay={[!i ? this.state.delay + 500 : 800, 0]}
                     >
-                        <h2 key="title" className="py-2 my-1 text-xl">
+                        <h2
+                            key="title"
+                            className={[this.props.alignmentMode == "portrait" ? "my-1" : "py-2 my-1"].join(" ")}
+                            style={{ fontSize: "var(--ifm-h4-font-size)" }}
+                        >
                             {title}
                         </h2>
-                        <em key="line" style={{ background: subColor }} className="inline-block rounded-sm w-16 h-[2px]" />
-                        <p key="content" className="mt-3 text-sm">
+                        <em
+                            key="line"
+                            style={{ background: subColor }}
+                            className={[this.props.alignmentMode == "portrait" ? "" : "", " inline-block rounded-sm w-16 h-[2px]"].join(" ")}
+                        />
+                        <p
+                            key="content"
+                            className={[this.props.alignmentMode == "portrait" ? "mt-1" : "mt-3"].join(" ")}
+                            style={{ fontSize: "smaller" }}
+                        >
                             {content}
                         </p>
                     </QueueAnim>
@@ -240,10 +255,30 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
         });
 
         return (
-            <div id="warppp" className={[this.props.classNames, "shadow-xl", "bg-white rounded-md overflow-hidden relative"].join(" ")}>
+            <div
+                id="warppp"
+                className={[
+                    this.props.classNames,
+                    this.props.alignmentMode == "portrait"
+                        ? [
+                              "w-full min-h-[300px]",
+                              "xxs:min-h-[350px]",
+                              "xs:min-h-[400px]",
+                              "sm:min-h-[450px]",
+                              "md:min-h-[550px]",
+                              "lg:min-h-[600px]",
+                              "xl:min-h-[650px]",
+                              "2xl:min-h-[750px]",
+                          ].join(" ")
+                        : ["min-w-[300px] min-h-[250px] w-3/4 py-10", "md:min-h-[550px]", "lg:min-h-[600px]", "xl:min-h-[700px]"].join(" "),
+                    "shadow-xl",
+                    "transition-all duration-300 ease-out",
+                    "bg-white rounded-md overflow-hidden relative",
+                ].join(" ")}
+            >
                 {/* 图片 */}
                 <BannerAnim
-                    className={["cps-swiper-img relative overflow-hidden", "w-full min-w-[450px] h-full block absolute z-[2]"].join(" ")}
+                    className={["cps-swiper-img relative overflow-hidden", "w-full h-full block absolute z-[2]"].join(" ")}
                     sync
                     type="across"
                     duration={1000}
@@ -260,7 +295,7 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
                 {/* 文字 */}
                 <BannerAnim
                     style={{ backdropFilter: "blur(5px)" }}
-                    className={["cps-swiper-text overflow-hidden z-[3]", "w-full h-1/3 block absolute bottom-0 bg-white/50"].join(" ")}
+                    className={["cps-swiper-text overflow-hidden z-[3]", "font", "w-full h-1/3 block absolute bottom-0 bg-white/50"].join(" ")}
                     sync
                     type="across"
                     duration={1000}

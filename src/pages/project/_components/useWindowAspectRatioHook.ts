@@ -2,11 +2,11 @@
  * @Author: cpasion-office-win10 373704015@qq.com
  * @Date: 2025-11-13 09:13:08
  * @LastEditors: cpasion-office-win10 373704015@qq.com
- * @LastEditTime: 2026-02-04 16:01:16
+ * @LastEditTime: 2026-02-06 10:02:39
  * @FilePath: \docusaurus-v2\src\pages\project\_components\useWindowAspectRatioHook.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export type AlignmentModeType = "portrait" | "landscape" | "square";
 
@@ -16,71 +16,96 @@ export type AlignmentModeType = "portrait" | "landscape" | "square";
  * @param squareThreshold 正方形阈值，默认0.05
  * @returns 当前的显示模式
  */
-export const useWindowAspectRatio = (threshold: number = 1.1, squareThreshold: number = 0.05): AlignmentModeType => {
-    const [mode, setMode] = useState<AlignmentModeType>(() => {
-        if (typeof window === "undefined") return "landscape";
+export const useWindowAspectRatio = (
+    squareEnter: number = 0.05, // 进入 square 的区间
+    squareExit: number = 0.08, // 离开 square 的区间（必须 > enter）
+    landscapeEnter: number = 1.1,
+    landscapeExit: number = 1.05, // 必须 < enter
+): AlignmentModeType => {
+    const getRatio = () => (typeof window === "undefined" ? 1 : window.innerWidth / window.innerHeight);
 
-        const ratio = window.innerWidth / window.innerHeight;
-        const diff = Math.abs(ratio - 1);
+    const [mode, setMode] = useState<AlignmentModeType>("portrait");
+    const modeRef = useRef<AlignmentModeType>(mode);
 
-        if (diff < squareThreshold) return "square";
-        return ratio > threshold ? "landscape" : "portrait";
-    });
+    useEffect(() => {
+        modeRef.current = mode;
+    }, [mode]);
 
     useEffect(() => {
         if (typeof window === "undefined") return;
 
-        let rafId: number;
-        let frameRequested = false;
+        let rafId: number | null = null;
 
-        const updateMode = () => {
-            const ratio = window.innerWidth / window.innerHeight;
-            const diff = Math.abs(ratio - 1);
+        const update = () => {
+            const ratio = getRatio();
+            const prev = modeRef.current;
+            let next = prev;
 
-            let newMode: AlignmentModeType = "portrait"; // （纵向/竖屏）​ - 高度大于宽度，就像肖像画一样
-            if (diff < squareThreshold) {
-                newMode = "square"; // 宽度和高度接近相等
-            } else if (ratio > threshold) {
-                newMode = "landscape"; // （横向/横屏）​ - 宽度大于高度，就像风景画一样
+            switch (prev) {
+                case "portrait":
+                    if (Math.abs(ratio - 1) <= squareEnter) {
+                        next = "square";
+                    } else if (ratio >= landscapeEnter) {
+                        next = "landscape";
+                    }
+                    break;
+
+                case "square":
+                    if (Math.abs(ratio - 1) >= squareExit) {
+                        next = ratio > 1 ? "landscape" : "portrait";
+                    }
+                    break;
+
+                case "landscape":
+                    if (ratio <= landscapeExit) {
+                        if (Math.abs(ratio - 1) <= squareEnter) {
+                            next = "square";
+                        } else {
+                            next = "portrait";
+                        }
+                    }
+                    break;
             }
 
-            setMode(newMode);
-            frameRequested = false;
+            if (next !== prev) {
+                modeRef.current = next;
+                setMode(next);
+            }
+
+            rafId = null;
         };
 
-        const handleResize = () => {
-            if (!frameRequested) {
-                frameRequested = true;
-                rafId = requestAnimationFrame(updateMode);
+        const onResize = () => {
+            if (rafId == null) {
+                rafId = requestAnimationFrame(update);
             }
         };
 
-        window.addEventListener("resize", handleResize);
-
-        // 移动设备方向变化
-        const handleOrientationChange = () => {
-            handleResize(); // 复用相同的更新逻辑
-        };
+        window.addEventListener("resize", onResize);
 
         if (window.screen.orientation) {
-            window.screen.orientation.addEventListener("change", handleOrientationChange);
+            window.screen.orientation.addEventListener("change", onResize);
         } else {
-            // 兼容旧设备
-            window.addEventListener("orientationchange", handleOrientationChange);
+            window.addEventListener("orientationchange", onResize);
         }
 
+        // 初始化一次
+        onResize();
+
         return () => {
-            window.removeEventListener("resize", handleResize);
+            window.removeEventListener("resize", onResize);
 
             if (window.screen.orientation) {
-                window.screen.orientation.removeEventListener("change", handleOrientationChange);
+                window.screen.orientation.removeEventListener("change", onResize);
             } else {
-                window.removeEventListener("orientationchange", handleOrientationChange);
+                window.removeEventListener("orientationchange", onResize);
             }
 
-            if (rafId) cancelAnimationFrame(rafId);
+            if (rafId != null) {
+                cancelAnimationFrame(rafId);
+            }
         };
-    }, [threshold, squareThreshold]);
+    }, [squareEnter, squareExit, landscapeEnter, landscapeExit]);
 
     return mode;
 };
