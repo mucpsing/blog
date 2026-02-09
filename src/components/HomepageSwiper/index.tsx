@@ -2,7 +2,7 @@
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-06 22:25:11
  * @LastEditors: cpasion-office-win10 373704015@qq.com
- * @LastEditTime: 2026-02-06 15:01:55
+ * @LastEditTime: 2026-02-09 15:56:01
  * @FilePath: \cps-blog\src\components\HomepageSwiper\index.tsx
  * @Description: 首页轮播组件，抽离自CpsImgSwiper组件，进行了定制化
  */
@@ -64,7 +64,11 @@ export default class HomeImgSwiper extends React.Component<ICpsImgSwiperProps, I
 
                 <Bubble width={600} height={200} bubbleScale={1.5} positionElementId="postitionElement"></Bubble>
 
-                <CpsImgSwiper classNames={["w-[600px] h-[450px]", "bg-white rounded-md overflow-hidden relative"].join(" ")}></CpsImgSwiper>
+                <CpsImgSwiper
+                    onLeft={(pageIndex) => this.setState({ showInt: pageIndex })}
+                    onRight={(pageIndex) => this.setState({ showInt: pageIndex })}
+                    classNames={["w-[600px] h-[450px]", "bg-white rounded-md overflow-hidden relative"].join(" ")}
+                ></CpsImgSwiper>
             </div>
         );
     }

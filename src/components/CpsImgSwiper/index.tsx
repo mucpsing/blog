@@ -2,7 +2,7 @@
  * @Author: cpasion-office-win10 373704015@qq.com
  * @Date: 2023-04-21 09:15:12
  * @LastEditors: cpasion-office-win10 373704015@qq.com
- * @LastEditTime: 2026-02-09 15:37:19
+ * @LastEditTime: 2026-02-09 15:56:42
  * @FilePath: \cps-blog\src\components\CpsImgSwiper\index.tsx
  * @Description: 这是一个图片轮播组件，支持横屏和竖屏排版，目前仅支持网页端浏览器，没做移动适配
  */
@@ -45,6 +45,8 @@ export interface ICpsImgSwiperProps {
     classNames?: string;
     imgPreview?: boolean; // 是否开启点击放大展示gif
     useWebp?: boolean; // 是否使用webp
+    onLeft?: (pageIndex: number) => void; // 左边切换按钮点击事件
+    onRight?: (pageIndex: number) => void; // 右边切换按钮点击事件
 }
 
 export interface ICpsImgSwiperState {
@@ -75,6 +77,8 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
         data: defaultData,
         imgPreview: false,
         useWebp: false,
+        onLeft: () => {},
+        onRight: () => {},
     };
 
     constructor(props: ICpsImgSwiperProps) {
@@ -130,6 +134,7 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
         this.setState({ showInt });
         this.bannerImg.prev();
         this.bannerText.prev();
+        this.props.onLeft?.(showInt);
     };
 
     onRight = (e?) => {
@@ -151,6 +156,7 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
         this.setState({ showInt });
         this.bannerImg.next();
         this.bannerText.next();
+        this.props.onRight?.(showInt);
     };
 
     switchPage = (index: number) => {
