@@ -34,7 +34,7 @@ export default function Home(): JSX.Element {
                 {/* 修复css不加载的问题 */}
                 <link rel="stylesheet" href="/css/globalcss.css" />
             </Head>
-            <header className="relative flex flex-col">
+            <header className="relative">
                 <HomepageSwiper />
             </header>
 

@@ -2,7 +2,7 @@
  * @Author: cpasion-office-win10 373704015@qq.com
  * @Date: 2023-04-21 09:15:12
  * @LastEditors: cpasion-office-win10 373704015@qq.com
- * @LastEditTime: 2026-02-06 10:15:47
+ * @LastEditTime: 2026-02-09 15:37:19
  * @FilePath: \cps-blog\src\components\CpsImgSwiper\index.tsx
  * @Description: 这是一个图片轮播组件，支持横屏和竖屏排版，目前仅支持网页端浏览器，没做移动适配
  */
@@ -16,7 +16,7 @@ import { isSupportWebp, imgUrl2Webp } from "./utils";
 
 import defaultData, { type ICpsImgSwiperDataItem } from "./data";
 import ImgPreview from "./imagePreview";
-import type { AlignmentModeType } from "@site/src/pages/project/_components/useWindowAspectRatioHook";
+import type { AlignmentModeType } from "@site/src/utils/useWindowAspectRatioHook";
 
 const Element = BannerAnim.Element;
 
@@ -71,7 +71,7 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
         showArrow: true,
         autoSwitch: 30000,
         // classNames: "md:w-[500px] md:h-[400px] lg:w-[500px] lg:h-[350px] xl:w-[950px] xl:h-[650px]",
-        classNames: [].join(" "),
+        classNames: "",
         data: defaultData,
         imgPreview: false,
         useWebp: false,
@@ -242,11 +242,7 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
                             style={{ background: subColor }}
                             className={[this.props.alignmentMode == "portrait" ? "" : "", " inline-block rounded-sm w-16 h-[2px]"].join(" ")}
                         />
-                        <p
-                            key="content"
-                            className={[this.props.alignmentMode == "portrait" ? "mt-1" : "mt-3"].join(" ")}
-                            style={{ fontSize: "smaller" }}
-                        >
+                        <p key="content" className={[this.props.alignmentMode == "portrait" ? "mt-1" : "mt-3"].join(" ")}>
                             {content}
                         </p>
                     </QueueAnim>
@@ -258,19 +254,7 @@ export default class CpsImgSwiper extends React.Component<ICpsImgSwiperProps, IC
             <div
                 id="warppp"
                 className={[
-                    this.props.classNames,
-                    this.props.alignmentMode == "portrait"
-                        ? [
-                              "w-full min-h-[300px]",
-                              "xxs:min-h-[350px]",
-                              "xs:min-h-[400px]",
-                              "sm:min-h-[450px]",
-                              "md:min-h-[550px]",
-                              "lg:min-h-[600px]",
-                              "xl:min-h-[650px]",
-                              "2xl:min-h-[750px]",
-                          ].join(" ")
-                        : ["min-w-[300px] min-h-[250px] w-3/4 py-10", "md:min-h-[550px]", "lg:min-h-[600px]", "xl:min-h-[700px]"].join(" "),
+                    this.props.classNames, // 外层容器控制响应式尺寸
                     "shadow-xl",
                     "transition-all duration-300 ease-out",
                     "bg-white rounded-md overflow-hidden relative",

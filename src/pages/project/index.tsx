@@ -22,7 +22,7 @@ import { sortedProjects, TagsObj, TagList, type Project, type TagType } from "./
 import { useHistory, useLocation } from "@docusaurus/router";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 
-import { useWindowAspectRatio, type AlignmentModeType } from "./_components/useWindowAspectRatioHook";
+import { useWindowAspectRatio, type AlignmentModeType } from "@site/src/utils/useWindowAspectRatioHook";
 
 import styles from "./styles.module.css";
 
@@ -256,14 +256,28 @@ function Showcase(): JSX.Element {
 
     return (
         <Layout title={TITLE} description={DESCRIPTION}>
-            <header className="flex justify-center">
+            <header className={["flex justify-center", AlignmentModeState == "portrait" ? "py-10" : "py-8"].join(" ")}>
                 <CpsImgSwiper
                     alignmentMode={AlignmentModeState}
-                    // classNames={"md:w-[650px] md:h-[450px] lg:w-[800px] lg:h-[600px] xl:w-[1050px] xl:h-[750px]"}
+                    classNames={[
+                        "max-w-[850px]",
+                        AlignmentModeState == "portrait"
+                            ? [
+                                  "w-5/6 min-h-[280px] text-xs",
+                                  "xxs:min-h-[330px xxs:text-xs]",
+                                  "xs:min-h-[380px] xs:text-xs",
+                                  "sm:min-h-[430px] sm:text-sm",
+                                  "md:min-h-[480px] md:text-sm",
+                                  "lg:min-h-[530px] lg:text-lg",
+                                  "xl:min-h-[580px] xl:text-lg",
+                                  "2xl:min-h-[600px] 2xl:text-lg",
+                              ].join(" ")
+                            : ["min-w-[300px] min-h-[250px] w-3/4", "md:min-h-[550px]", "lg:min-h-[580px]", "xl:min-h-[600px]"].join(" "),
+                    ].join(" ")}
                 ></CpsImgSwiper>
             </header>
 
-            <div>当前纵向比：{AlignmentModeState}</div>
+            {/* <div>当前纵向比：{AlignmentModeState}</div> */}
 
             <main className="margin-vert--lg">
                 <ProjectHeader title={TITLE} />
