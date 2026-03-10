@@ -2,7 +2,7 @@
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-06 22:25:11
  * @LastEditors: cpasion-office-win10 373704015@qq.com
- * @LastEditTime: 2026-02-10 10:04:39
+ * @LastEditTime: 2026-03-10 16:18:38
  * @FilePath: \cps-blog\src\components\HomepageSwiper\index.tsx
  * @Description: 首页轮播组件，抽离自CpsImgSwiper组件，进行了定制化
  */
@@ -43,7 +43,7 @@ const HomeImgSwiper: React.FC = () => {
                 <HomeTitle />
             </div>
 
-            <Bubble width={600} height={200} bubbleScale={1.5} positionElementId="postitionElement" />
+            <Bubble />
 
             <CpsImgSwiper
                 onLeft={(pageIndex) => setState((s) => ({ ...s, showInt: pageIndex }))}
