@@ -1,8 +1,8 @@
 /*
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-02-07 19:55:02
- * @LastEditors: cpasion-office-win10 373704015@qq.com
- * @LastEditTime: 2026-02-04 16:00:25
+ * @LastEditors: Capsion 373704015@qq.com
+ * @LastEditTime: 2026-03-10 23:01:56
  * @FilePath: \cps-blog\src\pages\index.tsx
  * @Description: 首页
  */
@@ -34,7 +34,7 @@ export default function Home(): JSX.Element {
                 {/* 修复css不加载的问题 */}
                 <link rel="stylesheet" href="/css/globalcss.css" />
             </Head>
-            <header className="relative">
+            <header className="relative" id="headRegion">
                 <HomepageSwiper />
             </header>
 

@@ -1,8 +1,8 @@
 /*
  * @Author: Capsion 373704015@qq.com
  * @Date: 2025-02-17 22:18:58
- * @LastEditors: cpasion-office-win10 373704015@qq.com
- * @LastEditTime: 2026-03-10 17:01:05
+ * @LastEditors: Capsion 373704015@qq.com
+ * @LastEditTime: 2026-03-10 23:19:44
  * @FilePath: \cps-blog-docusaurus-v3\src\components\BubbleText\utils.ts
  * @Description: Bubble组件要用到的一些工具函数
  */
@@ -111,12 +111,22 @@ export function getRandomPoint(region: Region): Point {
  * @param {DOMRect} rect - 矩形区域
  * @returns {Point} - 随机点坐标
  */
-export function getRandomPointByDOMRect(rect: DOMRect): Point {
+// export function getRandomPointByDOMRect(rect: DOMRect): Point {
+//     const { left, top, right, bottom } = rect;
+
+//     // 生成随机的 x 和 y 坐标
+//     const x = Math.floor(Math.random() * (right - left + 1)) + left;
+//     const y = Math.floor(Math.random() * (bottom - top + 1)) + top;
+
+//     return [x, y];
+// }
+
+export function getRandomPointByDOMRect(rect: DOMRect, elementSize: number = 0): Point {
     const { left, top, right, bottom } = rect;
 
-    // 生成随机的 x 和 y 坐标
-    const x = Math.floor(Math.random() * (right - left + 1)) + left;
-    const y = Math.floor(Math.random() * (bottom - top + 1)) + top;
+    // 右边和下边减去元素尺寸，确保左上角坐标不会导致元素超出边界
+    const x = Math.floor(Math.random() * (right - left - elementSize + 1)) + left;
+    const y = Math.floor(Math.random() * (bottom - top - elementSize + 1)) + top;
 
     return [x, y];
 }
