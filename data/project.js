@@ -10,7 +10,7 @@ module.exports = [
     ],
     "preview": "/screenshot/psd-api/image-20220607152510720.png",
     "gif": "/screenshot/psd-api/接口测试1.gif",
-    "filepath": "D:\\CPS\\MyProject\\Projects_Personal\\cps-blog-bk\\docusaurus-v2\\docs\\【05】项目经历\\完整项目\\psd文件解析接口\\index.md",
+    "filepath": "W:\\CPS\\MyProject\\cps\\docusaurus-v2\\docs\\【05】项目经历\\完整项目\\psd文件解析接口\\index.md",
     "website": "/docs/【05】项目经历/完整项目/psd文件解析接口"
   },
   {
@@ -22,7 +22,7 @@ module.exports = [
     ],
     "preview": "/screenshot/psd-api/image-20220607152510720.png",
     "gif": "/screenshot/psd-api/接口测试1.gif",
-    "filepath": "D:\\CPS\\MyProject\\Projects_Personal\\cps-blog-bk\\docusaurus-v2\\docs\\【05】项目经历\\完整项目\\YYS相关\\index.md",
+    "filepath": "W:\\CPS\\MyProject\\cps\\docusaurus-v2\\docs\\【05】项目经历\\完整项目\\YYS相关\\index.md",
     "website": "/docs/【05】项目经历/完整项目/YYS相关"
   },
   {
@@ -38,7 +38,7 @@ module.exports = [
     ],
     "preview": "/screenshot/capsion.top/capsion.top_proview_1.png",
     "gif": "/screenshot/capsion.top/capsion.top.gif",
-    "filepath": "D:\\CPS\\MyProject\\Projects_Personal\\cps-blog-bk\\docusaurus-v2\\docs\\【05】项目经历\\完整项目\\个人网站\\index.md",
+    "filepath": "W:\\CPS\\MyProject\\cps\\docusaurus-v2\\docs\\【05】项目经历\\完整项目\\个人网站\\index.md",
     "website": "/docs/【05】项目经历/完整项目/个人网站"
   },
   {
@@ -53,7 +53,7 @@ module.exports = [
     ],
     "preview": "/screenshot/cps-cli/cps-cli.png",
     "gif": "/screenshot/cps-cli/cps-cli.gif",
-    "filepath": "D:\\CPS\\MyProject\\Projects_Personal\\cps-blog-bk\\docusaurus-v2\\docs\\【05】项目经历\\完整项目\\个人自用脚手架\\index.md",
+    "filepath": "W:\\CPS\\MyProject\\cps\\docusaurus-v2\\docs\\【05】项目经历\\完整项目\\个人自用脚手架\\index.md",
     "website": "/docs/【05】项目经历/完整项目/个人自用脚手架"
   },
   {
@@ -71,7 +71,7 @@ module.exports = [
     ],
     "preview": "/screenshot/hongqi/admin/image-20230505161924362.png",
     "gif": "/screenshot/capsion.top/capsion.top.gif",
-    "filepath": "D:\\CPS\\MyProject\\Projects_Personal\\cps-blog-bk\\docusaurus-v2\\docs\\【05】项目经历\\完整项目\\截图插件\\index.md",
+    "filepath": "W:\\CPS\\MyProject\\cps\\docusaurus-v2\\docs\\【05】项目经历\\完整项目\\截图插件\\index.md",
     "website": "/docs/【05】项目经历/完整项目/截图插件"
   },
   {
@@ -90,7 +90,7 @@ module.exports = [
     ],
     "gif": "/screenshot/dfsu-gis-api/Dfsu-Gisapi-use-demo.gif",
     "preview": "/screenshot/dfsu-gis-api/step1-home.png技术",
-    "filepath": "D:\\CPS\\MyProject\\Projects_Personal\\cps-blog-bk\\docusaurus-v2\\docs\\【05】项目经历\\完整项目\\流速流场数据分析系统\\readme.md",
+    "filepath": "W:\\CPS\\MyProject\\cps\\docusaurus-v2\\docs\\【05】项目经历\\完整项目\\流速流场数据分析系统\\readme.md",
     "website": "/docs/【05】项目经历/完整项目/流速流场数据分析系统"
   },
   {
@@ -105,7 +105,7 @@ module.exports = [
     ],
     "preview": "/screenshot/hongqi/admin/image-20230505161924362.png",
     "gif": "/screenshot/capsion.top/capsion.top.gif",
-    "filepath": "D:\\CPS\\MyProject\\Projects_Personal\\cps-blog-bk\\docusaurus-v2\\docs\\【05】项目经历\\完整项目\\窗帘换装后台前端\\index.md",
+    "filepath": "W:\\CPS\\MyProject\\cps\\docusaurus-v2\\docs\\【05】项目经历\\完整项目\\窗帘换装后台前端\\index.md",
     "website": "/docs/【05】项目经历/完整项目/窗帘换装后台前端"
   },
   {
@@ -122,7 +122,7 @@ module.exports = [
     ],
     "preview": "/screenshot/hongqi/uni-app/uni-app1.png",
     "gif": "/screenshot/hongqi/uni-app/uni-app.gif",
-    "filepath": "D:\\CPS\\MyProject\\Projects_Personal\\cps-blog-bk\\docusaurus-v2\\docs\\【05】项目经历\\完整项目\\窗帘换装小程序\\index.md",
+    "filepath": "W:\\CPS\\MyProject\\cps\\docusaurus-v2\\docs\\【05】项目经历\\完整项目\\窗帘换装小程序\\index.md",
     "website": "/docs/【05】项目经历/完整项目/窗帘换装小程序"
   }
 ]

@@ -1,6 +1,11 @@
 import * as utils from "./utils";
 import { throttle, debounce } from "lodash";
 
+export interface Point {
+    x: number;
+    y: number;
+}
+
 const _DEFAULT_PROPS = {
     DEBUG: process.env.NODE_ENV === "development", // 是否开启调试模式
     mountElementId: "body",
@@ -31,15 +36,13 @@ export type BubbleProps = Partial<typeof _DEFAULT_PROPS>;
 
 const bubbleTransitionDuration = 800;
 const DEFAULT_BUBBLE_TRANSITION = `all ${bubbleTransitionDuration / 1000}s cubic-bezier(0.4, 0, 0.2, 1) 0s`;
-console.log({ DEFAULT_BUBBLE_TRANSITION });
 export class CpsBubbleComponent {
     private DEFAULT_PROPS = _DEFAULT_PROPS;
-    private BUBBLE_ITEM_CLASS = "CpsBubble.eachBubbleElement";
-    private BUBBLE_WRAPPER_CLASS = "CpsBubble.eachBubbleWrapperElement";
+    private BUBBLE_ITEM_CLASS = "CpsBubble__eachBubbleElement";
+    private BUBBLE_WRAPPER_CLASS = "CpsBubble__eachBubbleWrapperElement";
 
     private props: BubbleProps = {};
-    private pointArray = [];
-    public INTERVAL_LIST = [];
+    private pointArray: Point[] = [];
 
     private id = "CpsBubble";
     private dom: HTMLElement; // 组成字母的范围参考元素
@@ -51,7 +54,7 @@ export class CpsBubbleComponent {
     private bubbleElementList: HTMLDivElement[] = []; // 存放所有泡泡div实例
     private isGather = true;
 
-    private resizeGatherIntervalID: NodeJS.Timeout;
+    private resizeGatherTimeoutID: NodeJS.Timeout;
     private observer: MutationObserver; // 监听元素变化，可以修复首次加载时，位置元素会变化的问题
     private observerSize: ResizeObserver;
 
@@ -66,41 +69,62 @@ export class CpsBubbleComponent {
 
     private _oldRegion: [number, number, number, number] = [0, 0, 0, 0];
 
-    constructor(props) {
-        this.props = { ...this.DEFAULT_PROPS, ...props };
-
-        if (this.props.DEBUG) console.log("CpsBubbleComponent constructor");
-
-        this.init();
+    constructor(props: BubbleProps) {
+        this.init(props);
     }
 
     public test = () => {
         // 按钮1
-        const baseStyle = { pointerEvents: "auto", width: "100px", heigh: "60px", backgroundColor: "green" };
+        const baseStyle = { pointerEvents: "auto", width: "100px", height: "60px", backgroundColor: "green" };
         const testButtonElement = document.createElement("button");
         testButtonElement.innerText = "切换";
         testButtonElement.onclick = () => this.onTest();
-        Object.assign(baseStyle, testButtonElement.style);
+        Object.assign(testButtonElement.style, baseStyle);
         this.positionElement.appendChild(testButtonElement);
 
         // 按钮2
         const testButtonElement2 = document.createElement("button");
         testButtonElement2.innerText = "destroy";
         testButtonElement2.onclick = this.destroy;
-        Object.assign(baseStyle, testButtonElement2.style);
+        Object.assign(testButtonElement2.style, baseStyle);
         this.positionElement.appendChild(testButtonElement2);
     };
 
     private onTest = () => {
         if (this.props.DEBUG) console.log("onTest: ");
         const rect = this.positionElement.getBoundingClientRect();
-        console.log("pointArray: ", this.pointArray);
         console.log("rect: ", rect);
 
         this.switch();
     };
 
-    public init = () => {
+    public init = (props: BubbleProps) => {
+        this.props = { ...this.DEFAULT_PROPS, ...props };
+
+        if (this.props.DEBUG) console.log("CpsBubbleComponent constructor");
+
+        // 创建元素
+        this.elementInit();
+
+        // 创建事件
+        this.eventInit();
+        requestAnimationFrame(() => {
+            setTimeout(() => {
+                // 创建泡泡并挂载到body
+                this.createPointData(this.width, this.height);
+
+                // 添加DEBUG控制按钮
+                if (this.props.DEBUG) this.test();
+            }, 1000);
+        });
+
+        return this;
+    };
+
+    /**
+     * @description: 在指定的id元素上，创建一个覆盖元素，尺寸和位置保持一致，默认在body中生成
+     */
+    private elementInit = () => {
         let errMsg = "CpsBubbleComponent: init() 未找到定位元素:positionElement";
         if (this.props.DEBUG) console.log("CpsBubbleComponent: init()");
 
@@ -112,80 +136,11 @@ export class CpsBubbleComponent {
         }
 
         const rect = this.positionElement.getBoundingClientRect();
-        this.width = rect.width;
-        this.height = rect.height;
+        this.width = Math.floor(rect.width);
+        this.height = Math.floor(rect.height);
 
         this.offscreenCanvas = new OffscreenCanvas(this.width, this.height);
 
-        // 创建元素
-        this.elementInit();
-
-        if (this.props.mountElementId == "body") {
-            this.mountElement = document.body;
-        } else {
-            this.mountElement = document.getElementById(this.props.mountElementId);
-        }
-
-        // 创建 MutationObserver 来监听目标元素位置变化，重新修正泡泡位置
-        // this.observer = new MutationObserver(this.onRise);
-        // this.observer.observe(this.positionElement, { attributes: true, childList: false, subtree: false });
-
-        // 默认将背景挂载到body上
-        // document.body.appendChild(this.dom);
-
-        this.eventInit();
-        requestAnimationFrame(() => {
-            setTimeout(() => {
-                // 创建泡泡并挂载到body
-                this.createPointData(rect.width, rect.height);
-
-                // 添加DEBUG控制按钮
-                if (this.props.DEBUG) this.test();
-            }, 1000);
-        });
-
-        return this;
-    };
-
-    private eventInit = () => {
-        // 创建尺寸改变事件，重新修正拼凑的尺寸
-        this.observerSize = new ResizeObserver((entries) => {
-            entries.forEach((entry) => {
-                const { width, height } = entry.contentRect;
-                console.log(`positionElement元素新尺寸：${width}px x ${height}px`);
-            });
-        });
-        this.observerSize.observe(this.positionElement);
-
-        // 监听窗口大小变化，确保新元素尺寸同步更新
-        window.addEventListener("resize", this.onRise);
-    };
-
-    public switch = () => {
-        this.isGather ? this.disperseData() : this.gatherData();
-
-        this.isGather = !this.isGather;
-    };
-
-    public onRise = throttle(() => this.updatePositions(), 200);
-
-    /**
-     * @description: 更新整个组件的位置，组件位置与传入的props.positionElementId 绑定
-     */
-    public updatePositions = () => {
-        if (this.props.DEBUG) console.log("触发  updatePositions");
-        if (this.resizeGatherIntervalID) clearTimeout(this.resizeGatherIntervalID);
-
-        // 延迟聚合（resize 稳定后再计算泡泡位置）
-        this.resizeGatherIntervalID = setTimeout(() => {
-            this.gatherData(); // 仅聚合，避免扩散导致闪烁
-        }, 500); // 缩短延迟，提升响应性
-    };
-
-    /**
-     * @description: 在指定的id元素上，创建一个覆盖元素，尺寸和位置保持一致，默认在body中生成
-     */
-    private elementInit = () => {
         this.regionElement = document.getElementById(this.props.regionElementId);
         if (!this.regionElement) {
             this.regionElement = document.createElement("div");
@@ -202,17 +157,56 @@ export class CpsBubbleComponent {
             opacity: 0,
         });
 
-        if (this.props.hoverGather) {
-            // this.dom.className = "bubbleWarp";
-            this.positionElement.onmouseenter = this.gatherData;
-            this.positionElement.onmouseleave = this.disperseData;
+        if (this.props.mountElementId == "body") {
+            this.mountElement = document.body;
+        } else {
+            this.mountElement = document.getElementById(this.props.mountElementId);
         }
     };
 
+    private eventInit = () => {
+        // 创建尺寸改变事件，重新修正拼凑的尺寸
+        this.observerSize = new ResizeObserver((entries) => {
+            entries.forEach((entry) => {
+                const { width, height } = entry.contentRect;
+                console.log(`positionElement元素新尺寸：${width}px x ${height}px`);
+            });
+        });
+        this.observerSize.observe(this.positionElement);
+
+        // 监听窗口大小变化，确保新元素尺寸同步更新
+        window.addEventListener("resize", this.onRise);
+
+        if (this.props.hoverGather) {
+            this.positionElement.addEventListener("mouseenter", this.gatherData);
+            this.positionElement.addEventListener("mouseleave", this.disperseData);
+        }
+    };
+
+    public onRise = throttle(() => this.updatePositions(), 200);
+
+    /**
+     * @description: 更新整个组件的位置，组件位置与传入的props.positionElementId 绑定
+     */
+    public updatePositions = () => {
+        if (this.props.DEBUG) console.log("触发  updatePositions");
+        if (this.resizeGatherTimeoutID) clearTimeout(this.resizeGatherTimeoutID);
+
+        // 延迟聚合（resize 稳定后再计算泡泡位置）
+        this.resizeGatherTimeoutID = setTimeout(() => {
+            this.gatherData(); // 仅聚合，避免扩散导致闪烁
+        }, 500); // 缩短延迟，提升响应性
+    };
+
+    /**
+     * @description: 因为init采用了settime调用，所以吧必须将width和height在调入时动态传入，否则这里读取到的this.width和this.height为0
+     * @param {number} width
+     * @param {number} height
+     */
     private createPointData = async (width: number, height: number) => {
         if (this.props.DEBUG) console.log("触发  updateBubblePosition");
-        width = Math.trunc(width);
-        height = Math.trunc(height);
+        width = Math.floor(width);
+        height = Math.floor(height);
 
         const input = this.props.input;
         let data: Uint8ClampedArray;
@@ -292,11 +286,13 @@ export class CpsBubbleComponent {
         this.initialHeight = Math.floor(rect.height);
         const offsetX = Math.floor(rect.left + this.props.offsetX);
         const offsetY = Math.floor(rect.top + this.props.offsetY);
+
+        // TODO 记录历史范围
         this._oldRegion = [offsetX, offsetY, rect.width, rect.height];
 
         this.pointArray.forEach((item, i) => {
             const r = (Math.random() * (this.props.bubbleSizeMax - this.props.bubbleSizeMin) + this.props.bubbleSizeMin) * this.props.bubbleScale;
-            const opacity = this.props.opacity ? this.props.opacity : Math.random() * this.props.opacityMin + this.props.opacityMin;
+            const opacity = Math.random() * (this.props.opacityMax - this.props.opacityMin) + this.props.opacityMin;
 
             const delay = Math.floor(Math.random() * (DEFAULT_DELAY / 3));
             const start = DEFAULT_DELAY / 2 - delay;
@@ -378,6 +374,8 @@ export class CpsBubbleComponent {
         });
     };
 
+    public switch = throttle(() => (this.isGather ? this.disperseData() : this.gatherData()), bubbleTransitionDuration * 1.1);
+
     public gatherData = throttle(() => {
         // this.isGathering = true;
         requestAnimationFrame(() => {
@@ -388,10 +386,11 @@ export class CpsBubbleComponent {
                     transform: `translate(${0},${0})`,
                 };
 
-                const oldTop = this.pointArray[i].x;
-                const newTop = this.pointArray[i].x + rect.left;
-                const oldLeft = this.pointArray[i].y;
-                const newLeft = this.pointArray[i].y + rect.top;
+                const oldLeft = this.pointArray[i].x;
+                const newLeft = this.pointArray[i].x + rect.left;
+
+                const oldTop = this.pointArray[i].y;
+                const newTop = this.pointArray[i].y + rect.top;
                 const isPositionChanged = oldTop != newTop || oldLeft != newLeft;
 
                 if (isPositionChanged) {
@@ -401,16 +400,13 @@ export class CpsBubbleComponent {
 
                 Object.assign(bubbleElement.style, newStyle);
             });
-        });
-        this.isGather = true;
 
-        // setTimeout(() => {
-        //     this.isGathering = false;
-        // }, bubbleTransitionDuration);
+            this.isGather = true;
+        });
     }, bubbleTransitionDuration);
 
     // BUG 快速切换存在坐标混乱
-    public disperseData =() => {
+    public disperseData = throttle(() => {
         // if (this.isGathering) return console.log("无法打散，当前聚合中");
         if (!this.mountElement) return console.warn("bubble: 无法获取dom或者positionElement");
 
@@ -419,10 +415,8 @@ export class CpsBubbleComponent {
         const sideRect = disperseElement.getBoundingClientRect();
         const bubbleSizeMax = this.props.bubbleSizeMax * 2;
 
-        console.log({ sideRect });
-
         // 计算样式
-        const newStlyeList = this.bubbleElementList.map((item) => {
+        const newStyleList = this.bubbleElementList.map((item) => {
             const { left, top } = item.getBoundingClientRect();
 
             // 2. 配置最大重试次数（关键兜底）
@@ -442,7 +436,7 @@ export class CpsBubbleComponent {
 
                 // 未在安全区域则重新生成坐标，并重试+1
                 if (!isInSafeArea) {
-                    console.log("不合法坐标: ", coords[0], coords[1]);
+                    //不合法坐标
                     coords = utils.getRandomPointByDOMRect(sideRect);
                     retryCount++;
                 }
@@ -451,7 +445,10 @@ export class CpsBubbleComponent {
             // 4. 兜底处理：若重试耗尽仍无合规坐标，取容器中心（避免样式异常）
             if (!isInSafeArea) {
                 console.warn("泡泡坐标生成失败（重试次数耗尽），使用容器中心坐标");
-                coords = [sideRect.left + (sideRect.right - sideRect.left - bubbleSizeMax) / 2, sideRect.top + (sideRect.bottom - sideRect.top - bubbleSizeMax) / 2];
+                coords = [
+                    sideRect.left + (sideRect.right - sideRect.left - bubbleSizeMax) / 2,
+                    sideRect.top + (sideRect.bottom - sideRect.top - bubbleSizeMax) / 2,
+                ];
             }
 
             // BUG 坐标混乱元凶，真是坐标再这里最后才进行-left -top的计算，如果当前泡泡还在聚合中途坐标属于聚合与打散的中间态，此时进行再打散，导致坐标必然超出边界，且此处没有进行边界处理
@@ -464,12 +461,12 @@ export class CpsBubbleComponent {
         // 更新样式
         requestAnimationFrame(() => {
             this.bubbleElementList.forEach((bubbleElement, i) => {
-                Object.assign(bubbleElement.style, newStlyeList[i]);
+                Object.assign(bubbleElement.style, newStyleList[i]);
             });
-        });
 
-        this.isGather = false;
-    }
+            this.isGather = false;
+        });
+    }, bubbleTransitionDuration);
 
     public destroy = () => {
         try {
@@ -487,8 +484,14 @@ export class CpsBubbleComponent {
 
             if (this.regionElement) {
                 if (this.regionElement.style) this.regionElement.style.opacity = "0";
-                this.mountElement.removeChild(this.regionElement);
+                // this.mountElement.removeChild(this.regionElement);
+                document.body.removeChild(this.regionElement);
                 this.regionElement = null;
+            }
+
+            if (this.positionElement) {
+                this.positionElement.removeEventListener("mouseenter", this.gatherData);
+                this.positionElement.removeEventListener("mouseleave", this.disperseData);
             }
 
             this.offscreenCanvas.getContext("2d").clearRect(0, 0, this.offscreenCanvas.width, this.offscreenCanvas.height);
@@ -501,7 +504,7 @@ export class CpsBubbleComponent {
 
             if (this.props.DEBUG) console.log("destroy::end");
         } catch (err) {
-            console.log("destroy::err", err);
+            console.error("destroy::err", err);
         }
     };
 }
