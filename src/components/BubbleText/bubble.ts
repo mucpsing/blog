@@ -1,5 +1,5 @@
 import * as utils from "./utils";
-import { throttle, debounce } from "lodash";
+import { throttle } from "lodash";
 
 export interface Point {
     x: number;
@@ -14,6 +14,7 @@ const _DEFAULT_PROPS = {
     disperseElementId: "CpsBubble.disperseElement",
 
     input: "capsion",
+    inputType: "text" as "text" | "image" | "base64" | "url" | "path",
     fontSize: 160,
     fontName: "Arial",
     fontWeight: "bold",
@@ -21,8 +22,7 @@ const _DEFAULT_PROPS = {
     offsetY: 0,
     bubbleScale: 1,
     bubbleCount: 10,
-    bubbleSizeMin: 5,
-    bubbleSizeMax: 15,
+    bubbleSize: 10,
     intervalTime: 8000, // 泡泡往复的时间，这里需要重构
     opacity: 0.8,
     opacityMax: 0.9,
@@ -30,19 +30,20 @@ const _DEFAULT_PROPS = {
     autoSwitch: true,
     hoverGather: true,
     engine: "dom" as "dom" | "canvas" | "svg",
+    autoFit: true,
 };
 
 export type BubbleProps = Partial<typeof _DEFAULT_PROPS>;
 
 const bubbleTransitionDuration = 800;
 const DEFAULT_BUBBLE_TRANSITION = `all ${bubbleTransitionDuration / 1000}s cubic-bezier(0.4, 0, 0.2, 1) 0s`;
-export class CpsBubbleComponent {
+export class BubbleText {
     private DEFAULT_PROPS = _DEFAULT_PROPS;
     private BUBBLE_ITEM_CLASS = "CpsBubble__eachBubbleElement";
     private BUBBLE_WRAPPER_CLASS = "CpsBubble__eachBubbleWrapperElement";
 
     private props: BubbleProps = {};
-    private pointArray: Point[] = [];
+    private pointArray: (Point & { r: number })[] = [];
 
     private id = "CpsBubble";
     private dom: HTMLElement; // 组成字母的范围参考元素
@@ -50,6 +51,7 @@ export class CpsBubbleComponent {
     private positionElement: HTMLElement; // 聚合范围，泡泡组合成文字的具体范围元素
     private regionElement: HTMLElement; // 扩散范围：用来批量挂载泡泡的容器，不起到任何作用，但是泡泡都在这个容器内部
     private debugCanvasElementId: string = "CpsBubble.debugCanvas";
+    private debugCanvasElement: HTMLCanvasElement;
 
     private bubbleElementList: HTMLDivElement[] = []; // 存放所有泡泡div实例
     private isGather = true;
@@ -58,51 +60,44 @@ export class CpsBubbleComponent {
     private observer: MutationObserver; // 监听元素变化，可以修复首次加载时，位置元素会变化的问题
     private observerSize: ResizeObserver;
 
-    private initialWidth = 0;
-    private initialHeight = 0;
-
-    private width = 0;
-    private height = 0;
+    private baseWidth = 0;
+    private baseHeight = 0;
 
     private offscreenCanvas: OffscreenCanvas;
+    private bubbleSizeMin: number;
+    private bubbleSizeMax: number;
+
     public isGathering = true;
 
     private _oldRegion: [number, number, number, number] = [0, 0, 0, 0];
 
     constructor(props: BubbleProps) {
+        this.props = { ...this.DEFAULT_PROPS, ...props };
+
+        this.bubbleSizeMin = this.props.bubbleSize * 0.5;
+
+        this.bubbleSizeMax = this.props.bubbleSize;
+
+        if (this.props.DEBUG) console.log("CpsBubbleComponent constructor");
+
         this.init(props);
     }
 
     public test = () => {
         // 按钮1
-        const baseStyle = { pointerEvents: "auto", width: "100px", height: "60px", backgroundColor: "green" };
         const testButtonElement = document.createElement("button");
         testButtonElement.innerText = "切换";
-        testButtonElement.onclick = () => this.onTest();
-        Object.assign(testButtonElement.style, baseStyle);
+        testButtonElement.onclick = () => this.switch();
         this.positionElement.appendChild(testButtonElement);
 
         // 按钮2
         const testButtonElement2 = document.createElement("button");
         testButtonElement2.innerText = "destroy";
         testButtonElement2.onclick = this.destroy;
-        Object.assign(testButtonElement2.style, baseStyle);
         this.positionElement.appendChild(testButtonElement2);
     };
 
-    private onTest = () => {
-        if (this.props.DEBUG) console.log("onTest: ");
-        const rect = this.positionElement.getBoundingClientRect();
-        console.log("rect: ", rect);
-
-        this.switch();
-    };
-
     public init = (props: BubbleProps) => {
-        this.props = { ...this.DEFAULT_PROPS, ...props };
-
-        if (this.props.DEBUG) console.log("CpsBubbleComponent constructor");
-
         // 创建元素
         this.elementInit();
 
@@ -111,7 +106,7 @@ export class CpsBubbleComponent {
         requestAnimationFrame(() => {
             setTimeout(() => {
                 // 创建泡泡并挂载到body
-                this.createPointData(this.width, this.height);
+                this.createPointData(this.baseWidth, this.baseHeight);
 
                 // 添加DEBUG控制按钮
                 if (this.props.DEBUG) this.test();
@@ -136,10 +131,13 @@ export class CpsBubbleComponent {
         }
 
         const rect = this.positionElement.getBoundingClientRect();
-        this.width = Math.floor(rect.width);
-        this.height = Math.floor(rect.height);
+        if (this.props.DEBUG) {
+            console.log("初始化rect: ", rect);
+        }
+        this.baseWidth = Math.floor(rect.width);
+        this.baseHeight = Math.floor(rect.height);
 
-        this.offscreenCanvas = new OffscreenCanvas(this.width, this.height);
+        this.offscreenCanvas = new OffscreenCanvas(this.baseWidth, this.baseHeight);
 
         this.regionElement = document.getElementById(this.props.regionElementId);
         if (!this.regionElement) {
@@ -152,7 +150,7 @@ export class CpsBubbleComponent {
             pointerEvents: "none",
             top: 0,
             left: 0,
-            width: "100vw",
+            width: "100%",
             height: "0", // TODO 为什么设置0? 视觉完全隐藏（opacity）布局不占空间（height: 0） 为后续动画提供从0到实际高度的过渡效果
             opacity: 0,
         });
@@ -169,7 +167,7 @@ export class CpsBubbleComponent {
         this.observerSize = new ResizeObserver((entries) => {
             entries.forEach((entry) => {
                 const { width, height } = entry.contentRect;
-                console.log(`positionElement元素新尺寸：${width}px x ${height}px`);
+                // console.log(`positionElement元素新尺寸：${width}px x ${height}px`);
             });
         });
         this.observerSize.observe(this.positionElement);
@@ -199,12 +197,12 @@ export class CpsBubbleComponent {
     };
 
     /**
-     * @description: 因为init采用了settime调用，所以吧必须将width和height在调入时动态传入，否则这里读取到的this.width和this.height为0
+     * @description: 因为init采用了settime调用，所以吧必须将width和height在调入时动态传入，否则这里读取到的this.baseWidth和this.baseHeight为0
      * @param {number} width
      * @param {number} height
      */
     private createPointData = async (width: number, height: number) => {
-        if (this.props.DEBUG) console.log("触发  updateBubblePosition");
+        if (this.props.DEBUG) console.log("触发  createPointData");
         width = Math.floor(width);
         height = Math.floor(height);
 
@@ -213,30 +211,54 @@ export class CpsBubbleComponent {
 
         const { canvas, ctx } = utils.resetOffscreenCanvas(this.offscreenCanvas);
 
-        if (utils.isBase64(input) || utils.isUrl(input)) {
-            const img = new Image();
-            img.crossOrigin = "anonymous";
-            img.src = input;
-
-            data = await this.loadImage(img, width, height, ctx);
+        if (utils.isBase64(input) || utils.isUrl(input) || utils.isRelativePath(input)) {
+            let img = await utils.loadImage(input);
+            if (!img) throw new Error(`[图片加载失败] 无效的图片地址: ${input}`);
+            data = await this.renderImageToImageData(img, width, height, ctx);
+            img = null;
         } else if (utils.isString(input)) {
-            data = this.renderTextToImageData(input, width, height);
+            // 这场进行相对路径与字符串的判断
+            if (this.props.DEBUG) console.log("输入为纯文本");
+            // 存在字体异常没处理
+            data = await this.renderTextToImageData(input, width, height);
         } else {
             throw new Error("Unsupported input type");
         }
 
         // 使用 Promise 封装图片加载过程
         this.createBubble(data, width, height);
-
-        // canvas.remove();
     };
 
-    private loadImage = (img: HTMLImageElement, width: number, height: number, ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D) => {
+    private renderImageToImageData = (
+        img: HTMLImageElement,
+        width: number,
+        height: number,
+        ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,
+    ) => {
         return new Promise<Uint8ClampedArray>((resolve, reject) => {
-            img.onload = () => {
+            const draw = () => {
+                console.log("图片尺寸: ", img.width, img.height);
+
                 try {
-                    // 图片加载完成后，绘制到 canvas 上并获取 image data
-                    ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, width, height);
+                    const { drawWidth, drawHeight } = utils.fitImageSize(
+                        img.naturalWidth,
+                        img.naturalHeight,
+                        width,
+                        height,
+                        this.props.autoFit, // 开关配置
+                    );
+                    // 居中绘制：autoFit 后图片高度可能小于 canvas，垂直居中
+                    const offsetX = Math.floor((width - drawWidth) / 2);
+                    const offsetY = Math.floor((height - drawHeight) / 2);
+
+                    if (this.props.DEBUG) {
+                        console.log("图片尺寸: ", img.naturalWidth, img.naturalHeight);
+                        console.log("绘制尺寸: ", drawWidth, drawHeight);
+                        console.log("绘制偏移: ", offsetX, offsetY);
+                    }
+
+                    ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, drawWidth, drawHeight);
+                    // ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, width, height);
                     const data = ctx.getImageData(0, 0, width, height).data;
                     resolve(data);
                 } catch (error) {
@@ -244,21 +266,23 @@ export class CpsBubbleComponent {
                 }
             };
 
-            img.onerror = (error) => {
-                reject("Error loading image");
-            };
+            if (img.complete && img.naturalWidth !== 0) {
+                // ✅ 图片已缓存，直接绘制
+                draw();
+            } else {
+                img.onload = draw;
+                img.onerror = () => reject("Error loading image");
+            }
         });
     };
 
-    private renderTextToImageData = (text: string, width: number, height: number): Uint8ClampedArray => {
+    private renderTextToImageData = async (text: string, width: number, height: number): Promise<Uint8ClampedArray> => {
         const { canvas, ctx } = utils.resetOffscreenCanvas(this.offscreenCanvas);
 
         ctx.fillStyle = "black";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-
         ctx.font = `${this.props.fontWeight} ${this.props.fontSize}px ${this.props.fontName}`;
-
         ctx.fillText(text, width / 2, height / 2);
 
         const data = ctx.getImageData(0, 0, width, height).data;
@@ -276,23 +300,28 @@ export class CpsBubbleComponent {
         for (let i = 0; i < w; i += number) {
             for (let j = 0; j < h; j += number) {
                 if (data[(i + j * w) * 4 + 3] > 150) {
-                    this.pointArray.push({ x: Math.floor(i), y: Math.floor(j) });
+                    this.pointArray.push({ x: Math.floor(i), y: Math.floor(j), r: 0 });
                 }
             }
         }
 
         const rect = this.positionElement.getBoundingClientRect();
-        this.initialWidth = Math.floor(rect.width);
-        this.initialHeight = Math.floor(rect.height);
         const offsetX = Math.floor(rect.left + this.props.offsetX);
         const offsetY = Math.floor(rect.top + this.props.offsetY);
 
-        // TODO 记录历史范围
-        this._oldRegion = [offsetX, offsetY, rect.width, rect.height];
+        const bubbleSizeMin = this.bubbleSizeMin * this.props.bubbleScale;
+        console.log(this.bubbleSizeMin, this.props.bubbleScale);
+
+        const bubbleSizeMax = this.props.bubbleSize * this.props.bubbleScale;
+
+        console.log({ bubbleSizeMin, bubbleSizeMax });
 
         this.pointArray.forEach((item, i) => {
-            const r = (Math.random() * (this.props.bubbleSizeMax - this.props.bubbleSizeMin) + this.props.bubbleSizeMin) * this.props.bubbleScale;
+            const r = Math.random() * (bubbleSizeMax - bubbleSizeMin) + bubbleSizeMin;
+
             const opacity = Math.random() * (this.props.opacityMax - this.props.opacityMin) + this.props.opacityMin;
+
+            item.r = r;
 
             const delay = Math.floor(Math.random() * (DEFAULT_DELAY / 3));
             const start = DEFAULT_DELAY / 2 - delay;
@@ -377,25 +406,52 @@ export class CpsBubbleComponent {
     public switch = throttle(() => (this.isGather ? this.disperseData() : this.gatherData()), bubbleTransitionDuration * 1.1);
 
     public gatherData = throttle(() => {
-        // this.isGathering = true;
         requestAnimationFrame(() => {
+            if (!this.positionElement) return; // 增加空值保护
+
             const rect = this.positionElement.getBoundingClientRect();
+
+            const currentWidth = Math.floor(rect.width);
+            const currentWidthScale = currentWidth / this.baseWidth;
+
+            const currentHeight = Math.floor(rect.height);
+            const currentHeightScale = currentHeight / this.baseHeight;
+
+            // 泡泡挂载在 document.body 下，使用绝对定位。
+            // getBoundingClientRect() 返回的是视口坐标，需要加上页面滚动量
+            // 才能得到正确的 left/top 绝对文档坐标，与 createBubble 中的计算方式保持一致。
+            const scrollX = window.scrollX || window.pageXOffset;
+            const scrollY = window.scrollY || window.pageYOffset;
+
+            // positionElement 左上角的绝对文档坐标
+            const originLeft = rect.left + scrollX + this.props.offsetX;
+            const originTop = rect.top + scrollY + this.props.offsetY;
+
+            if (this.props.DEBUG) {
+                console.log("定位rect: ", rect);
+                console.log("this.baseWidth / baseHeight: ", this.baseWidth, this.baseHeight);
+                console.log("scrollX / scrollY: ", scrollX, scrollY);
+                console.log("originLeft / originTop: ", originLeft, originTop);
+                console.log("widthScale / heightScale: ", currentWidthScale, currentHeightScale);
+            }
 
             this.bubbleElementList.forEach((bubbleElement, i) => {
                 const newStyle: any = {
-                    transform: `translate(${0},${0})`,
+                    transform: `translate(0, 0)`,
                 };
 
-                const oldLeft = this.pointArray[i].x;
-                const newLeft = this.pointArray[i].x + rect.left;
+                // 将画布中的相对坐标，按当前尺寸缩放后，叠加到 positionElement 的绝对坐标上
+                const newLeft = originLeft + this.pointArray[i].x * currentWidthScale;
+                const newTop = originTop + this.pointArray[i].y * currentHeightScale;
 
-                const oldTop = this.pointArray[i].y;
-                const newTop = this.pointArray[i].y + rect.top;
-                const isPositionChanged = oldTop != newTop || oldLeft != newLeft;
+                const oldLeft = parseFloat(bubbleElement.style.left) || 0;
+                const oldTop = parseFloat(bubbleElement.style.top) || 0;
+
+                const isPositionChanged = Math.abs(oldLeft - newLeft) > 0.5 || Math.abs(oldTop - newTop) > 0.5;
 
                 if (isPositionChanged) {
-                    newStyle.left = `${this.pointArray[i].x + rect.left}px`;
-                    newStyle.top = `${this.pointArray[i].y + rect.top}px`;
+                    newStyle.left = `${newLeft}px`;
+                    newStyle.top = `${newTop}px`;
                 }
 
                 Object.assign(bubbleElement.style, newStyle);
@@ -405,15 +461,17 @@ export class CpsBubbleComponent {
         });
     }, bubbleTransitionDuration);
 
-    // BUG 快速切换存在坐标混乱
-    public disperseData = throttle(() => {
+    // BUG 如果在聚合过程中再次出发打散，因为是实时获取位置，会导致打散后的泡泡位置超出边界，属于获取了中间态不合法坐标导致的bug
+    // 修复方案1：将聚合坐标缓存，在打散过程中获取缓存坐标
+    // 修复方案2：打散过程中获取位置，使用缓存坐标
+    public disperseData111 = throttle(() => {
         // if (this.isGathering) return console.log("无法打散，当前聚合中");
         if (!this.mountElement) return console.warn("bubble: 无法获取dom或者positionElement");
 
         // 获取泡泡的扩散范围
         const disperseElement = document.getElementById(this.props.disperseElementId);
         const sideRect = disperseElement.getBoundingClientRect();
-        const bubbleSizeMax = this.props.bubbleSizeMax * 2;
+        const bubbleSizeMax = this.bubbleSizeMax * this.props.bubbleScale;
 
         // 计算样式
         const newStyleList = this.bubbleElementList.map((item) => {
@@ -468,6 +526,60 @@ export class CpsBubbleComponent {
         });
     }, bubbleTransitionDuration);
 
+    public disperseData = throttle(() => {
+        // if (this.isGathering) return console.log("无法打散，当前聚合中");
+        if (!this.mountElement) return console.warn("bubble: 无法获取dom或者positionElement");
+
+        // 获取泡泡的扩散范围
+        const disperseElement = document.getElementById(this.props.disperseElementId);
+        const sideRect = disperseElement.getBoundingClientRect();
+        const bubbleSizeMax = this.bubbleSizeMax * this.props.bubbleScale;
+
+        // 坐标系统一说明：coords 由 getBoundingClientRect() 生成，是视口坐标。
+        // 泡泡用 absolute 定位（文档坐标），最终落点 = coords + scroll。
+        // 因此边界检查必须在文档坐标系下进行，否则检查通过但渲染超界。
+        const scrollX = window.scrollX || window.pageXOffset;
+        const scrollY = window.scrollY || window.pageYOffset;
+
+        // 将 disperseElement 的边界转为文档坐标，并内缩 bubbleSizeMax 保证泡泡不超出
+        const safeLeft = sideRect.left + scrollX + bubbleSizeMax;
+        const safeRight = sideRect.right + scrollX - bubbleSizeMax;
+        const safeTop = sideRect.top + scrollY + bubbleSizeMax;
+        const safeBottom = sideRect.bottom + scrollY - bubbleSizeMax;
+
+        // 计算样式
+        const newStyleList = this.bubbleElementList.map((item) => {
+            // 在文档坐标系内随机取点（直接加 scroll 转换，避免反复 getBoundingClientRect）
+            const randomDocX = () => safeLeft + Math.random() * (safeRight - safeLeft);
+            const randomDocY = () => safeTop + Math.random() * (safeBottom - safeTop);
+
+            let docX = randomDocX();
+            let docY = randomDocY();
+
+            // 兜底：超出安全区则钳制到中心
+            if (safeRight <= safeLeft || safeBottom <= safeTop) {
+                docX = (safeLeft + safeRight) / 2;
+                docY = (safeTop + safeBottom) / 2;
+            }
+
+            // style.left/top 是泡泡锚点的稳定绝对文档坐标，translate 叠加在其上
+            const stableLeft = parseFloat(item.style.left) || 0;
+            const stableTop = parseFloat(item.style.top) || 0;
+            const offsetX = docX - stableLeft;
+            const offsetY = docY - stableTop;
+
+            return { transform: `translate(${offsetX}px, ${offsetY}px)` };
+        });
+
+        // 更新样式
+        requestAnimationFrame(() => {
+            this.bubbleElementList.forEach((bubbleElement, i) => {
+                Object.assign(bubbleElement.style, newStyleList[i]);
+            });
+
+            this.isGather = false;
+        });
+    }, bubbleTransitionDuration);
     public destroy = () => {
         try {
             if (this.props.DEBUG) console.log("destroy::start");
@@ -508,3 +620,5 @@ export class CpsBubbleComponent {
         }
     };
 }
+
+export default BubbleText;

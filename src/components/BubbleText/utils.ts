@@ -1,8 +1,8 @@
 /*
  * @Author: Capsion 373704015@qq.com
  * @Date: 2025-02-17 22:18:58
- * @LastEditors: Capsion 373704015@qq.com
- * @LastEditTime: 2026-03-10 23:19:44
+ * @LastEditors: cpasion-office-win10 373704015@qq.com
+ * @LastEditTime: 2026-03-12 14:34:07
  * @FilePath: \cps-blog-docusaurus-v3\src\components\BubbleText\utils.ts
  * @Description: Bubble组件要用到的一些工具函数
  */
@@ -163,6 +163,49 @@ export function isString(tar: any, max = 100): boolean {
     return typeof tar === "string" && tar.length > 0 && tar.length <= max;
 }
 
+/**
+ * 新增：判断是否为相对路径（基于你的基础函数扩展）
+ * 核心逻辑：不是base64、不是完整URL，但符合路径特征（/开头 | 包含./|../ | 有图片扩展名）
+ */
+export function isRelativePath(str: string): boolean {
+    // 相对路径的核心特征（覆盖/xxxxx/xxx.png、./xxx.png、../xxx.png等场景）
+    const relativePathRegex = /^(\/|\.\/|\.\.\/)|(\.(png|jpg|jpeg|gif|webp|svg\+xml))$/i;
+    // 排除纯符号的异常情况（比如单独的/、../，避免误判为相对路径）
+    const isPureSymbol = /^(\/|\.\/|\.\.\/)+$/.test(str);
+
+    return relativePathRegex.test(str) && !isPureSymbol;
+}
+
+/**
+ * 独立的图片加载函数：仅负责加载图片，不绑定任何渲染逻辑
+ * @param imageSrc 图片地址（base64/URL/相对路径）
+ * @returns 成功返回 Image 实例，失败返回 false
+ */
+export function loadImage(imageSrc: string): Promise<HTMLImageElement | false> {
+    return new Promise((resolve) => {
+        // 空值/非字符串直接返回失败
+        if (!imageSrc || typeof imageSrc !== "string") {
+            resolve(false);
+            return;
+        }
+
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+
+        // 加载成功：返回 Image 实例
+        img.onload = () => {
+            resolve(img);
+        };
+
+        // 加载失败（网络错误/路径错误/格式错误等）：返回 false
+        img.onerror = () => {
+            resolve(false);
+        };
+
+        // 触发加载（放在最后，避免 onload/onerror 未绑定完成就加载）
+        img.src = imageSrc;
+    });
+}
 export function resetOffscreenCanvas(canvas: HTMLCanvasElement | OffscreenCanvas) {
     canvas.width = canvas.width;
     canvas.height = canvas.height;
@@ -178,6 +221,47 @@ export function resetOffscreenCanvas(canvas: HTMLCanvasElement | OffscreenCanvas
     ctx.imageSmoothingEnabled = false;
 
     return { canvas, ctx };
+}
+
+/**
+ * 计算图片在目标渲染区域内按比例缩放后的尺寸
+ * 当图片实际尺寸大于渲染尺寸时，按宽度 100% 缩放，保持比例
+ */
+export function fitImageSize(
+    imgNaturalWidth: number,
+    imgNaturalHeight: number,
+    renderWidth: number,
+    renderHeight: number,
+    autoFit: boolean, // ✅ 显式传入，不再隐式引用 this
+): { drawWidth: number; drawHeight: number; clipped: boolean } {
+    const widthOverflow = imgNaturalWidth > renderWidth;
+    const heightOverflow = imgNaturalHeight > renderHeight;
+    const clipped = widthOverflow || heightOverflow;
+
+    if (clipped) {
+        console.warn(
+            `[Bubble] 图片实际尺寸 (${imgNaturalWidth}x${imgNaturalHeight}) ` +
+                `大于渲染尺寸 (${renderWidth}x${renderHeight})，` +
+                `图片可能显示不完整。` +
+                (autoFit ? "已启用 autoFit 自动缩放。" : "可开启 autoFit 自动适配。"),
+        );
+    }
+
+    if (clipped && autoFit) {
+        // 以宽度为基准做等比缩放
+        const scale = renderWidth / imgNaturalWidth;
+        return {
+            drawWidth: renderWidth,
+            drawHeight: Math.round(imgNaturalHeight * scale),
+            clipped,
+        };
+    }
+
+    return {
+        drawWidth: imgNaturalWidth,
+        drawHeight: imgNaturalHeight,
+        clipped, // 是否裁剪了
+    };
 }
 
 /**
