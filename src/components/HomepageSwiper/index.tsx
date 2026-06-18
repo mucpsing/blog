@@ -16,7 +16,7 @@ import type { ICpsImgSwiperProps, ICpsImgSwiperState } from "@site/src/component
 import { useWindowAspectRatio, type AlignmentModeType } from "@site/src/utils/useWindowAspectRatioHook";
 
 import HomeTitle from "./rightSide";
-import Bubble from "@site/src/components/BubbleText";
+import Bubble from "@site/src/components/BubbleText/test";
 
 const HomeImgSwiper: React.FC = () => {
     const DATA = useRef<ICpsImgSwiperDataItem[]>(dataArray);

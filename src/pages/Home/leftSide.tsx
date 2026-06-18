@@ -2,7 +2,7 @@
  * @Author: CPS holy.dandelion@139.com
  * @Date: 2023-03-06 23:17:09
  * @LastEditors: cpasion-office-win10 373704015@qq.com
- * @LastEditTime: 2026-03-10 16:20:13
+ * @LastEditTime: 2026-06-18 17:11:34
  * @FilePath: \cps-blog\src\components\HomepageSwiper\rightSide.tsx
  * @Description: 首页标题区域
  */
@@ -17,6 +17,8 @@ import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 
 import Iconfont from "@site/src/components/Iconfont";
 import styles from "@site/src/pages/index.module.css";
+// import Bubble from "@site/src/components/BubbleText";
+import { BubbleText, type BubbleProps } from "@site/src/components/BubbleText/bubble";
 
 function TypedTitle() {
     const { siteConfig } = useDocusaurusContext();
@@ -33,6 +35,7 @@ function TypedTitle() {
 
         return () => typed.destroy();
     }, []);
+
     return (
         <p className="my-2 min-h-[10rem] hero__subtitle">
             <span className="transform" ref={el}></span>
@@ -42,12 +45,34 @@ function TypedTitle() {
 
 export default function HomeTitle() {
     const { siteConfig } = useDocusaurusContext();
+
+    const positionRef = useRef(null);
+    let bubble: BubbleText | null = null;
+
+    useEffect(() => {
+        if (positionRef.current) {
+            console.log({ positionRef });
+            bubble = new BubbleText();
+
+            // const t = utils.debugMousePosition("bubble-target");
+        }
+
+        return () => {
+            if (bubble) bubble.destroy();
+
+            // t.stop();
+        };
+    }, []);
+
     return (
         <QueueAnim type="left" duration={800} className="px-4 text-center text-white">
             {/* 仅作定位使用 */}
-            <h1 id="postitionElement" className="hero__title h-[200px] pointer-events-none" key="title">
-                {/* <strong className="text-green-700">{siteConfig.title}</strong> */}
-            </h1>
+            <div
+                ref={positionRef}
+                id="CpsBubble.positionElement"
+                className="hero__title h-[200px] bg-gray-200/30 shadow-slate-200 rounded-md"
+                key="title"
+            ></div>
 
             <p className="my-6 underline decoration-dotted" key="content">
                 <a href="docs/【07】常识科普/社会真实/名人名言">这些年我们听到的名人疯言</a>

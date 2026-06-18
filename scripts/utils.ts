@@ -116,6 +116,58 @@ export function createNavItemByDir({ targetPath, includeDirList = [], excludeDir
 }
 
 /**
+ * @description: 递归遍历指定目录，查找所有非 .md 文件，打印提示并返回路径列表
+ * @param {string} targetPath 要检查的目录路径
+ * @param {string[]} excludeDirList 需要排除的目录名列表（默认空数组）
+ * @return {Promise<string[]>} 所有非 .md 文件的绝对路径列表，出错或找不到时返回空数组
+ */
+export async function findNonMdFiles(
+  targetPath: string,
+  excludeDirList: string[] = []
+): Promise<string[]> {
+  // 合并默认排除目录和用户传入的排除目录，使用 Set 提升查找效率
+  const defaultExcludes = ['.obsidian'];
+  const excludeSet = new Set([...defaultExcludes, ...excludeDirList]);
+
+  const result: string[] = [];
+
+  // 内部递归函数，避免重复传递排除集合
+  async function walk(currentPath: string): Promise<void> {
+    try {
+      const stat = await fsp.stat(currentPath);
+      if (!stat.isDirectory()) {
+        console.warn(`⚠️ [findNonMdFiles] 路径不是目录: ${currentPath}`);
+        return;
+      }
+
+      const entries = await fsp.readdir(currentPath, { withFileTypes: true });
+
+      for (const entry of entries) {
+        const fullPath = path.join(currentPath, entry.name);
+
+        if (entry.isDirectory()) {
+          // 如果目录名在排除列表中，跳过该目录及其所有子内容
+          if (excludeSet.has(entry.name)) {
+            continue;
+          }
+          // 递归遍历子目录
+          await walk(fullPath);
+        } else if (entry.isFile() && !entry.name.endsWith('.md')) {
+          console.warn(`⚠️ [findNonMdFiles] 发现非 .md 文件: ${fullPath}`);
+          result.push(fullPath);
+        }
+      }
+    } catch (error) {
+      // 单个目录出错时，记录错误并停止该分支，继续其他分支（当前函数会吞掉异常，返回已收集的结果）
+      console.error(`❌ [findNonMdFiles] 遍历路径出错: ${currentPath}`, error);
+    }
+  }
+
+  await walk(targetPath);
+  return result;
+}
+
+/**
  * @description: 读取.md文件的头部数据，头部以---开始和结束的yaml格式数据
  * @param {string} filepath
  * @return {Promise<object | undefined>}
@@ -216,3 +268,12 @@ export async function createProjectDataByFolder(filepathList: string[], prefixUr
 
 //   console.log({ res });
 // })();
+
+
+(async ()=>{
+    const d = path.resolve("W:/CPS/MyProject/cps/cps-blog/docs")
+
+    const res = await findNonMdFiles(d)
+
+    console.log({res})
+})

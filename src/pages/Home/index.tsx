@@ -15,8 +15,8 @@ import type { ICpsImgSwiperProps, ICpsImgSwiperState } from "@site/src/component
 
 import { useWindowAspectRatio, type AlignmentModeType } from "@site/src/utils/useWindowAspectRatioHook";
 
-import HomeTitle from "./rightSide";
-import Bubble from "@site/src/components/BubbleText";
+import HomeTitle from "./leftSide";
+import Bubble from "@site/src/components/BubbleText/test";
 
 const HomePage: React.FC = () => {
     const DATA = useRef<ICpsImgSwiperDataItem[]>(dataArray);
@@ -56,7 +56,7 @@ const HomePage: React.FC = () => {
                 <HomeTitle />
             </div>
 
-            <Bubble {...bubbleConfig} />
+            {/* <Bubble {...bubbleConfig} /> */}
 
             <CpsImgSwiper
                 onLeft={(pageIndex) => setState((s) => ({ ...s, showInt: pageIndex }))}

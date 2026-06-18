@@ -1,10 +1,11 @@
 const path = require("path");
 const utils = require("./scripts/utils");
 
-const includeDirList = ["【00】编程相关", "【01】前端开发", "【02】后端开发", "【03】运维相关", "【05】项目经历", "【05】项目经历", "【13】Game"];
+
+const includeDirList = ["【00】编程相关", "【01】前端开发", "【02】后端开发", "【03】运维相关", "【05】项目经历", "【13】Game"];
 
 const currentDocsPath = path.resolve("./docs");
-console.log("工作目录:", currentDocsPath);
+// const currentDocsPath = path.resolve("W:/CPS/MyProject/cps/cps-blog/docs");
 
 const lightCodeTheme = require("prism-react-renderer/themes/github");
 const darkCodeTheme = require("prism-react-renderer/themes/dracula");
@@ -30,6 +31,16 @@ const excludeDirList = [
   "临时",
 ];
 
+// 检查项目中所有非.md文件
+const otherFiles = utils.findNonMdFiles(currentDocsPath, excludeDirList)
+if (otherFiles.length > 0) {
+  console.log("非md文件:", otherFiles)
+  process.exit(1)
+}
+
+
+console.log("工作目录:", currentDocsPath);
+
 // const includeDirList = ["【00】安卓开发", "【00】编程相关", "【01】前端开发", "【02】后端开发","【03】运维相关", "【05】项目经历"];
 const navBarDocsItems = {
   label: "📔 学习笔记",
@@ -52,7 +63,7 @@ const config = {
   favicon: "img/favicon.ico",
 
   // Set the production url of your site here
-  url: "https://www.capsion.top",
+  url: "https://docs.capsion.top",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: "/",

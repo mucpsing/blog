@@ -9,7 +9,6 @@ export interface Point {
 const _DEFAULT_PROPS = {
     DEBUG: process.env.NODE_ENV === "development", // 是否开启调试模式
     mountElementId: "body",
-
     positionElementId: "CpsBubble.positionElement", // 用于定位的元素id，泡泡文字会在这个元素的范围内生成
     regionElementId: "CpsBubble.RegionElement",
     disperseElementId: "CpsBubble.disperseElement",
@@ -72,10 +71,8 @@ export class BubbleText {
 
     private _oldRegion: [number, number, number, number] = [0, 0, 0, 0];
 
-    constructor(props: BubbleProps = {}) {
+    constructor(props: BubbleProps) {
         this.props = { ...this.DEFAULT_PROPS, ...props };
-
-        if (this.props.DEBUG) console.log({ props: this.props });
 
         this.bubbleSizeMin = this.props.bubbleSize * 0.5;
 
@@ -96,7 +93,7 @@ export class BubbleText {
         // 按钮2
         const testButtonElement2 = document.createElement("button");
         testButtonElement2.innerText = "destroy";
-        testButtonElement2.onclick = () => this.destroy();
+        testButtonElement2.onclick = this.destroy;
         this.positionElement.appendChild(testButtonElement2);
     };
 
@@ -123,15 +120,14 @@ export class BubbleText {
      * @description: 在指定的id元素上，创建一个覆盖元素，尺寸和位置保持一致，默认在body中生成
      */
     private elementInit = () => {
-        let errMsg = `CpsBubbleComponent: init() 未找到定位元素:positionElement: ${this.props.positionElementId}`;
+        let errMsg = "CpsBubbleComponent: init() 未找到定位元素:positionElement";
         if (this.props.DEBUG) console.log("CpsBubbleComponent: init()");
 
         // 这是定位元素，从外部导入，本组件所有定位根据以该元素为基准，默认为body
         this.positionElement = document.getElementById(this.props.positionElementId);
         if (!this.positionElement) {
             console.error(errMsg);
-            // throw errMsg;
-            return;
+            throw errMsg;
         }
 
         const rect = this.positionElement.getBoundingClientRect();
